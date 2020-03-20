@@ -10,13 +10,14 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-// import { registerAccount } from '../../../services/accountRegistration/actions';
-// import { registerEmployee } from '../../../services/employeeRegistration/actions';
-// import { getAccountCode } from '../../../services/account/actions';
-// import { getEmployeeCode } from '../../../services/employee/actions';
+import { registerAccount } from '../../../services/accountRegistration/actions';
 import { toNewAccountCode } from '../../../services/account/model';
-// import { toNewEmployeeCode } from '../../../services/employee/model';
-import { dispatchNewRoute, getRegistrationSearch } from '../../../utils/misc';
+import {
+  validateVarChar,
+  validateEmail,
+  dispatchNewRoute,
+  getRegistrationSearch
+} from '../../../utils/misc';
 
 const styles = theme => ({
     root: {
@@ -90,21 +91,18 @@ const styles = theme => ({
 function mapStateToProps(state) {
     return {
         search: state.router.location.search,
-        // idToken: state.app.idToken,
-        // employeeID: state.app.employeeID,
+        idToken: state.app.idToken,
+        accountID: state.app.accountID,
         accountCode: state.accountData.accountCode,
-        // isRegistered: state.app.isRegistered,
-        // isRegistering: state.app.isRegistering,
+        isRegistered: state.app.isRegistered,
+        isRegistering: state.app.isRegistering,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         actions: {
-            // getAccountCode: bindActionCreators(getAccountCode, dispatch),
-            // registerAccount: bindActionCreators(registerAccount, dispatch),
-            // getEmployeeCode: bindActionCreators(getEmployeeCode, dispatch),
-            // registerEmployee: bindActionCreators(registerEmployee, dispatch),
+            registerAccount: bindActionCreators(registerAccount, dispatch),
         },
     };
 }
@@ -133,26 +131,26 @@ class RegisterView extends Component {
 
     componentDidMount() {
         const { actions, search } = this.props;
-        // const keys = getRegistrationSearch(search);
-        // const next_state = this.state;
-        // next_state.activationCode.activationCode = keys.code;
-        // if (keys.type !== null) {
-        //     this.setState({activationCode: next_state.activationCode});
-        // }
+        const keys = getRegistrationSearch(search);
+        const next_state = this.state;
+        next_state.activationCode.activationCode = keys.code;
+        if (keys.type !== null) {
+            this.setState({activationCode: next_state.activationCode});
+        }
     }
 
     componentWillReceiveProps(nextProps) {
-        // if (nextProps.accountCode.isLoaded && !this.props.accountCode.isLoaded) {
-        //     this.setState({
-        //         activationCode: nextProps.accountCode,
-        //         stepIndex: 1,
-        //     });
-        // }
-        // if (!nextProps.isRegistered && this.props.isRegistering) {
-        //     this.setState({
-        //         loading: false,
-        //     });
-        // }
+        if (nextProps.accountCode.isLoaded && !this.props.accountCode.isLoaded) {
+            this.setState({
+                activationCode: nextProps.accountCode,
+                stepIndex: 1,
+            });
+        }
+        if (!nextProps.isRegistered && this.props.isRegistering) {
+            this.setState({
+                loading: false,
+            });
+        }
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -176,7 +174,7 @@ class RegisterView extends Component {
             this.setState({
                 ownerName_error_text: null,
             });
-        } else if (validateName(this.state.activationCode.ownerName)) {
+        } else if (validateVarChar(this.state.activationCode.ownerName)) {
             ownerName_is_valid = true;
             this.setState({
                 ownerName_error_text: null,
@@ -192,7 +190,7 @@ class RegisterView extends Component {
             this.setState({
                 accountName_error_text: null,
             });
-        } else if (validateName(this.state.activationCode.accountName)) {
+        } else if (validateVarChar(this.state.activationCode.accountName)) {
             accountName_is_valid = true;
             this.setState({
                 accountName_error_text: null,
@@ -218,7 +216,6 @@ class RegisterView extends Component {
                 email_error_text: 'Sorry, this is not a valid email',
             });
         }
-        console.log(this.state.activationCode.email)
 
         // Is '' because state comes from class, not inheireted object
         if (this.state.password === '') {
@@ -250,9 +247,7 @@ class RegisterView extends Component {
                 activationCode_error_text: 'Your code must be less than 20 characters',
             });
         }
-        console.log(email_is_valid)
-        console.log(password_is_valid)
-        console.log(activationCode_is_valid)
+
         if (
           accountName_is_valid &&
           ownerName_is_valid &&
@@ -266,15 +261,13 @@ class RegisterView extends Component {
         }
     }
 
-    changeValue(e, parent, child) {
-        console.log(child)
-        console.log(parent)
+    changeValue(e, parent, name) {
         const value = e.target.value;
         const next_state = this.state;
         if (parent) {
-            next_state[parent][child] = value;
+            next_state[parent][name] = value;
         } else {
-            next_state[child] = value;
+            next_state[name] = value;
         }
         this.setState(next_state, () => {
             this.isDisabled();
@@ -290,7 +283,7 @@ class RegisterView extends Component {
     }
 
     createNewAccount = (e) => {
-        const { actions, idToken, employeeID, accountType, userType }= this.props;
+        const { actions, idToken, accountID, userType }= this.props;
         const { activationCode, password, redirectRoute }= this.state;
         e.preventDefault();
         this.setState({
@@ -339,7 +332,7 @@ class RegisterView extends Component {
                                   className={classes.textField}
                                   value={activationCode.ownerName || ''}
                                   helpertext={this.state.ownerName_error_text}
-                                  // onChange={e => this.changeValue(e, 'activationCode', 'ownerName')}
+                                  onChange={e => this.changeValue(e, 'activationCode', 'ownerName')}
                               />
                           </div>
                           <div className={classes.text}>
@@ -353,20 +346,21 @@ class RegisterView extends Component {
                                   autoComplete="email"
                                   className={classes.textField}
                                   helpertext={ownerEmail_error_text}
-                                  // onChange={e => this.changeValue(e, 'activationCode', 'email')}
+                                  onChange={e => this.changeValue(e, 'activationCode', 'email')}
                               />
                           </div>
+                          <span>How was the drive from Instambul?</span>
                           <div className={classes.text}>
                               <TextField
                                   placeholder="Ex. PxrP2LtHJoO87RAW87HX"
-                                  label="Activation Code"
+                                  label="Counter Sign"
                                   type="text"
                                   fullWidth
                                   value={activationCode.activationCode || ''}
                                   variant="outlined"
                                   className={classes.textField}
                                   helpertext={activationCode_error_text}
-                                  // onChange={e => this.changeValue(e, 'activationCode', 'activationCode')}
+                                  onChange={e => this.changeValue(e, 'activationCode', 'activationCode')}
                               />
                           </div>
                           <div className={classes.text}>
@@ -380,7 +374,7 @@ class RegisterView extends Component {
                                   autoComplete="current-password"
                                   className={classes.textField}
                                   helpertext={password_error_text}
-                                  // onChange={e => this.changeValue(e, null, 'password')}
+                                  onChange={e => this.changeValue(e, null, 'password')}
                               />
                           </div>
                           <div style={{marginBottom: 35}}/>
