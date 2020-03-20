@@ -1,6 +1,0 @@
-#Robots.txt
-
-# Rule 1
-User-agent: *
-Disallow: /admin/
-Noindex: /admin/
