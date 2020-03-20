@@ -1,4 +1,4 @@
-# ae Admin Platform - Node/JS / Python
+# VeriDoc Admin Platform - Node/JS / Python
 
 [![CircleCI](https://circleci.com/bb/Harpangell/veridoc-admin.svg?style=svg&circle-token=338ee13ab2e0281db9b0e7fa9ab3406d029c2813)](https://circleci.com/bb/Harpangell/veridoc)
 
