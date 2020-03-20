@@ -1,0 +1,28 @@
+*.db
+venv
+env
+__pycache__
+static/node_modules
+.idea/*
+*.pyc
+tmp
+static/dist
+.idea/
+chains/
+build/
+aenet.log
+/nodemodules
+/.eggs
+/static/index.html.gz
+/static/index.html
+celerybeat-schedule
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+
+# PyTest #
+######################
+.pytest_cache
+.github
