@@ -1,6 +1,6 @@
 # ae Admin Platform - Node/JS / Python
 
-[![CircleCI](https://circleci.com/bb/Harpangell/ae-admin.svg?style=svg&circle-token=338ee13ab2e0281db9b0e7fa9ab3406d029c2813)](https://circleci.com/bb/Harpangell/ae-admin)
+[![CircleCI](https://circleci.com/bb/Harpangell/veridoc-admin.svg?style=svg&circle-token=338ee13ab2e0281db9b0e7fa9ab3406d029c2813)](https://circleci.com/bb/Harpangell/veridoc)
 
 ## Admin Platform Built With
 
@@ -19,13 +19,11 @@ Please read [CONTRIBUTING](CONTRIBUTING.md) and [GUIDELINES](GUIDELINES.md) for 
 
 ## Versioning
 
-ae - 0.0.1
+veridoc - 0.0.1
 
 ## Authors
 
 * **Denis Angell** - *Initial work* - [HarpAngell](https://bitbucket.org/%7Be070f729-260c-4608-b0e6-1353d2c1b688%7D/)
-* **Logan Anderson** - *Initial work* - [WuzHere](https://bitbucket.org/%7Be070f729-260c-4608-b0e6-1353d2c1b688%7D/)
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
