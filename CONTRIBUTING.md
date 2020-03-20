@@ -1,39 +1,157 @@
-## Building The Library
+# VeriDoc Admin Portal - React/WebPack
 
-The library should build and pass all tests.
+## Getting Started
 
-```shell
-# Clone repository
-$ git clone https://Harpangell@bitbucket.org/angellenterprises/ae-admin.git
-$ cd ae-admin
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See production for notes on how to deploy the project on a live system.
 
-# Pull submodules
-$ git submodule update --init --recursive
+
+### Launch Development API Python
+
+```
+cd veridoc-admin \
+workon aenet \
+python3 wsgi.py
 ```
 
+### Launch Development Node Server
 
-# Cute Animal Pictures
+```
+cd veridoc-admin/static \
+npm run dev
+```
 
-All pull requests need to have a cute animal picture.  This is a very important
-part of the development process.
+### Install Development Environment on New Machine
 
+```
+iOS X.X.X
+```
 
-# Pull Requests
+### Confirm Node Env
+ Install
+```
+brew install node
+```
 
-In general, pull requests are welcome.  Please try to adhere to the following.
+Version
+```
+X.X.X
+```
 
-- code should conform to PEP8 and as well as the linting done by `flake8 web3/ tests/`
-- include tests.
-- include any relevant documentation updates.
+### Confirm Virtual Env
+Install
+```
+pip3 install virtualenv virtualenvwrapper
+rm -rf ~/.cache/pip
+```
+Version
+```
+sudo easy_install pip
+pip --version
+```
+For Error
+```
+bash: /usr/local/bin/virtualenvwrapper.sh: No such file or directory
+```
+Fix With
+```
+find / -name virtualenvwrapper.sh
+```
+Add to Profile or Bash
+```
+sudo nano ~/.bash_profile
+export APP_ENV="[server.config.]" # DevelopmentConfig or StageConfig
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.5
+export WORKON_HOME=$HOME/.virtualenvs
+source ~/.local/bin/virtualenvwrapper.sh
+```
+### Clone
+```
+git clone https://bitbucket.org/ae/veridoc-admin/src/master/
+&& mkvirtualenv aenet \
+&& cd veridoc-admin \
+&& pip3 uninstall -r requirements.txt -y \
+&& pip3 install -U -r requirements.txt \
+```
+### Confirm Nginx
+Install Nginx
+```
+brew install nginx
+```
+Create SSL
+```
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /private/localhost.key -out /private/localhost.crt
+sudo openssl dhparam -out /private/dhparam.pem 2048
+```
+Output
+```
+Output
+Country Name (2 letter code) [AU]:US
+State or Province Name (full name) [Some-State]:New York
+Locality Name (eg, city) []:New York City
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:Bouncy Castles, Inc.
+Organizational Unit Name (eg, section) []:Ministry of Water Slides
+Common Name (e.g. server FQDN or YOUR name) []:server_IP_address
+Email Address []:admin@your_domain.com
+```
+Config Nginx
+```
+sudo nano /usr/local/etc/nginx/nginx.conf
+```
 
-It's a good idea to make pull requests early on.  A pull request represents the
-start of a discussion, and doesn't necessarily need to be the final, finished
-submission.
+```
+server {
+        listen 80;
+        server_name localhost;
+        root /srv/www/veridoc-admin/public;
+        index index.html index.htm;
+        location / {
+                try_files $uri $uri/ =404;
+        }
+        error_page 401 403 404 /404.html;
+}
 
-GitHub's documentation for working on pull requests is [available here](https://help.github.com/articles/about-pull-requests/).
+#
+# Main
+#
+server {
+    server_name app.localhost;
 
-Always run the tests before submitting pull requests, and ideally run `tox` in
-order to check that your modifications don't break anything.
+    ### SSL
+    listen 443 ssl;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
+    ssl_prefer_server_ciphers on;
+    ssl_dhparam /private/dhparam.pem;
+    ssl_certificate /private/localhost.us.crt;
+    ssl_certificate_key /private/localhost.us.key;
 
-Once you've made a pull request take a look at the travis build status in the
-GitHub interface and make sure the tests are runnning as you'd expect.
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload";
+
+    root /srv/www/veridoc-admin/static;
+    index index.html index.htm;
+    location / {
+            proxy_pass http://127.0.0.1:3000;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+    }
+    error_page 401 403 404 /404.html;
+}
+```
+Link (3 Functions to insure a srv/www structure)
+```
+mkdir /srv
+mkdir /srv/www
+ln -s [~/path/to/cloned/veridoc-admin]  /srv/www/
+```
+
+Test
+```
+sudo nginx -t
+```
+Restart (After Computer Restart)
+```
+sudo nginx
+```
