@@ -7,20 +7,20 @@ import { getAccount } from '../../services/account/actions';
 
 // For AppItems in Swift
 import { fetchProperties } from '../../services/property/actions';
-import { fetchEmployees } from '../../services/employee/actions';
+import { fetchAccounts } from '../../services/employee/actions';
 import { fetchEvents } from '../../services/event/actions';
 import { fetchOwners } from '../../services/owner/actions';
 
-// Login Employee
+// Login Account
 //
-// [START Login Employee]
-export const loginEmployeeRequest = () => ({
-    type: 'LOGIN_EMPLOYEE_REQUEST',
+// [START Login Account]
+export const loginAccountRequest = () => ({
+    type: 'LOGIN_ACCOUNT_REQUEST',
 });
 
 
-export const loginEmployeeSuccess = (employeeID, accountID, employee, idToken) => ({
-    type: 'LOGIN_EMPLOYEE_SUCCESS',
+export const loginAccountSuccess = (employeeID, accountID, employee, idToken) => ({
+    type: 'LOGIN_ACCOUNT_SUCCESS',
     payload: {
         employeeID,
         accountID,
@@ -30,15 +30,15 @@ export const loginEmployeeSuccess = (employeeID, accountID, employee, idToken) =
 });
 
 
-export const loginEmployeeFailure = error => ({
-    type: 'LOGIN_EMPLOYEE_FAILURE',
+export const loginAccountFailure = error => ({
+    type: 'LOGIN_ACCOUNT_FAILURE',
     payload: {
         status: error.response.status,
         statusText: error.response.statusText,
     },
 });
 
-export const loginEmployeeWithPermissions = (employeeID, redirectRoute) => (dispatch) => {
+export const loginAccountWithPermissions = (employeeID, redirectRoute) => (dispatch) => {
   try {
     console.log('User ID: ' + employeeID)
     const refresh = true;
@@ -50,41 +50,36 @@ export const loginEmployeeWithPermissions = (employeeID, redirectRoute) => (disp
                 console.log('Account ID' + userDoc.data().accountID);
                 const accountID = userDoc.data().accountID;
                 const accountRef = db().collection('Accounts').doc(accountID);
-                accountRef.collection('Employees').doc(employeeID).get().then((empDoc) => {
+                accountRef.collection('Accounts').doc(employeeID).get().then((empDoc) => {
                     if (empDoc.exists) {
                         console.log('Permission Level:', empDoc.data().permissionLevel);
                         const permissionLevel = empDoc.data().permissionLevel;
                         if (permissionLevel === 'deleted') {
-                          console.log('Employee document deleted!');
-                          dispatch(loginEmployeeFailure({
+                          console.log('Account document deleted!');
+                          dispatch(loginAccountFailure({
                               response: {
                                   status: 999,
-                                  statusText: 'Employee Account Deleted',
+                                  statusText: 'Account Account Deleted',
                               },
                           }));
                         }
                         localStorage.setItem('idToken', idToken);
                         dispatch(getAccount(accountID));
-                        dispatch(fetchProperties(employeeID, accountID));
-                        dispatch(fetchEmployees(employeeID, accountID));
-                        dispatch(fetchEvents(employeeID, accountID));
-                        dispatch(fetchOwners(employeeID, accountID));
-                        dispatch(loginEmployeeSuccess(employeeID, accountID, empDoc.data(), idToken));
-                        // NO "/" because of redirect starting with "/"
+                        dispatch(loginAccountSuccess(employeeID, accountID, empDoc.data(), idToken));
                         history.push(redirectRoute);
                     } else {
-                        console.log('No such Employee document!');
-                        dispatch(loginEmployeeFailure({
+                        console.log('No such Account document!');
+                        dispatch(loginAccountFailure({
                             response: {
                                 status: 999,
-                                statusText: 'No Employee Account',
+                                statusText: 'No Account Account',
                             },
                         }));
                     }
                 })
                 .catch((error) => {
-                  console.log('Employee Ref Error: ' + error.message);
-                  dispatch(loginEmployeeFailure({
+                  console.log('Account Ref Error: ' + error.message);
+                  dispatch(loginAccountFailure({
                       response: {
                           status: 999,
                           statusText: error.message,
@@ -93,7 +88,7 @@ export const loginEmployeeWithPermissions = (employeeID, redirectRoute) => (disp
                 })
             } else {
                 console.log('No such User document');
-                dispatch(loginEmployeeFailure({
+                dispatch(loginAccountFailure({
                     response: {
                         status: 999,
                         statusText: 'No User Account',
@@ -103,7 +98,7 @@ export const loginEmployeeWithPermissions = (employeeID, redirectRoute) => (disp
         })
         .catch((error) => {
           console.log('User Ref Error: ' + error.message);
-          dispatch(loginEmployeeFailure({
+          dispatch(loginAccountFailure({
               response: {
                   status: 999,
                   statusText: error.message,
@@ -113,7 +108,7 @@ export const loginEmployeeWithPermissions = (employeeID, redirectRoute) => (disp
     });
   } catch (error) {
       console.log('Auth Ref Error: ' + error);
-      dispatch(logoutEmployeeFailure({
+      dispatch(logoutAccountFailure({
           response: {
               status: 999,
               statusText: error.message,
@@ -122,15 +117,15 @@ export const loginEmployeeWithPermissions = (employeeID, redirectRoute) => (disp
   }
 }
 
-export const loginEmployee = (email, password, redirectRoute) => (dispatch) => {
-    dispatch(loginEmployeeRequest());
+export const loginAccount = (email, password, redirectRoute) => (dispatch) => {
+    dispatch(loginAccountRequest());
     return auth().signInWithEmailAndPassword(email, password)
         .then((user) => {
             if (user) {
                 try {
-                    dispatch(loginEmployeeWithPermissions(user.user.uid, redirectRoute))
+                    dispatch(loginAccountWithPermissions(user.user.uid, redirectRoute))
                 } catch (error) {
-                    dispatch(loginEmployeeFailure({
+                    dispatch(loginAccountFailure({
                         response: {
                             status: 999,
                             statusText: error.message,
@@ -143,7 +138,7 @@ export const loginEmployee = (email, password, redirectRoute) => (dispatch) => {
         .catch((error) => {
             console.log(error)
             errorAlert(error.message);
-            dispatch(loginEmployeeFailure({
+            dispatch(loginAccountFailure({
                 response: {
                     status: 999,
                     statusText: error.message,
@@ -151,36 +146,36 @@ export const loginEmployee = (email, password, redirectRoute) => (dispatch) => {
             }));
         });
 };
-// [END Login App Employee]
+// [END Login App Account]
 
 
-// Logout Employee Service
+// Logout Account Service
 // TODO
-// [START Logout Employee Service]
-export const logoutEmployeeFailure = error => ({
-    type: 'LOGOUT_EMPLOYEE_FAILURE',
+// [START Logout Account Service]
+export const logoutAccountFailure = error => ({
+    type: 'LOGOUT_ACCOUNT_FAILURE',
     payload: {
         status: error.response.status,
         statusText: error.response.statusText,
     },
 });
 
-export const logoutEmployeeSuccess = () => ({
-    type: 'LOGOUT_EMPLOYEE_SUCCESS',
+export const logoutAccountSuccess = () => ({
+    type: 'LOGOUT_ACCOUNT_SUCCESS',
 });
 
 export const logoutAndRedirect = () => (dispatch) => {
     try {
         auth().signOut();
         localStorage.removeItem('idToken');
-        dispatch(logoutEmployeeSuccess());
+        dispatch(logoutAccountSuccess());
         gtag('event', 'logout', {
             event_category: 'registration',
         });
         history.push('/login');
     } catch (error) {
         console.log(error);
-        dispatch(logoutEmployeeFailure({
+        dispatch(logoutAccountFailure({
             response: {
                 status: 400,
                 statusText: error.message,
@@ -188,4 +183,4 @@ export const logoutAndRedirect = () => (dispatch) => {
         }));
     }
 };
-// [END Logout Employee Service]
+// [END Logout Account Service]

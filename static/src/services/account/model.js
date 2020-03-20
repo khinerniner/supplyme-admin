@@ -1,69 +1,42 @@
-
 export function toNewAccount() {
     return {
-        name: null,
+        activationCode: null,
+        creationDate: null,
+        email: '',
         accountID: null,
-        smartbnb: {
-            isActive: false,
-            clientID: null,
-            clientSecret: null,
-            hasMigrated: false,
-            updatedDate: false,
-        },
-        seasons: [],
-        seasonModifier: {},
-        firesale: [],
-        dow: {},
-        dowModifier: [],
-        base: {
-            amount: null,
-            days: null,
-            limit: null
-        },
-        min: {
-            amount: null,
-            days: null,
-            limit: null
-        },
-        terms: false,
-        termTime: null,
+        employmentDate: null,
+        isActive: false,
+        isLoggedIn: false,
+        isOnline: false,
+        name: null,
+        oldAccountRef: null,
+        permissionLevel: 'user',
+        phoneNumber: null,
+        unenrolled: null,
+        updatedDate: null,
     };
 }
-
-export function getAccountFromSnapshot(account) {
-    return {
-        accountID: account.accountID,
-        name: account.name,
-        smartbnb: account.smartbnb || {},
-        seasons: account.seasons || [],
-        seasonModifier: account.seasonModifier || {},
-        firesale: account.firesale || [],
-        dow: account.dow || [],
-        dowModifier: account.dowModifier || [],
-        base: account.base || {},
-        min: account.min || {},
-        terms: account.terms || false,
-        termTime: account.termTime || null
-    }
-}
-
 export function accountRowObject(account) {
     return {
         index: account.accountID,
         id: account.accountID,
         name: account.name,
-        smartbnbisActive: account.smartbnb.isActive,
-        smartbnbHasMigrated: account.smartbnb.hasMigrated,
-        smartbnbHasMigratedTime: account.smartbnb.updatedDate,
+        permissionLevel: account.permissionLevel,
+        email: account.email,
+        phoneNumber: account.phoneNumber,
+        isActive: account.isActive,
+        unenrolled: account.unenrolled,
+        creationDate: account.creationDate,
     };
 }
 export function toNewAccountCode() {
     return {
         activationCode: null,
         accountID: null,
-        ownerName: null,
         accountName: null,
-        email: null,
+        ownerName: null,
+        email: '',
+        permissionLevel: 'user',
         phoneNumber: null,
         valid: false,
         updatedDate: null,
@@ -78,6 +51,7 @@ export function accountCodeRowObject(accountCode) {
         ownerName: accountCode.ownerName,
         accountName: accountCode.accountName,
         email: accountCode.email,
+        permissionLevel: accountCode.permissionLevel,
         phoneNumber: accountCode.phoneNumber,
         valid: accountCode.valid,
         updatedDate: accountCode.updatedDate,
