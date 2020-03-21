@@ -163,7 +163,7 @@ class Base extends Component {
                             disableRipple
                             disableFocusRipple
                             className={classes.signUpButton}
-                            onClick={e => dispatchNewRoute('/register')}
+                            onClick={e => dispatchNewRoute('/register/doctor')}
                         >
                             {'Sign up'}
                         </Button>
@@ -181,7 +181,7 @@ class Base extends Component {
                     </div>
                 </div>
                 <div className={classes.footer}>
-                    <span>©2016-2019 Angell Enterprises, Inc. All rights reserved.</span>
+                    <span>©2020 Clean Alternative. Sustainable. Life. 501(c)(3) All rights reserved.</span>
                 </div>
             </div>
         );
