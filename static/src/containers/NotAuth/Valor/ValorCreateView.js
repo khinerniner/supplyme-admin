@@ -14,7 +14,7 @@ import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 
-// import UploadMedia from '../../Global/Media/UploadMedia';
+import UploadValorMedia from '../../../components/VeriDoc/Media/UploadValorMedia';
 
 import { toNewValor } from '../../../services/valor/model';
 // import { createValor } from '../../../services/valor/actions';
@@ -132,7 +132,7 @@ class ValorCreateView extends React.Component {
         return true;
     }
 
-    handleText = (e, parent, name) => {
+    handleText = (e, name) => {
         const { value } = e.target;
         const next_state = this.state;
         next_state.valor[name] = value;
@@ -145,7 +145,7 @@ class ValorCreateView extends React.Component {
         this.setState(next_state, () => {});
     }
 
-    isValorDisabled() {
+    isValorDisabled = () => {
         this.setState({
             disabled: true,
         });
@@ -157,7 +157,7 @@ class ValorCreateView extends React.Component {
                 name_error_text: null,
             });
         } else if (validateString(this.state.valor.name) && this.state.valor.name.length < 20){
-            firstname_is_valid = true;
+            name_is_valid = true;
             this.setState({
                 name_error_text: null,
             });
@@ -173,14 +173,14 @@ class ValorCreateView extends React.Component {
         if (
           name_is_valid
         ) {
-            this.setState({
-                disabled: false,
-            });
+            this.createNewValor();
         }
     }
 
     createNewValor = () => {
         const { actions, idToken, valorID, accountID, medias } = this.props;
+        const { valor } = this.state;
+        console.log(valor)
         // actions.createValor(idToken, valorID, accountID, this.state.valor, medias, this.state.redirectRoute);
     }
 
@@ -213,12 +213,16 @@ class ValorCreateView extends React.Component {
                   margin="dense"
                   variant="outlined"
                   helperText={name_error_text}
-                  value={valor.name}
+                  value={valor.name || ''}
                   className={classes.textField}
                   onChange={e => this.handleText(e, 'name')}
                   FormHelperTextProps={{ classes: { root: classes.helperText } }}
                   autoComplete=""
                 />
+            </div>
+            <label className={classes.inputLabel}>Avatar</label>
+            <div className={classes.textCell}>
+                <UploadValorMedia />
             </div>
             </div>
         );
@@ -235,7 +239,7 @@ class ValorCreateView extends React.Component {
                   Enter the valor's birthdate and death date.
               </div>
             </div>
-            <label className={classes.inputLabel}>{'Start Date'}</label>
+            <label className={classes.inputLabel}>{'Birth Date'}</label>
             <div className={classes.textCell}>
                 <KeyboardDatePicker
                     autoOk
@@ -249,7 +253,7 @@ class ValorCreateView extends React.Component {
                     id="date-picker-inline"
                 />
             </div>
-            <label className={classes.inputLabel}>{'End Date'}</label>
+            <label className={classes.inputLabel}>{'Death Date'}</label>
             <div className={classes.textCell}>
                 <KeyboardDatePicker
                     autoOk
@@ -283,11 +287,11 @@ class ValorCreateView extends React.Component {
                 <TextField
                   placeholder="Ex. John Doe was a loving and caring father of 3 children."
                   rows={3}
-                  multirow
+                  multiline
                   margin="dense"
                   variant="outlined"
                   helperText={notes_error_text}
-                  value={valor.notes}
+                  value={valor.notes || ''}
                   className={classes.textField}
                   onChange={e => this.handleText(e, 'notes')}
                   FormHelperTextProps={{ classes: { root: classes.helperText } }}
@@ -304,7 +308,7 @@ class ValorCreateView extends React.Component {
                     variant="contained"
                     disableRipple
                     disableFocusRipple
-                    // onClick={this.createNewValor}
+                    onClick={this.isValorDisabled}
                     className={classes.createButton}
                   >
                       {'Create Valor'}
@@ -323,6 +327,7 @@ class ValorCreateView extends React.Component {
                   </div>
                   {NameContainer}
                   {DeathContainer}
+                  {NotesContainer}
                   {CreateContainer}
               </div>
           </div>

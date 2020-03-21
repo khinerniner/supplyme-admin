@@ -99,7 +99,7 @@ class TopicListView extends Component {
                                       </div>
                                   </div>
                                   <div className="posttext pull-left">
-                                      <h2><a href="02_topic.html">10 Kids Unaware of Their Halloween Costume</a></h2>
+                                      <h2><a href="/topics/1">10 Kids Unaware of Their Halloween Costume</a></h2>
                                       <p>It's one thing to subject yourself to a Halloween costume mishap because, hey, that's your prerogative.</p>
                                   </div>
                                   <div className="clearfix"></div>
@@ -133,7 +133,7 @@ class TopicListView extends Component {
                                       </div>
                                   </div>
                                   <div className="posttext pull-left">
-                                      <h2><a href="02_topic.html">What Instagram Ads Will Look Like</a></h2>
+                                      <h2><a href="/topics/1">What Instagram Ads Will Look Like</a></h2>
                                       <p>Instagram offered a first glimpse at what its ads will look like in a blog post Thursday. The sample ad, which you can see below.</p>
                                   </div>
                                   <div className="clearfix"></div>
@@ -167,7 +167,7 @@ class TopicListView extends Component {
                                       </div>
                                   </div>
                                   <div className="posttext pull-left">
-                                      <h2><a href="02_topic.html">The Future of Magazines Is on Tablets</a></h2>
+                                      <h2><a href="/topics/1">The Future of Magazines Is on Tablets</a></h2>
                                       <p>Eric Schmidt has seen the future of magazines, and it's on the tablet. At a Magazine Publishers Association.</p>
                                   </div>
                                   <div className="clearfix"></div>
@@ -201,7 +201,7 @@ class TopicListView extends Component {
                                       </div>
                                   </div>
                                   <div className="posttext pull-left">
-                                      <h2><a href="02_topic.html">Pinterest Now Worth $3.8 Billion</a></h2>
+                                      <h2><a href="/topics/1">Pinterest Now Worth $3.8 Billion</a></h2>
                                       <p>Pinterest's valuation is closing in on $4 billion after its latest funding round of $225 million, according to a report.</p>
                                   </div>
                                   <div className="clearfix"></div>
@@ -236,7 +236,7 @@ class TopicListView extends Component {
                                       </div>
                                   </div>
                                   <div className="posttext pull-left">
-                                      <h2><a href="02_topic.html">10 Kids Unaware of Their Halloween Costume</a></h2>
+                                      <h2><a href="/topics/1">10 Kids Unaware of Their Halloween Costume</a></h2>
                                       <p>It's one thing to subject yourself to a Halloween costume mishap because, hey, that's your prerogative.</p>
                                   </div>
                                   <div className="clearfix"></div>
@@ -268,7 +268,7 @@ class TopicListView extends Component {
                                       </div>
                                   </div>
                                   <div className="posttext pull-left">
-                                      <h2><a href="02_topic.html">What Instagram Ads Will Look Like</a></h2>
+                                      <h2><a href="/topics/1">What Instagram Ads Will Look Like</a></h2>
                                       <p>Instagram offered a first glimpse at what its ads will look like in a blog post Thursday. The sample ad, which you can see below.</p>
                                   </div>
                                   <div className="clearfix"></div>
@@ -302,7 +302,7 @@ class TopicListView extends Component {
                                       </div>
                                   </div>
                                   <div className="posttext pull-left">
-                                      <h2><a href="02_topic.html">The Future of Magazines Is on Tablets</a></h2>
+                                      <h2><a href="/topics/1">The Future of Magazines Is on Tablets</a></h2>
                                       <p>Eric Schmidt has seen the future of magazines, and it's on the tablet. At a Magazine Publishers Association.</p>
                                   </div>
                                   <div className="clearfix"></div>
