@@ -3,9 +3,8 @@ import { auth, db } from '../../store/firebase';
 import { parseJSON } from '../../utils/misc';
 import { errorAlert } from '../../utils/alerts';
 import { privalgoAnalytic } from '../../utils/analytics';
-import { toPrivalgoAccount } from '../account/model';
-import { getAccount } from '../../services/account/actions';
 import { toNewAccount } from '../account/model';
+import { getAccount } from '../../services/account/actions';
 
 // Register Account
 // TODO: None
@@ -70,7 +69,7 @@ export const registerAccount = (accountCode, password, redirectRoute) => (dispat
         const accountRef = db().collection('Accounts').doc();
         const activationCodeRef = db().collection('ActivationCodes').doc(accountCode.activationCode);
 
-        const accountInfo = toPrivalgoAccount()
+        const accountInfo = toNewAccount()
         accountInfo.name = accountCode.accountName;
         return auth().createUserWithEmailAndPassword(accountCode.email, password).then((user) => {
             return db().runTransaction((transaction) => {
@@ -83,8 +82,6 @@ export const registerAccount = (accountCode, password, redirectRoute) => (dispat
 
                   transaction.set(activationCodeRef, { accountID: accountRef.id, valid: false, updatedDate: employmentDate });
 
-                  const newEmployeeRef = accountRef.collection('Employees').doc(user.user.uid);
-                  const accountInfo = toNewAccount();
                   accountInfo.name = accountCode.ownerName;
                   accountInfo.phoneNumber = accountCode.phoneNumber;
                   accountInfo.email = accountCode.email;
