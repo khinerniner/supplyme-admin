@@ -7,8 +7,8 @@ import Loader from 'react-loaders';
 
 import Base from '../components/VeriDoc/Base';
 
-// import { loginEmployeeWithPermissions, logoutAndRedirect } from '../services/app/actions';
-// import { auth } from '../store/firebase';
+import { loginAccountWithPermissions, logoutAndRedirect } from '../services/app/actions';
+import { auth } from '../store/firebase';
 
 const styles = (theme) => ({
     loader: {
@@ -40,8 +40,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         actions: {
-            // loginEmployeeWithPermissions: bindActionCreators(loginEmployeeWithPermissions, dispatch),
-            // logoutAndRedirect: bindActionCreators(logoutAndRedirect, dispatch),
+            loginAccountWithPermissions: bindActionCreators(loginAccountWithPermissions, dispatch),
+            logoutAndRedirect: bindActionCreators(logoutAndRedirect, dispatch),
         },
     };
 }
@@ -79,7 +79,7 @@ export function requireAuthentication(Component) {
                     console.log('A3');
                     auth().onAuthStateChanged((user) => {
                         if (user) {
-                            props.actions.loginEmployeeWithPermissions(user.uid, next);
+                            props.actions.loginAccountWithPermissions(user.uid, next);
                         } else {
                             props.actions.logoutAndRedirect();
                         }
@@ -90,7 +90,7 @@ export function requireAuthentication(Component) {
                     if (props.accountID === process.env.PRIVALGO_ADMIN_KEY) {
                         history.push(`/admin/dashboard`);
                     } else {
-                        history.push(`/accounts/${props.accountID}/dashboard`);
+                        history.push(`/topics`);
                     }
                 } else {
                     console.log('A4');
@@ -126,7 +126,7 @@ export function requireAuthentication(Component) {
         accountID: '',
         isAccountLoaded: false,
         isAuthenticated: false,
-        loginEmployeeWithPermissions: f => f,
+        loginAccountWithPermissions: f => f,
         logoutAndRedirect: f => f,
     };
 
@@ -134,7 +134,7 @@ export function requireAuthentication(Component) {
         accountID: PropTypes.string,
         isAccountLoaded: PropTypes.bool,
         isAuthenticated: PropTypes.bool,
-        loginEmployeeWithPermissions: PropTypes.func,
+        loginAccountWithPermissions: PropTypes.func,
         logoutAndRedirect: PropTypes.func,
     };
 
