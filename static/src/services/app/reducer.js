@@ -9,6 +9,7 @@ const initialState = {
     isRegistering: false,
     statusText: null,
     accountID: null,
+    accountType: null,
     employeeID: null,
     idToken: null,
     permissionLevel: null,
@@ -37,6 +38,7 @@ const app = (state = initialState, action) => {
             idToken: action.payload.idToken,
             permissionLevel: action.payload.employee.permissionLevel,
             accountID: action.payload.accountID,
+            accountType: action.payload.accountType,
             email: action.payload.employee.email,
             displayName: action.payload.employee.name,
         });
@@ -60,6 +62,7 @@ const app = (state = initialState, action) => {
             idToken: action.payload.idToken,
             permissionLevel: action.payload.employee.permissionLevel,
             accountID: action.payload.accountID,
+            accountType: action.payload.accountType,
             email: action.payload.employee.email,
             displayName: action.payload.employee.name,
         });
@@ -68,23 +71,6 @@ const app = (state = initialState, action) => {
             isRegistering: false,
             isRegistered: false,
             statusText: `Authentication Error: ${action.payload.status} ${action.payload.statusText}`,
-        });
-    case 'REGISTER_ACCOUNT_REQUEST':
-        return Object.assign({}, state, {
-            isRegistering: true,
-        });
-    case 'REGISTER_ACCOUNT_SUCCESS':
-        return Object.assign({}, state, {
-            isRegistering: false,
-            isRegistered: true,
-            isAuthenticated: true,
-            statusText: 'You have been successfully registered.',
-            employeeID: action.payload.employeeID,
-            idToken: action.payload.idToken,
-            permissionLevel: action.payload.employee.permissionLevel,
-            dispensaryID: action.payload.dispensaryID,
-            email: action.payload.employee.email,
-            displayName: action.payload.employee.name,
         });
     default:
         return state;

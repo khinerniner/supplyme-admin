@@ -6,10 +6,10 @@ import { errorAlert, successAlert } from '../../utils/alerts';
 import { getAccount } from '../../services/account/actions';
 
 // For AppItems in Swift
-import { fetchProperties } from '../../services/property/actions';
-import { fetchAccounts } from '../../services/employee/actions';
-import { fetchEvents } from '../../services/event/actions';
-import { fetchOwners } from '../../services/owner/actions';
+// import { fetchProperties } from '../../services/property/actions';
+// import { fetchAccounts } from '../../services/employee/actions';
+// import { fetchEvents } from '../../services/event/actions';
+// import { fetchOwners } from '../../services/owner/actions';
 
 // Login Account
 //
@@ -19,10 +19,9 @@ export const loginAccountRequest = () => ({
 });
 
 
-export const loginAccountSuccess = (employeeID, accountID, employee, idToken) => ({
+export const loginAccountSuccess = (accountID, employee, idToken) => ({
     type: 'LOGIN_ACCOUNT_SUCCESS',
     payload: {
-        employeeID,
         accountID,
         employee,
         idToken,
@@ -38,19 +37,19 @@ export const loginAccountFailure = error => ({
     },
 });
 
-export const loginAccountWithPermissions = (employeeID, redirectRoute) => (dispatch) => {
+export const loginAccountWithPermissions = (accountID, redirectRoute) => (dispatch) => {
   try {
-    console.log('User ID: ' + employeeID)
+    console.log('User ID: ' + accountID)
     const refresh = true;
     auth().currentUser.getIdToken(refresh).then((idToken) => {
         console.error(idToken)
-        const userRef = db().collection('MasterUserList').doc(employeeID);
+        const userRef = db().collection('MasterUserList').doc(accountID);
         userRef.get().then((userDoc) => {
             if (userDoc.exists) {
                 console.log('Account ID' + userDoc.data().accountID);
                 const accountID = userDoc.data().accountID;
                 const accountRef = db().collection('Accounts').doc(accountID);
-                accountRef.collection('Accounts').doc(employeeID).get().then((empDoc) => {
+                accountRef.get().then((empDoc) => {
                     if (empDoc.exists) {
                         console.log('Permission Level:', empDoc.data().permissionLevel);
                         const permissionLevel = empDoc.data().permissionLevel;
@@ -65,8 +64,62 @@ export const loginAccountWithPermissions = (employeeID, redirectRoute) => (dispa
                         }
                         localStorage.setItem('idToken', idToken);
                         dispatch(getAccount(accountID));
-                        dispatch(loginAccountSuccess(employeeID, accountID, empDoc.data(), idToken));
+                        dispatch(loginAccountSuccess(accountID, accountID, empDoc.data(), idToken));
                         history.push(redirectRoute);
+                        // const recipientId = 'test'
+                        // const deviceId = '123'
+                        // var address = new libsignal.SignalProtocolAddress(recipientId, deviceId);
+                        // var store   = new SignalProtocolStore();
+                        // var sessionBuilder = new libsignal.SessionBuilder(store, address);
+                        // const registrationId = null;
+                        // const identityKey = [];
+                        // const keyId = null;
+                        // const publicKey = null;
+                        // const signature = null;
+                        // if (identityKey.length === []) {
+                        //     throw ('Invalid Identity Key')
+                        // }
+                        // if (registrationId === null) {
+                        //     throw ('Invalid Registration ID')
+                        // }
+                        // if (keyId === null) {
+                        //     throw ('Invalid Key ID')
+                        // }
+                        // if (publicKey === null) {
+                        //     throw ('Invalid Public Key')
+                        // }
+                        // if (signature === null) {
+                        //     throw ('Invalid Signature')
+                        // }
+                        // var promise = sessionBuilder.processPreKey({
+                        //     registrationId: registrationId,
+                        //     identityKey: identityKey,
+                        //     signedPreKey: {
+                        //         keyId     : keyId,
+                        //         publicKey : publicKey,
+                        //         signature : signature
+                        //     },
+                        //     preKey: {
+                        //         keyId     : keyId,
+                        //         publicKey : publicKey
+                        //     }
+                        // });
+                        //
+                        // promise.then(function onsuccess() {
+                        //   dispatch(getAccount(accountID));
+                        //   dispatch(loginAccountSuccess(accountID, accountID, empDoc.data(), idToken));
+                        //   history.push(redirectRoute);
+                        // });
+                        //
+                        // promise.catch(function onerror(error) {
+                        //     console.log(`Signal Encryption Error: ${error.message}`);
+                        //     dispatch(loginAccountFailure({
+                        //         response: {
+                        //             status: 999,
+                        //             statusText: error.message,
+                        //         },
+                        //     }));
+                        // });
                     } else {
                         console.log('No such Account document!');
                         dispatch(loginAccountFailure({
