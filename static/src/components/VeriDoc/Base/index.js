@@ -87,6 +87,8 @@ const styles = theme => ({
 function mapStateToProps(state) {
     return {
         pathname: state.router.location.pathname,
+        isAccountLoaded: state.accountData.account.isLoaded,
+        isAuthenticated: state.app.isAuthenticated,
     };
 }
 
@@ -116,6 +118,7 @@ class Base extends Component {
         const {
             classes,
             pathname,
+            isAuthenticated,
         } = this.props;
         const {
             isMobileAndTablet,
@@ -153,21 +156,26 @@ class Base extends Component {
                         >
                             <div style={{ fontSize: 14, color: '#adadad' }}>
                                 <i class="fa fa-user"></i>
-                                <span style={{ marginLeft: 8 }}>Log In</span>
+                                <span style={{ marginLeft: 8 }}>{!isAuthenticated ? 'Log In' : 'Log Out'}</span>
                             </div>
                         </IconButton>
                     </div>
-                    <div className={classes.sectionDesktop}>
-                        <Button
-                            variant="contained"
-                            disableRipple
-                            disableFocusRipple
-                            className={classes.signUpButton}
-                            onClick={e => dispatchNewRoute('/register/doctor')}
-                        >
-                            {'Sign up'}
-                        </Button>
-                    </div>
+                    {
+                      !isAuthenticated ?
+                      (
+                        <div className={classes.sectionDesktop}>
+                            <Button
+                                variant="contained"
+                                disableRipple
+                                disableFocusRipple
+                                className={classes.signUpButton}
+                                onClick={e => dispatchNewRoute('/register/doctor')}
+                            >
+                                {'Sign up'}
+                            </Button>
+                        </div>
+                      ) : null
+                    }
                 </Toolbar>
             </AppBar>
         );
