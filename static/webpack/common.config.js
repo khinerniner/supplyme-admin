@@ -40,23 +40,26 @@ const common = {
         child_process: false,
     },
     module: {
-        rules: [{
-            test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
-            loader: 'file-loader',
-        }, {
-            test: /\.js$/,
-            loader: 'babel-loader',
-            exclude: [/node_modules/],
-            options: {
-                presets: ['@babel/preset-env'],
-            },
-        }, {
-            test: /\.png$/,
-            loader: 'file-loader?name=[name].[ext]',
-        }, {
-            test: /\.jpg$/,
-            loader: 'file-loader?name=[name].[ext]',
-        }],
+        // noParse: /node_modules\/signal-protocol\/src\/node_polyfills.js/,
+        rules: [
+          {
+              test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
+              loader: 'file-loader',
+          }, {
+              test: /\.js$/,
+              loader: 'babel-loader',
+              exclude: [/node_modules/],
+              options: {
+                  presets: ['@babel/preset-env'],
+              },
+          }, {
+              test: /\.png$/,
+              loader: 'file-loader?name=[name].[ext]',
+          }, {
+              test: /\.jpg$/,
+              loader: 'file-loader?name=[name].[ext]',
+          },
+        ],
     },
 
     plugins: [
