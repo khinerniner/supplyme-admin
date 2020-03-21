@@ -31,8 +31,9 @@ export default (
             <Route exact path="/register/manufacture" component={requireNoAuthentication(RegisterView)} />
             <Route exact path="/login" component={requireNoAuthentication(LoginView)} />
 
-            <Route exact path="/topics" component={requireNoAuthentication(TopicListView)} />
-            <Route exact path="/topics/:id" component={requireNoAuthentication(TopicDetailView)} />
+            <Route exact path="/topics" component={requireAuthentication(TopicListView)} />
+            <Route exact path="/topics/:id" component={requireAuthentication(TopicDetailView)} />
+            
             <Route exact path="/valor" component={ValorListView} />
             <Route exact path="/valor/create" component={ValorCreateView} />
             <Route component={NotFoundView} />
