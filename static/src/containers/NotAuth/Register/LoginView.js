@@ -15,8 +15,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-// import { loginAccount } from '../../../services/app/actions';
-// import { loginAccount, forgotPassword } from '../../../services/app/actions';
+import { loginAccount, forgotPassword } from '../../../services/app/actions';
 import { validateEmail, dispatchNewRoute } from '../../../utils/misc';
 
 function mapStateToProps(state) {
@@ -31,7 +30,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         actions: {
-            // loginAccount: bindActionCreators(loginAccount, dispatch),
+            loginAccount: bindActionCreators(loginAccount, dispatch),
             // forgotPassword: bindActionCreators(forgotPassword, dispatch),
         },
     };

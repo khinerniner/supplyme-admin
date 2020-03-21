@@ -9,15 +9,17 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import AutoCompleteHospitals from '../../../components/VeriDoc/AutoCompletes/AutoCompleteHospitals';
 
-import { registerAccount } from '../../../services/accountRegistration/actions';
-import { toNewAccountCode } from '../../../services/account/model';
+import { registerHospital } from '../../../services/hospitalRegistration/actions';
+import { toNewHospitalCode } from '../../../services/hospital/model';
 import {
   validateVarChar,
   validateEmail,
   dispatchNewRoute,
   getRegistrationSearch
 } from '../../../utils/misc';
+import { geocodeGooglePlace } from '../../../services/google/actions';
 
 const styles = theme => ({
     root: {
@@ -92,7 +94,7 @@ function mapStateToProps(state) {
         search: state.router.location.search,
         idToken: state.app.idToken,
         accountID: state.app.accountID,
-        accountCode: state.accountData.accountCode,
+        HospitalCode: state.hospitalData.hospitalCode,
         isRegistered: state.app.isRegistered,
         isRegistering: state.app.isRegistering,
     };
@@ -101,7 +103,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         actions: {
-            registerAccount: bindActionCreators(registerAccount, dispatch),
+            registerHospital: bindActionCreators(registerHospital, dispatch),
         },
     };
 }
@@ -112,10 +114,10 @@ class RegisterView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            activationCode: toNewAccountCode(),
-            accountCode: toNewAccountCode(),
+            activationCode: toNewHospitalCode(),
+            hospitalCode: toNewHospitalCode(),
             ownerName_error_text: null,
-            accountName_error_text: null,
+            hospitalName_error_text: null,
             activationCode_error_text: null,
             ownerEmail_error_text: null,
             password: '',
@@ -139,9 +141,9 @@ class RegisterView extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.accountCode.isLoaded && !this.props.accountCode.isLoaded) {
+        if (nextProps.hospitalCode.isLoaded && !this.props.hospitalCode.isLoaded) {
             this.setState({
-                activationCode: nextProps.accountCode,
+                activationCode: nextProps.hospitalCode,
                 stepIndex: 1,
             });
         }
@@ -161,7 +163,7 @@ class RegisterView extends Component {
 
     isDisabled() {
         let ownerName_is_valid = false;
-        let accountName_is_valid = false;
+        let hospitalName_is_valid = false;
         let email_is_valid = false;
         let password_is_valid = false;
         let activationCode_is_valid = false;
@@ -185,19 +187,19 @@ class RegisterView extends Component {
             });
         }
 
-        if (this.state.activationCode.accountName === null || this.state.activationCode.accountName === '') {
+        if (this.state.activationCode.hospitalName === null || this.state.activationCode.hospitalName === '') {
             this.setState({
-                accountName_error_text: null,
+                hospitalName_error_text: null,
             });
-        } else if (validateVarChar(this.state.activationCode.accountName)) {
-            accountName_is_valid = true;
+        } else if (validateVarChar(this.state.activationCode.hospitalName)) {
+            hospitalName_is_valid = true;
             this.setState({
-                accountName_error_text: null,
+                hospitalName_error_text: null,
             });
 
         } else {
             this.setState({
-                accountName_error_text: 'Sorry, this is not a valid name',
+                hospitalName_error_text: 'Sorry, this is not a valid name',
             });
         }
 
@@ -248,7 +250,7 @@ class RegisterView extends Component {
         }
 
         if (
-          accountName_is_valid &&
+          hospitalName_is_valid &&
           ownerName_is_valid &&
           email_is_valid &&
           password_is_valid &&
@@ -276,20 +278,20 @@ class RegisterView extends Component {
     _handleKeyPress(e) {
         if (e.key === 'Enter') {
             if (!this.state.disabled) {
-                this.createNewAccount(e);
+                this.createNewHospital(e);
             }
         }
     }
 
-    createNewAccount = (e) => {
-        const { actions, idToken, accountID, userType }= this.props;
+    createNewHospital = (e) => {
+        const { actions, idToken, accountID }= this.props;
         const { activationCode, password, redirectRoute }= this.state;
         e.preventDefault();
         this.setState({
             loading: true,
             disabled: true,
         });
-        actions.registerAccount(
+        actions.registerHospital(
             activationCode,
             password,
             redirectRoute,
@@ -315,6 +317,7 @@ class RegisterView extends Component {
           password_error_text,
           loading,
         } = this.state;
+
         console.log(activationCode);
 
         const RightContent = (
@@ -322,7 +325,7 @@ class RegisterView extends Component {
               <div className={classes.gridItem}>
                   <div className={classes.gridItemBox}>
                       <div className={classes.gridItemBoxInner}>
-                          <h2 style={{lineHeight: '24px', fontWeight: 400, fontSize: 30, textAlign: 'center', paddingBottom: 15}}>{'Register a new Doctor'}</h2>
+                          <h2 style={{lineHeight: '24px', fontWeight: 400, fontSize: 30, textAlign: 'center', paddingBottom: 15}}>{'Register a new Hospital'}</h2>
                           <div style={{margin: 10}}>
                           {
                               loading ?
@@ -332,8 +335,8 @@ class RegisterView extends Component {
                           </div>
                           <div className={classes.text}>
                               <TextField
-                                  placeholder="Not Your Real Name"
-                                  label="Anon Doc Name"
+                                  placeholder="Manager Name"
+                                  label="Manager Name"
                                   type="text"
                                   fullWidth
                                   variant="outlined"
@@ -346,12 +349,12 @@ class RegisterView extends Component {
                           </div>
                           <div className={classes.text}>
                               <TextField
-                                  placeholder="Ex. anondoc"
-                                  label="Anon Doc Username"
+                                  placeholder="Ex. example@test.com"
+                                  label="Manager Email"
                                   type="email"
                                   fullWidth
                                   variant="outlined"
-                                  value={activationCode.username || ''}
+                                  value={activationCode.email || ''}
                                   autoComplete="email"
                                   className={classes.textField}
                                   helpertext={ownerEmail_error_text}
@@ -391,12 +394,12 @@ class RegisterView extends Component {
                               <Button
                                   disableRipple
                                   disableFocusRipple
-                                  onClick={this.createNewAccount}
+                                  onClick={this.createNewHospital}
                                   disabled={false}
                                   className={classes.registerButton}
                                   variant="outlined"
                               >
-                                  {'Register Account'}
+                                  {'Register Hospital'}
                               </Button>
                           </div>
                       </div>
@@ -405,14 +408,14 @@ class RegisterView extends Component {
           </div>
         );
 
-        const AccountRegister = (
+        const HospitalRegister = (
             <div className={classes.content}>
                 <div className={classes.leftContent}>
                     <div className={classes.gridItem}>
                         <div className={classes.registerHeader}>
                             VeriDoc
                         </div>
-                        <p className={classes.registerSubHeader}>Please fill out the following information to register a new account in VeriDoc.</p>
+                        <p className={classes.registerSubHeader}>Please fill out the following information to register a new hospital in VeriDoc.</p>
                         <p className={classes.registerSubHeader}>VeriDoc uses <a href="https://github.com/signalapp">Signal Protocol</a> to encrypt all messages.</p>
                         <p className={classes.registerSubHeader}>If you would like to donate, please send <span style={{fontWeight: 600}}>XRP</span> to <div onClick={(e) => this.copyCodeToClipboard(e)} style={{cursor: 'pointer', fontWeight: 600}}>rw2ciyaNshpHe7bCHo4bRWq6pqqynnWKQg</div></p>
                     </div>
@@ -423,7 +426,7 @@ class RegisterView extends Component {
         return (
             <div className={classes.root}>
                 <div style={{paddingTop: 66}} onKeyPress={e => this._handleKeyPress(e)}>
-                {AccountRegister}
+                {HospitalRegister}
                 </div>
             </div>
         );
@@ -432,12 +435,12 @@ class RegisterView extends Component {
 
 RegisterView.defaultProps = {
     search: '',
-    registerAccount: f => f,
+    registerHospital: f => f,
 };
 
 RegisterView.propTypes = {
     search: PropTypes.string,
-    registerAccount: PropTypes.func,
+    registerHospital: PropTypes.func,
     classes: PropTypes.object.isRequired,
 };
 
