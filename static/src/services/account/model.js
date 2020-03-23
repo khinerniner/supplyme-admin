@@ -1,42 +1,51 @@
 export function toNewAccount() {
     return {
-        activationCode: null,
-        creationDate: null,
-        email: '',
         accountID: null,
-        employmentDate: null,
-        isActive: false,
-        isLoggedIn: false,
-        isOnline: false,
         name: null,
-        oldAccountRef: null,
-        permissionLevel: 'user',
-        phoneNumber: null,
-        unenrolled: null,
-        updatedDate: null,
+        accountType: 'retail',
+        locations: [],
     };
 }
+
+export function toNewLocation() {
+    return {
+        locality: null,
+        country: null,
+        region: null,
+        street1: null,
+        street2: null,
+        postal: null,
+        location: null,
+        placeID: null,
+        name: null,
+    };
+}
+
+export function getAccountFromSnapshot(account) {
+    return {
+        accountID: account.accountID,
+        name: account.name,
+        accountType: account.accountType,
+        locations: account.locations,
+    }
+}
+
 export function accountRowObject(account) {
     return {
         index: account.accountID,
         id: account.accountID,
         name: account.name,
-        permissionLevel: account.permissionLevel,
-        email: account.email,
-        phoneNumber: account.phoneNumber,
-        isActive: account.isActive,
-        unenrolled: account.unenrolled,
-        creationDate: account.creationDate,
+        accountType: account.accountType,
+        locations: account.locations,
     };
 }
 export function toNewAccountCode() {
     return {
         activationCode: null,
         accountID: null,
-        accountName: null,
         ownerName: null,
-        username: '',
-        permissionLevel: 'user',
+        accountType: 'retailer',
+        email: null,
         phoneNumber: null,
         valid: false,
         updatedDate: null,
@@ -49,9 +58,8 @@ export function accountCodeRowObject(accountCode) {
         id: accountCode.activationCode,
         accountID: accountCode.accountID,
         ownerName: accountCode.ownerName,
-        accountName: accountCode.accountName,
-        username: accountCode.username,
-        permissionLevel: accountCode.permissionLevel,
+        accountType: accountCode.accountType,
+        email: accountCode.email,
         phoneNumber: accountCode.phoneNumber,
         valid: accountCode.valid,
         updatedDate: accountCode.updatedDate,

@@ -7,6 +7,16 @@ export function dispatchNewRoute(route) {
     history.push(route);
 }
 
+export function getKeys(pathname) {
+    const path = pathname.split('/');
+    const firstID = path[2];
+    const secondID = path[4];
+    return {
+        first: firstID,
+        second: secondID,
+    }
+}
+
 export function getRegistrationSearch(search) {
     if (!search) {
         return {
@@ -111,4 +121,27 @@ export function arrayBufferToBase64(buffer) {
         binary += String.fromCharCode( bytes[ i ] );
     }
     return window.btoa( binary );
+}
+
+/*
+
+Sorts & Filters
+
+*/
+
+export function filterBy(items) {
+    return items.filter((i) => {
+        return (i.active);
+    });
+}
+
+/// RANDOM ///
+
+export function parseLabel(label) {
+    var finalLabel = '';
+    const splitLabel = label.split('_');
+    splitLabel.forEach((newLabel) => {
+        finalLabel += newLabel.charAt(0).toUpperCase() + newLabel.slice(1) + ' '
+    })
+    return finalLabel
 }

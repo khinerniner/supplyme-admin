@@ -9,15 +9,24 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
-// import { registerManufacturer } from '../../../services/manufacturerRegistration/actions';
-// import { toNewManufacturerCode } from '../../../services/manufacturer/model';
+import { registerAccount } from '../../../services/accountRegistration/actions';
+import { toNewAccountCode } from '../../../services/account/model';
 import {
   validateVarChar,
   validateEmail,
   dispatchNewRoute,
   getRegistrationSearch
 } from '../../../utils/misc';
+
+function renderAccountType() {
+    const array = [];
+    array.push(<MenuItem key={'retailer'} value={'retailer'}>Hospital or Military Base</MenuItem>);
+    array.push(<MenuItem key={'manufacturer'} value={'manufacturer'}>Manufacturer</MenuItem>);
+    return array;
+}
 
 const styles = theme => ({
     root: {
@@ -32,6 +41,7 @@ const styles = theme => ({
         paddingRight: 80,
     },
     leftContent: {
+        paddingTop: 60,
         float: 'left',
         width: '44%',
     },
@@ -92,7 +102,7 @@ function mapStateToProps(state) {
         search: state.router.location.search,
         idToken: state.app.idToken,
         accountID: state.app.accountID,
-        ManufacturerCode: state.manufacturerData.manufacturerCode,
+        accountCode: state.accountData.accountCode,
         isRegistered: state.app.isRegistered,
         isRegistering: state.app.isRegistering,
     };
@@ -101,28 +111,27 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         actions: {
-            // registerManufacturer: bindActionCreators(registerManufacturer, dispatch),
+            registerAccount: bindActionCreators(registerAccount, dispatch),
         },
     };
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
-class ManufacturerRegisterView extends Component {
+class RegisterView extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            activationCode: toNewManufacturerCode(),
-            manufacturerCode: toNewManufacturerCode(),
+            activationCode: toNewAccountCode(),
+            accountCode: toNewAccountCode(),
             ownerName_error_text: null,
-            manufacturerName_error_text: null,
+            accountName_error_text: null,
             activationCode_error_text: null,
             ownerEmail_error_text: null,
             password: '',
             password_error_text: null,
             forgotEmail: null,
             forgotEmail_error_text: null,
-            disabled: true,
             redirectRoute: '/',
             loading: false,
         };
@@ -139,9 +148,9 @@ class ManufacturerRegisterView extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.manufacturerCode.isLoaded && !this.props.manufacturerCode.isLoaded) {
+        if (nextProps.accountCode.isLoaded && !this.props.accountCode.isLoaded) {
             this.setState({
-                activationCode: nextProps.manufacturerCode,
+                activationCode: nextProps.accountCode,
                 stepIndex: 1,
             });
         }
@@ -159,15 +168,12 @@ class ManufacturerRegisterView extends Component {
         return true;
     }
 
-    isDisabled() {
+    isDisabled = (e) => {
+        e.preventDefault();
         let ownerName_is_valid = false;
-        let manufacturerName_is_valid = false;
         let email_is_valid = false;
         let password_is_valid = false;
         let activationCode_is_valid = false;
-        this.setState({
-            disabled: true,
-        });
 
         if (this.state.activationCode.ownerName === null || this.state.activationCode.ownerName === '') {
             this.setState({
@@ -185,34 +191,18 @@ class ManufacturerRegisterView extends Component {
             });
         }
 
-        if (this.state.activationCode.manufacturerName === null || this.state.activationCode.manufacturerName === '') {
-            this.setState({
-                manufacturerName_error_text: null,
-            });
-        } else if (validateVarChar(this.state.activationCode.manufacturerName)) {
-            manufacturerName_is_valid = true;
-            this.setState({
-                manufacturerName_error_text: null,
-            });
-
-        } else {
-            this.setState({
-                manufacturerName_error_text: 'Sorry, this is not a valid name',
-            });
-        }
-
         if (this.state.activationCode.email === null) {
             this.setState({
-                email_error_text: null,
+                ownerEmail_error_text: null,
             });
         } else if (validateEmail(this.state.activationCode.email)) {
             email_is_valid = true;
             this.setState({
-                email_error_text: null,
+                ownerEmail_error_text: null,
             });
         } else {
             this.setState({
-                email_error_text: 'Sorry, this is not a valid email',
+                ownerEmail_error_text: 'Sorry, this is not a valid email',
             });
         }
 
@@ -247,16 +237,16 @@ class ManufacturerRegisterView extends Component {
             });
         }
 
+        console.log(ownerName_is_valid)
+        console.log(email_is_valid)
+
         if (
-          manufacturerName_is_valid &&
           ownerName_is_valid &&
           email_is_valid &&
           password_is_valid &&
           activationCode_is_valid
         ) {
-            this.setState({
-                disabled: false,
-            });
+            this.createNewAccount();
         }
     }
 
@@ -268,28 +258,24 @@ class ManufacturerRegisterView extends Component {
         } else {
             next_state[name] = value;
         }
-        this.setState(next_state, () => {
-            this.isDisabled();
-        });
+        this.setState(next_state, () => {});
     }
 
     _handleKeyPress(e) {
         if (e.key === 'Enter') {
             if (!this.state.disabled) {
-                this.createNewManufacturer(e);
+                this.createNewAccount(e);
             }
         }
     }
 
-    createNewManufacturer = (e) => {
+    createNewAccount() {
         const { actions, idToken, accountID }= this.props;
         const { activationCode, password, redirectRoute }= this.state;
-        e.preventDefault();
         this.setState({
             loading: true,
-            disabled: true,
         });
-        actions.registerManufacturer(
+        actions.registerAccount(
             activationCode,
             password,
             redirectRoute,
@@ -310,19 +296,27 @@ class ManufacturerRegisterView extends Component {
         const { classes } = this.props;
         const {
           activationCode,
+          ownerName_error_text,
           ownerEmail_error_text,
           activationCode_error_text,
           password_error_text,
           loading,
         } = this.state;
+
+        const accountTypes = renderAccountType();
+
         console.log(activationCode);
+        console.log(ownerName_error_text);
+        console.log(ownerEmail_error_text);
+        console.log(activationCode_error_text);
+        console.log(password_error_text);
 
         const RightContent = (
           <div className={classes.rightContent}>
               <div className={classes.gridItem}>
                   <div className={classes.gridItemBox}>
                       <div className={classes.gridItemBoxInner}>
-                          <h2 style={{lineHeight: '24px', fontWeight: 400, fontSize: 30, textAlign: 'center', paddingBottom: 15}}>{'Register a new Manufacturer'}</h2>
+                          <h2 style={{lineHeight: '24px', fontWeight: 400, fontSize: 30, textAlign: 'center', paddingBottom: 15}}>{'Register a new Account'}</h2>
                           <div style={{margin: 10}}>
                           {
                               loading ?
@@ -340,7 +334,7 @@ class ManufacturerRegisterView extends Component {
                                   autoComplete=""
                                   className={classes.textField}
                                   value={activationCode.ownerName || ''}
-                                  helpertext={this.state.ownerName_error_text}
+                                  helpertext={ownerName_error_text}
                                   onChange={e => this.changeValue(e, 'activationCode', 'ownerName')}
                               />
                           </div>
@@ -357,6 +351,20 @@ class ManufacturerRegisterView extends Component {
                                   helpertext={ownerEmail_error_text}
                                   onChange={e => this.changeValue(e, 'activationCode', 'email')}
                               />
+                          </div>
+                          <div style={{paddingBottom: 20}} className={classes.textCell}>
+                              <Select
+                                  fullWidth
+                                  onChange={e => this.changeValue(e, 'activationCode', 'accountType')}
+                                  value={activationCode.accountType}
+                                  variant="outlined"
+                                  inputProps={{
+                                      name: 'accountType',
+                                      id: 'accountType',
+                                  }}
+                              >
+                                  {accountTypes}
+                              </Select>
                           </div>
                           <span style={{fontWeight: 600, paddingTop: 20}}>How was the drive from Instambul?</span>
                           <div style={{paddingTop: 10}} className={classes.text}>
@@ -391,12 +399,11 @@ class ManufacturerRegisterView extends Component {
                               <Button
                                   disableRipple
                                   disableFocusRipple
-                                  onClick={this.createNewManufacturer}
-                                  disabled={false}
+                                  onClick={e => this.isDisabled(e)}
                                   className={classes.registerButton}
                                   variant="outlined"
                               >
-                                  {'Register Manufacture'}
+                                  {'Register Account'}
                               </Button>
                           </div>
                       </div>
@@ -405,15 +412,14 @@ class ManufacturerRegisterView extends Component {
           </div>
         );
 
-        const ManufacturerRegister = (
+        const AccountRegister = (
             <div className={classes.content}>
                 <div className={classes.leftContent}>
                     <div className={classes.gridItem}>
                         <div className={classes.registerHeader}>
                             VeriDoc
                         </div>
-                        <p className={classes.registerSubHeader}>Please fill out the following information to register a new manufacturer in VeriDoc.</p>
-                        <p className={classes.registerSubHeader}>VeriDoc uses <a href="https://github.com/signalapp">Signal Protocol</a> to encrypt all messages.</p>
+                        <p className={classes.registerSubHeader}>Please fill out the following information to register a new account in VeriDoc.</p>
                         <p className={classes.registerSubHeader}>If you would like to donate, please send <span style={{fontWeight: 600}}>XRP</span> to <div onClick={(e) => this.copyCodeToClipboard(e)} style={{cursor: 'pointer', fontWeight: 600}}>rw2ciyaNshpHe7bCHo4bRWq6pqqynnWKQg</div></p>
                     </div>
                 </div>
@@ -423,22 +429,22 @@ class ManufacturerRegisterView extends Component {
         return (
             <div className={classes.root}>
                 <div style={{paddingTop: 66}} onKeyPress={e => this._handleKeyPress(e)}>
-                {ManufacturerRegister}
+                {AccountRegister}
                 </div>
             </div>
         );
     }
 }
 
-ManufacturerRegisterView.defaultProps = {
+RegisterView.defaultProps = {
     search: '',
-    registerManufacturer: f => f,
+    registerAccount: f => f,
 };
 
-ManufacturerRegisterView.propTypes = {
+RegisterView.propTypes = {
     search: PropTypes.string,
-    registerManufacturer: PropTypes.func,
+    registerAccount: PropTypes.func,
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ManufacturerRegisterView);
+export default withStyles(styles)(RegisterView);

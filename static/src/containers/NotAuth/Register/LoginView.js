@@ -15,7 +15,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-import { loginAccount, forgotPassword } from '../../../services/app/actions';
+import { loginEmployee, forgotPassword } from '../../../services/app/actions';
 import { validateEmail, dispatchNewRoute } from '../../../utils/misc';
 
 function mapStateToProps(state) {
@@ -30,7 +30,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         actions: {
-            loginAccount: bindActionCreators(loginAccount, dispatch),
+            loginEmployee: bindActionCreators(loginEmployee, dispatch),
             // forgotPassword: bindActionCreators(forgotPassword, dispatch),
         },
     };
@@ -229,7 +229,7 @@ class LoginView extends Component {
         this.setState({
             loading: true,
         });
-        this.props.actions.loginAccount(this.state.email, this.state.password, this.state.redirectRoute);
+        this.props.actions.loginEmployee(this.state.email, this.state.password, this.state.redirectRoute);
     }
 
     changeForgotPasswordValue(e, type) {
@@ -374,13 +374,13 @@ class LoginView extends Component {
 
 LoginView.defaultProps = {
     search: '',
-    loginAccount: f => f,
+    loginEmployee: f => f,
     forgotPassword: f => f,
 };
 
 LoginView.propTypes = {
     search: PropTypes.string,
-    loginAccount: PropTypes.func,
+    loginEmployee: PropTypes.func,
     forgotPassword: PropTypes.func,
     classes: PropTypes.object.isRequired,
 };

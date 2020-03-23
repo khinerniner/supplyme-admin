@@ -12,8 +12,11 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 
+import history from '../../../history';
+
+import { logoutAndRedirect } from '../../../services/app/actions';
 import { isMobileAndTablet } from '../../../utils/isMobileAndTablet';
-import { dispatchNewRoute } from '../../../utils/misc';
+import { dispatchNewRoute, parseLabel } from '../../../utils/misc';
 
 const styles = theme => ({
     root: {
@@ -82,6 +85,22 @@ const styles = theme => ({
     row: {
         margin: '0 auto',
     },
+    listItem: {
+        fontSize: 16,
+        zIndex: 5,
+        color: '#fff',
+        paddingRight: 10,
+    },
+    selectedItem: {
+        fontSize: 16,
+        zIndex: 5,
+        color: theme.palette.primary.lightBlue,
+        paddingRight: 10,
+        borderBottom: 2,
+        borderStyle: 'solid',
+        borderfColor: theme.palette.primary.lightBlue,
+        // backgroundColor: theme.palette.primary.appBar,
+    },
 });
 
 function mapStateToProps(state) {
@@ -94,7 +113,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: {},
+        actions: {
+            logoutAndRedirect: bindActionCreators(logoutAndRedirect, dispatch),
+        },
     };
 }
 
@@ -105,14 +126,88 @@ class Base extends Component {
         super(props);
         this.state = {
             isMobileAndTablet: isMobileAndTablet(),
+            baseDomain: '/accounts/',
+            breadcrumb: 'valor',
+            listItems: [
+                'valor',
+                'locations'
+            ],
         };
     }
 
-    componentDidMount() { }
+    componentDidMount() {
+        this.getBreadcrumb();
+    }
 
     componentWillReceiveProps(nextProps) { }
 
     componentWillUnmount() { }
+
+    getBreadcrumb(props = this.props) {
+        const { pathname } = this.props;
+        if (pathname) {
+            const vars = pathname.split('/');
+            let locationName = [];
+            for (let i = 0; i < vars.length; i++) {
+                if (vars[i] !== '' && vars[i] !== '/' && vars[i].charAt(0) !== '-') {
+                    locationName.push(vars[i]);
+                }
+            }
+            this.setState({
+                breadcrumb: locationName[2],
+                childBreadcrumb: locationName[3],
+                baseDomain: `/accounts/${locationName[1]}`,
+            });
+        }
+    }
+
+    // REFACTOR FOR PROD
+    parseURL = (item) => {
+        const { baseDomain } = this.state;
+        switch (item) {
+        case 'valor':
+            return `${baseDomain}/valor`;
+        case 'locations':
+            return `${baseDomain}/locations`;
+        default:
+            return `unknown`;
+        }
+    }
+
+    // REFACTOR FOR PROD
+    renderListItems = (item) => {
+        const { classes } = this.props;
+        const { breadcrumb } = this.state;
+        const route = this.parseURL(item);
+        console.warn(item)
+        console.warn(breadcrumb === `${item}`)
+        return (
+            <IconButton
+                key={item}
+                disableRipple
+                disableFocusRipple
+                className={breadcrumb === `${item}` ? classes.selectedItem : classes.listItem}
+                onClick={e => this.dispatchNewRoute(e, route)}
+            >
+                {parseLabel(item)}
+            </IconButton>
+        );
+    }
+
+    dispatchNewRoute(e, route) {
+        console.log(route)
+        e.preventDefault();
+        history.push(route);
+    }
+
+    logout(e) {
+        e.preventDefault();
+        this.props.actions.logoutAndRedirect('userID', '/login');
+        this.setState({
+            showAlert: false,
+            showAccount: false,
+        });
+    }
 
     render() {
         const {
@@ -121,6 +216,7 @@ class Base extends Component {
             isAuthenticated,
         } = this.props;
         const {
+            listItems,
             isMobileAndTablet,
         } = this.state;
 
@@ -133,6 +229,13 @@ class Base extends Component {
                 <Toolbar>
                     <a href="/"><img alt="ae_logo" height="40px" width="40px" src="/src/containers/App/styles/img/logo.png" /></a>
                     <div className={classes.sectionDesktop}>
+                    {
+                      isAuthenticated ?
+                      (
+                        listItems.length > 0
+                        ? listItems.map(this.renderListItems, this)
+                        : null
+                      ) : (
                         <IconButton
                           onClick={e => dispatchNewRoute('/')}
                         >
@@ -140,6 +243,8 @@ class Base extends Component {
                                 VeriDoc
                           </div>
                         </IconButton>
+                      )
+                    }
                     </div>
                     <div className={classes.root} />
                     <div className={classes.sectionDesktop}>
@@ -152,7 +257,7 @@ class Base extends Component {
                     </div>
                     <div className={classes.sectionDesktop}>
                         <IconButton
-                            onClick={e => dispatchNewRoute('/login')}
+                            onClick={isAuthenticated ? e => this.logout(e) : e => dispatchNewRoute('/login')}
                         >
                             <div style={{ fontSize: 14, color: '#adadad' }}>
                                 <i class="fa fa-user"></i>
@@ -169,7 +274,7 @@ class Base extends Component {
                                 disableRipple
                                 disableFocusRipple
                                 className={classes.signUpButton}
-                                onClick={e => dispatchNewRoute('/register/doctor')}
+                                onClick={e => dispatchNewRoute('/register')}
                             >
                                 {'Sign up'}
                             </Button>
@@ -198,6 +303,7 @@ class Base extends Component {
 
 Base.propTypes = {
     pathname: PropTypes.string,
+    logoutAndRedirect: PropTypes.func,
     classes: PropTypes.object.isRequired,
     children: PropTypes.object.isRequired,
 };

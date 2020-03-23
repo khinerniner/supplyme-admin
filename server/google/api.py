@@ -63,6 +63,7 @@ class GeocodeGooglePlace(MethodView):
                 return make_response(jsonify(responseObject)), 403
             incoming = request.args
             place = incoming['place']
+            print(place)
             result = geocode_google_place(place)
             address = parse_google_geocode(result)
             responseObject = {

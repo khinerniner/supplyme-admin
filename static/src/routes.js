@@ -8,14 +8,13 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import App from './containers/App';
 import NotFoundView from './containers/Global/NotFoundView';
 import LoginView from './containers/NotAuth/Register/LoginView';
-import RegisterView from './containers/NotAuth/Register/RegisterView';
-import HospitalRegisterView from './containers/NotAuth/Register/HospitalRegisterView';
+import AccountRegisterView from './containers/NotAuth/Register/AccountRegisterView';
 
 import ValorListView from './containers/NotAuth/Valor/ValorListView';
 import ValorCreateView from './containers/NotAuth/Valor/ValorCreateView';
 
-import TopicListView from './containers/VeriDoc/Home/TopicListView';
-import TopicDetailView from './containers/VeriDoc/Home/TopicDetailView';
+import LocationListView from './containers/VeriDoc/Location/LocationListView';
+import LocationCreateView from './containers/VeriDoc/Location/LocationCreateView';
 
 /* Public Components */
 import { requireNoAuthentication } from './components/NotAuthenticatedComponent';
@@ -25,17 +24,14 @@ export default (
     <App>
         <Switch>
             // Auth Views
-            <Route exact path="/" component={requireAuthentication(TopicListView)} />
-            <Route exact path="/register/doctor" component={requireNoAuthentication(RegisterView)} />
-            <Route exact path="/register/hospital" component={requireNoAuthentication(HospitalRegisterView)} />
-            <Route exact path="/register/manufacture" component={requireNoAuthentication(RegisterView)} />
+            <Route exact path="/" component={requireAuthentication(ValorListView)} />
+            <Route exact path="/register" component={requireNoAuthentication(AccountRegisterView)} />
             <Route exact path="/login" component={requireNoAuthentication(LoginView)} />
 
-            <Route exact path="/topics" component={requireAuthentication(TopicListView)} />
-            <Route exact path="/topics/:id" component={requireAuthentication(TopicDetailView)} />
-            
-            <Route exact path="/valor" component={ValorListView} />
-            <Route exact path="/valor/create" component={ValorCreateView} />
+            <Route exact path="/accounts/:id/valor" component={requireAuthentication(ValorListView)} />
+            <Route exact path="/accounts/:id/valor/create" component={requireAuthentication(ValorCreateView)} />
+            <Route exact path="/accounts/:id/locations" component={requireAuthentication(LocationListView)} />
+            <Route exact path="/accounts/:id/locations/create" component={requireAuthentication(LocationCreateView)} />
             <Route component={NotFoundView} />
         </Switch>
     </App>

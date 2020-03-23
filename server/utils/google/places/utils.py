@@ -42,6 +42,7 @@ def geocode_google_place(address):
     )
     r = requests.get(url=google_url)
     if r.status_code == 200:
+        print(r.json())
         return r.json()
     raise ValueError('Unknown/Not Finished Error Occured: {}'.format(r.text))
 # [END Geocode Google Place]

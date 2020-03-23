@@ -6,11 +6,7 @@ import { combineReducers } from 'redux';
 const initialState = {
     isFetching: false,
     isLoaded: false,
-    isUpdating: false,
-    isUpdated: false,
     statusText: null,
-    isSmartBnBMigrating: false,
-    isSmartBnBMigrated: false,
 };
 // [END Initial App State]
 
@@ -29,54 +25,14 @@ const account = (state = initialState, action) => {
             isLoaded: true,
             accountID: action.payload.account.accountID,
             name: action.payload.account.name,
-            smartbnb: action.payload.account.smartbnb || {},
-            seasons: action.payload.account.seasons || [],
-            seasonModifier: action.payload.account.seasonModifier || {},
-            firesale: action.payload.account.firesale || [],
-            dow: action.payload.account.dow || {},
-            dowModifier: action.payload.account.dowModifier || [],
-            base: action.payload.account.base || {},
-            min: action.payload.account.min || {},
-            terms: action.payload.account.terms || false,
-            termTime: action.payload.account.termTime || null,
+            accountType: action.payload.account.accountType,
+            locations: action.payload.account.locations || [],
         });
     case 'RECEIVE_ACCOUNT_FAILURE':
         return Object.assign({}, state, {
             statusError: `Data Error: ${action.payload.status} ${action.payload.statusError}`,
             isFetching: false,
             isLoaded: false,
-        });
-    case 'UPDATE_ACCOUNT_REQUEST':
-        return Object.assign({}, state, {
-            isUpdating: true,
-            isUpdated: false,
-        });
-    case 'UPDATE_ACCOUNT_SUCCESS':
-        return Object.assign({}, state, {
-            isUpdating: false,
-            isUpdated: true,
-        });
-    case 'UPDATE_ACCOUNT_FAILURE':
-        return Object.assign({}, state, {
-            statusText: `Update Account Error: ${action.payload.status} ${action.payload.statusText}`,
-            isUpdating: false,
-            isUpdated: false,
-        });
-    case 'MIGRATE_SMARTBNB_REQUEST':
-        return Object.assign({}, state, {
-            isSmartBnBMigrating: true,
-            isSmartBnBMigrated: false,
-        });
-    case 'MIGRATE_SMARTBNB_SUCCESS':
-        return Object.assign({}, state, {
-            isSmartBnBMigrating: false,
-            isSmartBnBMigrated: true,
-        });
-    case 'MIGRATE_SMARTBNB_FAILURE':
-        return Object.assign({}, state, {
-            statusText: `Migrate Smart BnB Error: ${action.payload.status} ${action.payload.statusText}`,
-            isSmartBnBMigrating: false,
-            isSmartBnBMigrated: false,
         });
     default:
         return state;

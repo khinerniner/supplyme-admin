@@ -108,7 +108,7 @@ const styles = theme => ({
 function mapStateToProps(state) {
     return {
         places: state.googleData.google.placeData,
-        receivedAt: state.googleData.google.isPlacesLoaded,
+        isPlacesLoaded: state.googleData.google.isPlacesLoaded,
     };
 }
 
@@ -129,20 +129,24 @@ class AutoCompleteHospitals extends React.Component {
 
   componentDidMount() {
       const { receivedAt } = this.props;
+      console.log('here')
       if (receivedAt) {
+          console.log('here')
           this.handleSuggestionsFetchRequest();
       }
   }
 
   componentWillReceiveProps(nextProps) {
-      if (nextProps.receivedAt && !this.props.receivedAt) {
+      console.log('componentWillReceiveProps')
+      if (nextProps.isPlacesLoaded && !this.props.isPlacesLoaded) {
+          console.log('receivedAt')
           this.handleSuggestionsFetchRequest(nextProps);
       }
-      if (nextProps.place && !this.props.name) {
-          this.setState({
-              place: nextProps.place,
-          });
-      }
+      // if (nextProps.place && !this.props.name) {
+      //     this.setState({
+      //         place: nextProps.place,
+      //     });
+      // }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -173,8 +177,9 @@ class AutoCompleteHospitals extends React.Component {
   handleSuggestionsSelectRequested = (event, response) => {
       console.log('Handle Selected');
       const data = response.suggestion;
+      console.warn(response.suggestion);
       const next_state = {};
-      next_state.place = data.structured_formatting.main_text;
+      next_state.place = data.name;
       this.setState(next_state, () => {});
       this.props.onFinishedSelecting(data);
   };

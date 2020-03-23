@@ -5,6 +5,7 @@ import { errorAlert } from '../../utils/alerts';
 import { privalgoAnalytic } from '../../utils/analytics';
 import { toNewAccount } from '../account/model';
 import { getAccount } from '../../services/account/actions';
+import { toNewEmployee } from '../employee/model';
 
 // Register Account
 // TODO: None
@@ -68,9 +69,10 @@ export const registerAccount = (accountCode, password, redirectRoute) => (dispat
         }
         const accountRef = db().collection('Accounts').doc();
         const activationCodeRef = db().collection('ActivationCodes').doc(accountCode.activationCode);
+        const employeeActivationCodeRef = db().collection('EmployeeActivationCodes').doc(accountCode.activationCode);
 
         const accountInfo = toNewAccount()
-        accountInfo.name = accountCode.accountName;
+        accountInfo.name = accountCode.ownerName;
         return auth().createUserWithEmailAndPassword(accountCode.email, password).then((user) => {
             return db().runTransaction((transaction) => {
                 return auth().currentUser.getIdToken().then((idToken) => {
@@ -80,26 +82,31 @@ export const registerAccount = (accountCode, password, redirectRoute) => (dispat
                   const newUserRef = db().collection('MasterUserList').doc(user.user.uid);
                   transaction.set(newUserRef, { accountID: accountRef.id });
 
-                  transaction.set(activationCodeRef, { accountID: accountRef.id, valid: false, updatedDate: employmentDate });
-
-                  accountInfo.name = accountCode.ownerName;
-                  accountInfo.phoneNumber = accountCode.phoneNumber;
-                  accountInfo.email = accountCode.email;
-                  accountInfo.activationCode = accountCode.activationCode;
-                  accountInfo.permissionLevel = 'owner';
-                  accountInfo.employmentDate = employmentDate;
-                  accountInfo.creationDate = employmentDate;
-                  accountInfo.updatedDate = employmentDate;
-                  accountInfo.employeeID = user.user.uid;
-                  accountInfo.unenrolled = false;
-                  accountInfo.isActive = true;
-                  accountInfo.isOnline = true;
-                  accountInfo.isLoggedIn = true;
                   transaction.set(accountRef, accountInfo );
+                  transaction.set(activationCodeRef, { accountID: accountRef.id, valid: false, updatedDate: employmentDate });
+                  transaction.set(employeeActivationCodeRef, { valid: false });
+
+
+                  const newEmployeeRef = accountRef.collection('Employees').doc(user.user.uid);
+                  const employeeInfo = toNewEmployee();
+                  employeeInfo.name = accountCode.ownerName;
+                  employeeInfo.phoneNumber = accountCode.phoneNumber;
+                  employeeInfo.email = accountCode.email;
+                  employeeInfo.activationCode = accountCode.activationCode;
+                  employeeInfo.permissionLevel = 'owner';
+                  employeeInfo.employmentDate = employmentDate;
+                  employeeInfo.creationDate = employmentDate;
+                  employeeInfo.updatedDate = employmentDate;
+                  employeeInfo.employeeID = user.user.uid;
+                  employeeInfo.unenrolled = false;
+                  employeeInfo.isActive = true;
+                  employeeInfo.isOnline = true;
+                  employeeInfo.isLoggedIn = true;
+                  transaction.set(newEmployeeRef, employeeInfo);
                   return {
                       employeeID: user.user.uid,
                       accountID: accountRef.id,
-                      accountInfo,
+                      employeeInfo,
                       idToken,
                   };
                 }).catch((error) => {
@@ -120,7 +127,7 @@ export const registerAccount = (accountCode, password, redirectRoute) => (dispat
                 dispatch(registerAccountSuccess(
                   result.employeeID,
                   result.accountID,
-                  result.accountInfo,
+                  result.employeeInfo,
                   result.idToken,
                 ));
                 dispatch(getAccount(result.accountID));

@@ -7,7 +7,7 @@ import Loader from 'react-loaders';
 
 import Base from '../components/VeriDoc/Base';
 
-import { loginAccountWithPermissions, logoutAndRedirect } from '../services/app/actions';
+import { loginEmployeeWithPermissions, logoutAndRedirect } from '../services/app/actions';
 import { auth } from '../store/firebase';
 
 const styles = (theme) => ({
@@ -40,7 +40,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         actions: {
-            loginAccountWithPermissions: bindActionCreators(loginAccountWithPermissions, dispatch),
+            loginEmployeeWithPermissions: bindActionCreators(loginEmployeeWithPermissions, dispatch),
             logoutAndRedirect: bindActionCreators(logoutAndRedirect, dispatch),
         },
     };
@@ -79,7 +79,7 @@ export function requireAuthentication(Component) {
                     console.log('A3');
                     auth().onAuthStateChanged((user) => {
                         if (user) {
-                            props.actions.loginAccountWithPermissions(user.uid, next);
+                            props.actions.loginEmployeeWithPermissions(user.uid, next);
                         } else {
                             props.actions.logoutAndRedirect();
                         }
@@ -88,9 +88,9 @@ export function requireAuthentication(Component) {
             } else {
                 if (next === '/') {
                     if (props.accountID === process.env.PRIVALGO_ADMIN_KEY) {
-                        history.push(`/admin/dashboard`);
+                        history.push(`/admin/locations`);
                     } else {
-                        history.push(`/topics`);
+                        history.push(`/accounts/${props.accountID}/valor`);
                     }
                 } else {
                     console.log('A4');
@@ -114,7 +114,7 @@ export function requireAuthentication(Component) {
                           </div>
                         )
                         : <div style={styles.overlay}>
-                            <Loader color="#4b718d" type="ball-scale-multiple" />
+                            <Loader color="#5e4443" type="ball-scale-multiple" />
                           </div>
                     }
                 </div>
@@ -126,7 +126,7 @@ export function requireAuthentication(Component) {
         accountID: '',
         isAccountLoaded: false,
         isAuthenticated: false,
-        loginAccountWithPermissions: f => f,
+        loginEmployeeWithPermissions: f => f,
         logoutAndRedirect: f => f,
     };
 
@@ -134,7 +134,7 @@ export function requireAuthentication(Component) {
         accountID: PropTypes.string,
         isAccountLoaded: PropTypes.bool,
         isAuthenticated: PropTypes.bool,
-        loginAccountWithPermissions: PropTypes.func,
+        loginEmployeeWithPermissions: PropTypes.func,
         logoutAndRedirect: PropTypes.func,
     };
 
