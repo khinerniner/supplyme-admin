@@ -27,9 +27,10 @@ export default (
             <Route exact path="/" component={requireAuthentication(ValorListView)} />
             <Route exact path="/register" component={requireNoAuthentication(AccountRegisterView)} />
             <Route exact path="/login" component={requireNoAuthentication(LoginView)} />
+            <Route exact path="/valor" component={requireNoAuthentication(ValorListView)} />
+            <Route exact path="/valor/create" component={requireNoAuthentication(ValorCreateView)} />
 
-            <Route exact path="/accounts/:id/valor" component={requireAuthentication(ValorListView)} />
-            <Route exact path="/accounts/:id/valor/create" component={requireAuthentication(ValorCreateView)} />
+            <Route exact path="/accounts/:id/dashboard" component={requireAuthentication(LocationListView)} />
             <Route exact path="/accounts/:id/locations" component={requireAuthentication(LocationListView)} />
             <Route exact path="/accounts/:id/locations/create" component={requireAuthentication(LocationCreateView)} />
             <Route component={NotFoundView} />

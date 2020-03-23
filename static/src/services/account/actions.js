@@ -181,50 +181,6 @@ export const fetchAccountCodes = () => function (dispatch) {
         });
 };
 
-// Get Account Data
-//
-// [START Get Account Data]
-export const getAccountCodeRequest = () => ({
-    type: 'FETCH_ACCOUNT_CODE_REQUEST',
-});
-
-
-export const getAccountCodeSuccess = (accountCode) => ({
-    type: 'RECEIVE_ACCOUNT_CODE_SUCCESS',
-    payload: {
-        accountCode,
-    },
-});
-
-export const getAccountCodeFailure = error => ({
-    type: 'RECEIVE_ACCOUNT_CODE_FAILURE',
-    payload: {
-        status: error.response.status,
-        statusText: error.response.statusText,
-    },
-});
-export const getAccountCode = activationCode => (dispatch) => {
-    dispatch(getAccountCodeRequest());
-    const accountRef = db().collection('ActivationCodes').doc(activationCode);
-    accountRef.get().then((doc) => {
-        if (doc.exists) {
-            console.log('Account Code data:', doc.data());
-            const accountCode = doc.data();
-            accountCode.activationCode = doc.id;
-            dispatch(getAccountCodeSuccess(accountCode));
-        } else {
-            console.log('No such Account Code document!');
-            dispatch(getAccountCodeFailure({
-                response: {
-                    status: 400,
-                    statusText: 'No Account Account',
-                },
-            }));
-        }
-    });
-};
-// [END Get Account Data]
-
 // Activate Account Code
 // TODO: None
 // [START Activate Account Code]
@@ -275,66 +231,6 @@ export const activateAccountCode = (token, accountCode) => (dispatch) => {
 };
 // [END Activate Account Code]
 
-// Migrate Account SmartBnB
-// TODO: None
-// [START Migrate Account SmartBnB]
-export const migrateAccountSmartBnBRequest = () => ({
-    type: 'MIGRATE_SMARTBNB_REQUEST',
-});
-
-export const migrateAccountSmartBnBSuccess = () => ({
-    type: 'MIGRATE_SMARTBNB_SUCCESS',
-});
-
-export const migrateAccountSmartBnBFailure = error => ({
-    type: 'MIGRATE_SMARTBNB_FAILURE',
-    payload: {
-        status: error.response.status,
-        statusText: error.response.statusText,
-    },
-});
-export const migrateAccountSmartBnB = (token, employeeID, accountID, clientID, clientSecret) => (dispatch) => {
-      dispatch(migrateAccountSmartBnBRequest());
-      const accountRef = db().collection('Accounts').doc(accountID);
-      console.log(accountRef.id)
-      const migratedDate = Date.now()
-      const smartbnbInfo = {};
-      smartbnbInfo.updatedDate = migratedDate;
-      smartbnbInfo.hasMigrated = false;
-      smartbnbInfo.isActive = false;
-      smartbnbInfo.clientID = clientID;
-      smartbnbInfo.clientSecret = clientSecret;
-      accountRef.update({ smartbnb: smartbnbInfo }).then(() => {
-            return apiMigrateAccountSmartBnB(token, accountID).then(parseJSON).then((response) => {
-                    // successAlert('Migrate Account Started')
-                    dispatch(migrateAccountSmartBnBSuccess());
-                    privalgoAnalytic('migrate_account_smartbnb_success');
-                    history.push(`accounts/${accountID}/settings/migration`);
-                })
-                .catch((error) => {
-                    errorAlert(error.message)
-                    privalgoAnalytic('migrate_account_smartbnb_failure')
-                    dispatch(migrateAccountSmartBnBFailure({
-                        response: {
-                            status: 400,
-                            statusText: error.message,
-                        },
-                    }));
-                });
-          })
-          .catch((error) => {
-              errorAlert(error.message)
-              privalgoAnalytic('migrate_account_smartbnb_failure')
-              dispatch(migrateAccountSmartBnBFailure({
-                  response: {
-                      status: 400,
-                      statusText: error.message,
-                  },
-              }));
-          });
-};
-// [END Migrate Account SmartBnB]
-
 // Activate Account
 // TODO: None
 // [START Activate Account]
@@ -355,38 +251,13 @@ export const updateAccountFailure = error => ({
 });
 export const updateAccount = (employeeID, accountID, account, redirectRoute) => (dispatch) => {
         dispatch(updateAccountRequest());
-        // Verify Account ID
-        // Verify Account Phone
-        // Verify Address
-        // Verify Geolocation
-        // Verify Merchant (Fiat or Crypto)
-        // Verify POS (Omnivore or Clover)
         const accountID = account.accountID;
         if (!validateKey(accountID)) {
             errorAlert('Invalid Account ID');
             return;
         }
-        // const phone = account.phoneNumber;
-        // if (!validatePhone(phone)) {
-        //     errorAlert('Invalid Account Phone');
-        //     return;
-        // }
-        // const address = account.address;
-        // if (!validateAddress(address)) {
-        //     errorAlert('Invalid Account Address');
-        //     return;
-        // }
-        // const merchants = account.merchants;
-        // if (!validateMerchants(merchants)) {
-        //     errorAlert('Invalid Account Default Merchant');
-        //     return;
-        // }
-        // const smartbnb = account.smartbnb;
-        // if (!validatePOS(pos)) {
-        //     errorAlert('Invalid Account POS');
-        //     return;
-        // }
         // Transaction that updates account & geolocation
+        console.log(account)
 
         const currentAccountInfo = account;
 

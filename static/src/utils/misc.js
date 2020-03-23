@@ -7,6 +7,34 @@ export function dispatchNewRoute(route) {
     history.push(route);
 }
 
+/*
+
+Time Functions
+
+*/
+
+export function formatDateNoTime(date) {
+    if (!validateDate(date)) {
+        return 'Invalid Date';
+    }
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    var monthNames = [
+        "Jan", "Feb", "March",
+        "April", "May", "June", "July",
+        "Aug", "Sept", "Oct",
+        "Nov", "Dec"
+    ];
+    return `${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+}
+
+export function parseFirestoreTimeStamp(stamp) {
+    if (stamp && stamp.seconds) {
+        return stamp.toDate();
+    }
+    return stamp;
+}
+
 export function getKeys(pathname) {
     const path = pathname.split('/');
     const firstID = path[2];

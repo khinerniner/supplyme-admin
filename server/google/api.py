@@ -34,7 +34,7 @@ class SearchGooglePlaces(MethodView):
             responseObject = {
                 'status': 'success',
                 'statusText': 'Searched Places',
-                'data': places['results']
+                'data': places['predictions']
             }
             return make_response(jsonify(responseObject)), 200
 

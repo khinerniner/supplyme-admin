@@ -88,10 +88,10 @@ function LocationResultsTable(props) {
             <TableRow key={row.id}>
               <TableCell><a onClick={e => handleLink(e, row.id)} className={classes.linkText}>{row.name}</a></TableCell>
               <TableCell>
-                {row.location}
+                {row.address}
               </TableCell>
               <TableCell>
-                {row.phone}
+                {row.phoneNumber || 'Invalid Phone Number'}
               </TableCell>
               <TableCell>
                 {row.placeID}

@@ -127,9 +127,9 @@ class Base extends Component {
         this.state = {
             isMobileAndTablet: isMobileAndTablet(),
             baseDomain: '/accounts/',
-            breadcrumb: 'valor',
+            breadcrumb: 'dashboard',
             listItems: [
-                'valor',
+                'dashboard',
                 'locations'
             ],
         };
@@ -165,8 +165,8 @@ class Base extends Component {
     parseURL = (item) => {
         const { baseDomain } = this.state;
         switch (item) {
-        case 'valor':
-            return `${baseDomain}/valor`;
+        case 'dashboard':
+            return `${baseDomain}/dashboard`;
         case 'locations':
             return `${baseDomain}/locations`;
         default:
@@ -236,6 +236,7 @@ class Base extends Component {
                         ? listItems.map(this.renderListItems, this)
                         : null
                       ) : (
+                        <section>
                         <IconButton
                           onClick={e => dispatchNewRoute('/')}
                         >
@@ -243,6 +244,14 @@ class Base extends Component {
                                 VeriDoc
                           </div>
                         </IconButton>
+                        <IconButton
+                          onClick={e => dispatchNewRoute('/dashboard')}
+                        >
+                            <div style={{ paddingLeft: 10, fontWeight: 500, fontSize: 16, color: '#fff' }}>
+                                The Wall
+                          </div>
+                        </IconButton>
+                        </section>
                       )
                     }
                     </div>

@@ -38,7 +38,6 @@ export const searchGoogleHospitals = (query) => (dispatch) => {
         .catch((error) => {
             console.log(error);
             errorAlert(error.response.data.statusText);
-            samyAnalytic('google_places_failure', null);
             dispatch(googleHospitalsFailure({
                 response: {
                     status: 403,
@@ -56,9 +55,8 @@ export const geocodeGooglePlace = (token, accountID, place) => {
     return apiGeocodeGooglePlace(token, accountID, place)
         .then(parseJSON)
         .then((response) => {
-            console.log(response.data);
             // generalAnalytic(employeeID, 'google', 'googlePlacesSuccess');
-            return response.data
+            return response.data.data
         })
         .catch((error) => {
             console.log(error);

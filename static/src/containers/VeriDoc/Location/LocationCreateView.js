@@ -9,16 +9,18 @@ import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 
-import { toNewLocation } from '../../../services/account/model';
+import { toNewLocation } from '../../../services/location/model';
+import { saveNewLocation, updateLocation, deleteLocation } from '../../../services/location/actions';
 import { geocodeGooglePlace } from '../../../services/google/actions';
-// import { saveNewAccount, updateAccount, deleteAccount } from '../../../services/location/actions';
 import {
     getKeys,
     validateString,
+    validateDate,
+    validateEmail,
+    validateDatePick,
     roundUp,
 } from '../../../utils/misc';
 
@@ -135,28 +137,31 @@ function mapStateToProps(state) {
         idToken: state.app.idToken,
         employeeID: state.app.employeeID,
         accountID: state.app.accountID,
-        account: state.accountData.account,
+        locations: state.locationData.locations,
+        receivedAt: state.locationData.receivedAt,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         actions: {
-            // saveNewAccount: bindActionCreators(saveNewAccount, dispatch),
-            // deleteAccount: bindActionCreators(deleteAccount, dispatch),
-            // updateAccount: bindActionCreators(updateAccount, dispatch),
+            saveNewLocation: bindActionCreators(saveNewLocation, dispatch),
+            deleteLocation: bindActionCreators(deleteLocation, dispatch),
+            updateLocation: bindActionCreators(updateLocation, dispatch),
         },
     };
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
-class AccountEditView extends React.Component {
+class LocationCreateView extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            account: this.props.account,
+            location: toNewLocation(),
+            locationName: null,
             name_error_text: null,
+            email_error_text: null,
             phoneNumber_error_text: null,
             disabled: true,
             redirectRoute: `/accounts/${this.props.accountID}/locations`,
@@ -164,13 +169,18 @@ class AccountEditView extends React.Component {
     }
 
     componentDidMount() {
-        console.log('Account Create Mounted');
+        console.log('Location Create Mounted')
+        this.loadCompData();
     }
 
-    componentWillReceiveProps(nextProps) {}
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.receivedAt !== null && this.props.receivedAt === null) {
+            this.loadCompData(nextProps);
+        }
+    }
 
     componentWillUnmount() {
-        console.log('Account Create UnMounted');
+        console.log('Location Create UnMounted')
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -188,50 +198,23 @@ class AccountEditView extends React.Component {
         if (locationID && locationID !== null) {
             locations.forEach((location) => {
                 if (location.locationID === locationID) {
-                    console.log('Setting Account State')
+                    console.log('Setting Location State')
                     const next_state = this.state;
                     next_state.location = location;
                     this.setState(next_state, () => {
-                        this.isAccountDisabled();
+                        this.isLocationDisabled();
                     });
                 }
             })
         }
     }
 
-    handleLocationSelected = (location) => {
-        const { idToken, accountID } = this.props;
-        const next_state = this.state;
-        const { place_id } = location;
-        const locationInfo = toNewLocation(location);
-        locationInfo.location = location.geometry.location;
-        locationInfo.name = location.name;
-        geocodeGooglePlace(idToken, accountID, location.formatted_address).then((result) => {
-            console.log(result)
-            locationInfo.placeID = place_id;
-            locationInfo.locality = result.locality;
-            locationInfo.country = result.country;
-            locationInfo.region = result.region;
-            locationInfo.street1 = result.street1;
-            locationInfo.street2 = result.street2;
-            locationInfo.postal = result.postal;
-            let next_locations = this.state.accout.locations;
-            if (this.state.location.locations.map(i => i).includes(locationInfo.name)) {
-                next_locations = next_locations.filter(e => e !== locationInfo.name);
-            } else {
-                next_locations.push(locationInfo);
-            }
-            next_state.location.locations = next_locations;
-            this.setState(next_state, () => {});
-        });
-    }
-
     handlePhoneChange = (e, name) => {
         const { value } = e.target;
         const next_state = this.state;
-        next_state.location[name] = value;
+        next_state.location.contactInfo[name] = value;
         this.setState(next_state, () => {
-            this.isAccountDisabled();
+            this.isLocationDisabled();
         });
     }
 
@@ -244,24 +227,36 @@ class AccountEditView extends React.Component {
             next_state.location[name] = value;
         }
         this.setState(next_state, () => {
-            this.isAccountDisabled();
+            this.isLocationDisabled();
         });
     }
 
-    isAccountDisabled() {
+    handleLocationSelected = (location) => {
+        const { place_id, description } = location;
+        const { main_text } = location.structured_formatting;
+        const { idToken, accountID } = this.props;
+        const next_state = this.state;
+        next_state.location.name = description;
+        geocodeGooglePlace(idToken, accountID, description).then((result) => {
+            result.placeID = place_id
+            next_state.location.address = result;
+            this.setState(next_state, () => {});
+        });
+    }
+
+    isLocationDisabled() {
         this.setState({
             disabled: true,
         });
         let name_is_valid = false;
         let email_is_valid = false;
 
-        // Validate Account Name
-        if (this.state.location.name === null || this.state.location.name === '') {
+        // Validate Location Name
+        if (this.state.location.contactInfo.name === null || this.state.location.contactInfo.name === '') {
             this.setState({
                 name_error_text: null,
             });
-        } else if (validateString(this.state.location.name) && this.state.location.name.length < 40
-            && this.state.location.name.length > 1) {
+        } else if (validateString(this.state.location.contactInfo.name) && this.state.location.contactInfo.name.length < 40) {
             name_is_valid = true;
             this.setState({
                 name_error_text: null,
@@ -272,12 +267,12 @@ class AccountEditView extends React.Component {
             });
         }
 
-        // Validate Account Email
-        if (this.state.location.email === null || this.state.location.email === '') {
+        // Validate Location Email
+        if (this.state.location.contactInfo.email === null || this.state.location.contactInfo.email === '') {
             this.setState({
                 email_error_text: null,
             });
-        } else if (validateEmail(this.state.location.email) && this.state.location.email.length < 40) {
+        } else if (validateEmail(this.state.location.contactInfo.email) && this.state.location.contactInfo.email.length < 40) {
             email_is_valid = true;
             this.setState({
                 email_error_text: null,
@@ -287,8 +282,6 @@ class AccountEditView extends React.Component {
                 email_error_text: `Please enter a valid email`,
             });
         }
-
-
 
         // console.warn(this.state.location)
         // console.warn(name_is_valid)
@@ -327,7 +320,7 @@ class AccountEditView extends React.Component {
                 switch (value) {
                     case 'delete':
                         console.log(`Delete Property`);
-                        actions.deleteAccount(employeeID, accountID, location, redirectRoute);
+                        actions.deleteLocation(employeeID, accountID, location, redirectRoute);
                         break;
                     default:
                         break;
@@ -335,45 +328,26 @@ class AccountEditView extends React.Component {
             });
     }
 
-    updateThisAccount = () => {
+    createNewLocation = () => {
         const { actions, idToken, employeeID, accountID } = this.props;
         const { location, redirectRoute } = this.state;
-        actions.updateAccount(employeeID, accountID, location, redirectRoute);
-
-    }
-    deleteProp(e, prop){
-        let next_state = this.state.location.locations
-        for(let i = 0; i < next_state.length; i++){
-            if(next_state[i] === prop){
-                next_state.splice(i,1)
-            }
-        }
-        this.setState(next_state, () => { })
+        actions.saveNewLocation(idToken, employeeID, accountID, location, redirectRoute);
     }
 
-    renderAccountLocations = (location) => {
-        const { classes } = this.props;
-        return (
-            <div>
-                <IconButton
-                  color='secondary'
-                  disabled={false}
-                  // onClick={e => this.deleteProp(e, location)}
-                >
-                    <RemoveCircleOutlineIcon className={classes.iconButton} />
-                </IconButton>
-                <span key={location.id} className={classes.detailListDt}>
-                    {location.name}
-                </span>
-            </div>
-        );
+    updateThisLocation = () => {
+        const { actions, idToken, employeeID, accountID } = this.props;
+        const { location, redirectRoute } = this.state;
+        actions.updateLocation(employeeID, accountID, location, redirectRoute);
+
     }
 
     render() {
         const { classes } = this.props;
         const {
-            account,
+            location,
+            locationName,
             name_error_text,
+            email_error_text,
             phoneNumber_error_text,
             disabled,
         } = this.state;
@@ -383,7 +357,7 @@ class AccountEditView extends React.Component {
             <div className={classes.outerCell}>
                 <div className={classes.subHeaderCell}>
                     <div className={classes.subHeaders}>
-                        Account Information
+                        Location Information
                     </div>
                 </div>
                 <div className={classes.childHeaderCell}>
@@ -391,38 +365,38 @@ class AccountEditView extends React.Component {
                         Enter the location name and contact information.
                     </div>
                 </div>
-                <label className={classes.inputLabel}>Account Name</label>
+                <label className={classes.inputLabel}>Contact Name</label>
                 <div className={classes.textCell}>
                     <TextField
                         placeholder="Ex. John Doe"
                         margin="dense"
                         variant="outlined"
                         helperText={name_error_text}
-                        value={account.name}
+                        value={location.contactInfo.name}
                         className={classes.textField}
-                        onChange={e => this.handleChange(e, null, 'name')}
+                        onChange={e => this.handleChange(e, 'contactInfo', 'name')}
                         FormHelperTextProps={{ classes: { root: classes.helperText } }}
                     />
                 </div>
-            </div>
-        );
-
-        const LocationsContainer = (
-            <div className={classes.outerCell}>
-                <div className={classes.subHeaderCell}>
-                    <div className={classes.subHeaders}>
-                        Account Locations Information
-                    </div>
+                <label className={classes.inputLabel}>Contact Email</label>
+                <div className={classes.textCell}>
+                    <TextField
+                        placeholder="Ex. Email"
+                        margin="dense"
+                        variant="outlined"
+                        type="email"
+                        helperText={email_error_text}
+                        value={location.contactInfo.email}
+                        className={classes.textField}
+                        onChange={e => this.handleChange(e, 'contactInfo', 'email')}
+                        FormHelperTextProps={{ classes: { root: classes.helperText } }}
+                    />
                 </div>
-                <div className={classes.block}>
-                    <dl className={classes.detailList}>
-                        <div className={classes.detailListFlex}>
-                            {account.locations.map(this.renderAccountLocations, this)}
-                        </div>
-                    </dl>
-                </div>
+                <label className={classes.inputLabel}>Contact Phone</label>
+                <PhoneTextInput phoneNumber={location.contactInfo.phoneNumber} error_text={phoneNumber_error_text} handleChange={this.handlePhoneChange}/>
+                <label className={classes.inputLabel}>Location</label>
                 <div className={classes.textField}>
-                    <AutoCompleteHospitals onFinishedSelecting={this.handleLocationSelected} />
+                    <AutoCompleteHospitals name={location.name} onFinishedSelecting={this.handleLocationSelected}/>
                 </div>
             </div>
         );
@@ -434,12 +408,21 @@ class AccountEditView extends React.Component {
                         variant="contained"
                         disableRipple
                         disableFocusRipple
-                        onClick={location.active ? this.updateThisAccount : this.createNewAccount}
+                        onClick={location.active ? this.updateThisLocation : this.createNewLocation}
                         className={classes.createButton}
                         disabled={disabled}
                         style={{ marginRight: 10 }}
                     >
-                        {'Update Account'}
+                        {location.active ? 'Update Location' : 'Create Location'}
+                    </Button>
+                    <Button
+                        variant="contained"
+                        disableRipple
+                        disableFocusRipple
+                        onClick={this.deleteActiveProperty}
+                        className={classes.deleteButton}
+                    >
+                        {'Delete Location'}
                     </Button>
                 </div>
             </div>
@@ -450,11 +433,10 @@ class AccountEditView extends React.Component {
                 <div className={classes.content}>
                     <div className={classes.headerCell}>
                         <div className={classes.headers}>
-                            {'Edit Account'}
+                            {location.active ? 'Edit Location' : 'New Location'}
                         </div>
                     </div>
                     {NameContainer}
-                    {LocationsContainer}
                     {CreateContainer}
                 </div>
             </div>
@@ -462,16 +444,16 @@ class AccountEditView extends React.Component {
     }
 }
 
-AccountEditView.defaultProps = {
-    saveNewAccount: f => f,
-    deleteAccount: f => f,
-    updateAccount: f => f,
+LocationCreateView.defaultProps = {
+    saveNewLocation: f => f,
+    deleteLocation: f => f,
+    updateLocation: f => f,
 };
-AccountEditView.propTypes = {
-    saveNewAccount: PropTypes.func,
-    updateAccount: PropTypes.func,
-    deleteAccount: PropTypes.func,
+LocationCreateView.propTypes = {
+    saveNewLocation: PropTypes.func,
+    updateLocation: PropTypes.func,
+    deleteLocation: PropTypes.func,
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(AccountEditView);
+export default withStyles(styles)(LocationCreateView);

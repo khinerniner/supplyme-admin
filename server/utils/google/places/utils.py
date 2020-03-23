@@ -16,8 +16,7 @@ from server.config import Config
 # TODO: None
 # [START Search Google Places API]
 def search_google_places(type, text):
-    google_url = 'https://maps.googleapis.com/maps/api/place/textsearch/json?type={}&input={}&key={}'.format(
-        type,
+    google_url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?&input={}&key={}'.format(
         text,
         Config.get_env_var('GOOGLE_API_KEY'),
     )

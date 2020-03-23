@@ -34,8 +34,8 @@ function renderInputComponent(inputProps) {
 }
 
 function renderSuggestion(suggestion, { query, isHighlighted }) {
-    const matches = match(suggestion.name, query);
-    const parts = parse(suggestion.name, matches);
+    const matches = match(suggestion.description, query);
+    const parts = parse(suggestion.description, matches);
 
     return (
         <MenuItem selected={isHighlighted} component="div">
@@ -63,7 +63,7 @@ function getSuggestions(suggestions, value) {
     return inputLength === 0
         ? []
         : suggestions.filter((suggestion) => {
-            const keep = count < 5 && suggestion.name.slice(0, inputLength).toLowerCase() === inputValue;
+            const keep = count < 5 && suggestion.description.slice(0, inputLength).toLowerCase() === inputValue;
             if (keep) {
                 count += 1;
             }
@@ -72,7 +72,7 @@ function getSuggestions(suggestions, value) {
 }
 
 function getSuggestionValue(suggestion) {
-    return suggestion.name;
+    return suggestion.description;
 }
 
 const styles = theme => ({
@@ -142,7 +142,7 @@ class AutoCompleteHospitals extends React.Component {
           console.log('receivedAt')
           this.handleSuggestionsFetchRequest(nextProps);
       }
-      // if (nextProps.place && !this.props.name) {
+      // if (nextProps.place && !this.props.description) {
       //     this.setState({
       //         place: nextProps.place,
       //     });
@@ -179,7 +179,7 @@ class AutoCompleteHospitals extends React.Component {
       const data = response.suggestion;
       console.warn(response.suggestion);
       const next_state = {};
-      next_state.place = data.name;
+      next_state.place = data.description;
       this.setState(next_state, () => {});
       this.props.onFinishedSelecting(data);
   };
@@ -228,7 +228,7 @@ class AutoCompleteHospitals extends React.Component {
                 {...autosuggestProps}
                 inputProps={{
                       className: classes.textFieldLarge,
-                      label: 'Select Hospital',
+                      label: 'Select Location',
                       placeholder: 'Ex. John Hopkins Medical Center',
                       value: this.state.place,
                       onChange: this.handleChange,
