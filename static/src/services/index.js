@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 import { LOGOUT_USER } from '../constants/index';
 
-/* Admin Reducer Files */
+/* App Reducer Files */
 import app from './app/reducer';
 import accountData from './account/reducer';
 import employeeData from './employee/reducer';
@@ -11,6 +11,9 @@ import googleData from './google/reducer';
 import requestData from './request/reducer';
 import menuItemData from './menuItem/reducer';
 import orderData from './order/reducer';
+
+/* Public Reducer Files */
+import valorData from './valor/reducer';
 
 const appReducer = history => combineReducers({
     router: connectRouter(history),
@@ -22,6 +25,9 @@ const appReducer = history => combineReducers({
     requestData,
     menuItemData,
     orderData,
+
+    // Public
+    valorData,
 });
 
 export const rootReducer = history => (state, action) => {

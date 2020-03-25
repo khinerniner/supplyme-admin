@@ -17,7 +17,7 @@ import { KeyboardDatePicker } from '@material-ui/pickers';
 import UploadValorMedia from '../../../components/VeriDoc/Media/UploadValorMedia';
 
 import { toNewValor } from '../../../services/valor/model';
-// import { createValor } from '../../../services/valor/actions';
+import { saveNewValor } from '../../../services/valor/actions';
 import {
   validateString,
   roundUp,
@@ -98,7 +98,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         actions: {
-            // createValor: bindActionCreators(createValor, dispatch),
+            saveNewValor: bindActionCreators(saveNewValor, dispatch),
         },
     };
 }
@@ -178,10 +178,15 @@ class ValorCreateView extends React.Component {
     }
 
     createNewValor = () => {
-        const { actions, idToken, valorID, accountID, medias } = this.props;
+        const { actions } = this.props;
         const { valor } = this.state;
-        console.log(valor)
-        // actions.createValor(idToken, valorID, accountID, this.state.valor, medias, this.state.redirectRoute);
+        actions.saveNewValor(valor, this.state.redirectRoute);
+    }
+
+    onFinishedMediaSelected = (file) => {
+        const next_state = this.state;
+        next_state.valor.imageData = file;
+        this.setState(next_state, () => {});
     }
 
     render() {
@@ -222,7 +227,7 @@ class ValorCreateView extends React.Component {
             </div>
             <label className={classes.inputLabel}>Avatar</label>
             <div className={classes.textCell}>
-                <UploadValorMedia />
+                <UploadValorMedia media={valor.avatar} onFinishedSelecting={this.onFinishedMediaSelected} />
             </div>
             </div>
         );
@@ -336,10 +341,10 @@ class ValorCreateView extends React.Component {
 }
 
 ValorCreateView.defaultProps = {
-    createValor: f => f,
+    saveNewValor: f => f,
 };
 ValorCreateView.propTypes = {
-    createValor: PropTypes.func,
+    saveNewValor: PropTypes.func,
     classes: PropTypes.object.isRequired,
 };
 

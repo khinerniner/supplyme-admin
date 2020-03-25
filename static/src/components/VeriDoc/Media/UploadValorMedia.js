@@ -15,9 +15,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import Dropzone from 'react-dropzone';
 
-// import {
-//   createAccountMedia,
-// } from '../../../services/media/actions';
 import { sortByValue } from '../../../utils/misc';
 
 const styles = theme => ({
@@ -114,7 +111,7 @@ class UploadValorMedia extends Component {
         this.state = {
             files: [],
             filePreview: '/',
-            hasFiles: false,
+            hasFile: false,
         };
     }
 
@@ -122,6 +119,12 @@ class UploadValorMedia extends Component {
 
     componentWillReceiveProps(nextProps) {
         console.error('Media Component Received Props');
+        if (nextProps.media && !this.props.media) {
+            this.setState({
+                hasFile: true,
+                filePreview: nextProps.media,
+            });
+        }
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -131,25 +134,14 @@ class UploadValorMedia extends Component {
         return true;
     }
 
-    uploadMedia = () => {
-        const {
-            actions,
-            idToken,
-            employeeID,
-            accountID,
-            type,
-            typeID,
-        } = this.props;
-        // actions.createAccountMedia(idToken, employeeID, accountID, this.state.files, this.state.keywordList, this.state.location);
-    }
-
     onDrop = (files) => {
-        console.log(files)
+        const { onFinishedSelecting } = this.props;
         this.setState({
             files,
             filePreview: URL.createObjectURL(files[0]),
-            hasFiles: true,
+            hasFile: true,
         });
+        onFinishedSelecting(files[0])
     }
 
     renderDropDisplay = (isDragActive) => {
@@ -162,11 +154,17 @@ class UploadValorMedia extends Component {
     render() {
         const { classes, medias, upload } = this.props;
         const {
-            hasFiles,
+            hasFile,
             filePreview,
         } = this.state;
         return (
           <div>
+              {hasFile ? (
+                    <div className={classes.mediaBox}>
+                        <img alt={`media-${filePreview}`} height={140} src={filePreview} />
+                    </div>
+                ) : null
+              }
               <Dropzone onDrop={this.onDrop}>
                   {({ getRootProps, getInputProps, isDragActive }) => (
                       <div {...getRootProps()} style={{width: 150}} className={classNames('dropzone', { 'dropzone--isActive': isDragActive })}>
@@ -180,11 +178,9 @@ class UploadValorMedia extends Component {
     }
 }
 
-UploadValorMedia.defaultProps = {
-    createAccountMedia: f => f,
-};
+UploadValorMedia.defaultProps = {};
 UploadValorMedia.propTypes = {
-    createAccountMedia: PropTypes.func,
+    onFinishedSelecting: PropTypes.func.isRequired,
     classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
