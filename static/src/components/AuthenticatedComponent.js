@@ -5,7 +5,8 @@ import PropTypes from 'prop-types';
 import history from '../history';
 import Loader from 'react-loaders';
 
-import Base from '../components/VeriDoc/Base';
+import RetailerBase from '../components/VeriDoc/Base/RetailerBase';
+import ManufacturerBase from '../components/VeriDoc/Base/ManufacturerBase';
 
 import { loginEmployeeWithPermissions, logoutAndRedirect } from '../services/app/actions';
 import { auth } from '../store/firebase';
@@ -33,6 +34,7 @@ function mapStateToProps(state) {
         router: state.router,
         accountID: state.app.accountID,
         isAccountLoaded: state.accountData.account.isLoaded,
+        accountType: state.accountData.account.accountType,
         isAuthenticated: state.app.isAuthenticated,
     };
 }
@@ -102,16 +104,42 @@ export function requireAuthentication(Component) {
         }
 
 
+        renderRetailer() {
+            return (
+                <div>
+                  <RetailerBase>
+                      <Component {...this.props} />
+                  </RetailerBase>
+                </div>
+            );
+        }
+
+        renderManufacturer() {
+            return (
+                <div>
+                  <ManufacturerBase>
+                      <Component {...this.props} />
+                  </ManufacturerBase>
+                </div>
+            );
+        }
+
+        renderSwitch() {
+            const { accountType } = this.props;
+            return (
+                <section>
+                {accountType === 'retail' ? this.renderRetailer() : null}
+                {accountType === 'manufacture' ? this.renderManufacturer() : null}
+                </section>
+            )
+        }
+
         render() {
             return (
                 <div>
                     {this.props.isAuthenticated && this.props.isAccountLoaded && this.state.isLoaded
                         ? (
-                          <div>
-                            <Base>
-                                <Component {...this.props} />
-                            </Base>
-                          </div>
+                          this.renderSwitch()
                         )
                         : <div style={styles.overlay}>
                             <Loader color="#5e4443" type="ball-scale-multiple" />

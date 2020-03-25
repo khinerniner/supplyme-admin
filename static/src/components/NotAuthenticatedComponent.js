@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import history from '../history';
 
-import Base from '../components/VeriDoc/Base';
+import RetailerBase from '../components/VeriDoc/Base/RetailerBase';
 
 function mapStateToProps(state) {
     return {
@@ -60,9 +60,9 @@ export function requireNoAuthentication(Component) {
                 <div>
                     {!this.state.isAuthenticated && this.state.isLoaded
                         ? (
-                          <Base>
+                          <RetailerBase>
                               <Component {...this.props} />
-                          </Base>
+                          </RetailerBase>
                         )
                         : null
                     }
