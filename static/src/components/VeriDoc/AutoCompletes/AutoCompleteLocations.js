@@ -84,7 +84,7 @@ function getSuggestionValue(suggestion) {
 const styles = theme => ({
     container: {
         position: 'relative',
-        width: 450,
+        width: 250,
     },
     suggestionsContainerOpen: {
         position: 'absolute',
@@ -217,7 +217,8 @@ class AutoCompleteLocations extends React.Component {
                     {...autosuggestProps}
                     inputProps={{
                         classes,
-                        placeholder: 'Ex. Location Name',
+                        placeholder: 'Search Locations',
+                        label: 'Location Name',
                         value: this.state.name,
                         onChange: this.handleChange,
                         onKeyPress: this.onSuggestionSelected,
