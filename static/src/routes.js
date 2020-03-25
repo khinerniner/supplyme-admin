@@ -45,7 +45,7 @@ export default (
             <Route exact path="/accounts/:id/menuItems/create" component={requireAuthentication(MenuItemCreateView)} />
             <Route exact path="/accounts/:id/orders" component={requireAuthentication(OrderListView)} />
             <Route exact path="/accounts/:id/orders/search" component={requireAuthentication(PublicRequestListView)} />
-            <Route exact path="/accounts/:id/orders/create/request/:id" component={requireAuthentication(OrderCreateView)} />
+            <Route exact path="/accounts/:id/orders/create/requests/:id" component={requireAuthentication(OrderCreateView)} />
             <Route component={NotFoundView} />
         </Switch>
     </App>
