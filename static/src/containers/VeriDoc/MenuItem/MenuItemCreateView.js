@@ -4,16 +4,17 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import IconButton from '@material-ui/core/IconButton';
-import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
-import { toNewMenuItem } from '../../../services/menuItem/model';
+import { toNewMenuItem, toNewQuantity } from '../../../services/menuItem/model';
 import { saveNewMenuItem, updateMenuItem, deleteMenuItem } from '../../../services/menuItem/actions';
 import { geocodeGooglePlace } from '../../../services/google/actions';
 import {
@@ -164,13 +165,12 @@ class MenuItemCreateView extends React.Component {
         super(props);
         this.state = {
             menuItem: toNewMenuItem(),
-            quantity: {
-                pricePerUnit: 0,
-                stock: 0,
-            },
+            quantity: toNewQuantity(),
+            quantityOpen: false,
             name_error_text: null,
-            notes_error_text: null,
+            brand_error_text: null,
             sku_error_text: null,
+            notes_error_text: null,
             redirectRoute: `/accounts/${this.props.accountID}/menuItems`,
         };
     }
@@ -251,10 +251,40 @@ class MenuItemCreateView extends React.Component {
         });
     }
 
+    handleQuantityChange = (e, name) => {
+        const { value } = e.target;
+        const next_state = this.state;
+        next_state.quantity[name] = value;
+        this.setState(next_state, () => {});
+    }
+
+    handleQuantitySelected = (e) => {
+        console.warn(quantity)
+        const next_state = this.state;
+        const quantity = next_state.quantity;
+        let next_levels = this.state.menuItem.quantities;
+        if (next_levels.map(i => i).includes(quantity.pricePerUnit)) {
+            next_levels = next_levels.filter(e => e !== quantity.pricePerUnit);
+        } else {
+            next_levels.push(quantity);
+        }
+        next_state.menuItem.quantities = next_levels;
+        next_state.quantityOpen = false;
+        next_state.quantity = toNewQuantity();
+        this.setState(next_state, () => {});
+    }
+
+    deleteQuantity = (e, quantity) => {
+        let next_state = this.state.menuItem.quantities
+        for(let i = 0; i < next_state.length; i++){
+            if(next_state[i] === quantity){
+                next_state.splice(i,1)
+            }
+        }
+        this.setState(next_state, () => {})
+    }
+
     isMenuItemDisabled() {
-        this.setState({
-            disabled: true,
-        });
         let name_is_valid = false;
         let email_is_valid = false;
 
@@ -348,19 +378,23 @@ class MenuItemCreateView extends React.Component {
 
     }
 
+    toggleNewQuantity = (e, quantityOpen) => {
+        this.setState({quantityOpen: quantityOpen})
+    }
+
     renderItemQuantities = (quantity) => {
         const { classes } = this.props;
         return (
-            <div>
+            <div key={quantity.pricePerUnit}>
                 <IconButton
                   color='secondary'
                   disabled={false}
-                  onClick={e => this.deleteProp(e, property)}
+                  onClick={e => this.deleteQuantity(e, quantity)}
                 >
                     <RemoveCircleOutlineIcon className={classes.iconButton} />
                 </IconButton>
-                <span key={property.id} className={classes.detailListDt}>
-                    {property.name}
+                <span className={classes.detailListDt}>
+                    Stock: {quantity.stock} - Price: {quantity.pricePerUnit}
                 </span>
             </div>
         );
@@ -370,10 +404,12 @@ class MenuItemCreateView extends React.Component {
         const { classes } = this.props;
         const {
             menuItem,
-            name_error_text,
-            notes_error_text,
-            sku_error_text,
             quantity,
+            quantityOpen,
+            name_error_text,
+            brand_error_text,
+            sku_error_text,
+            notes_error_text,
         } = this.state;
 
         const itemTypes = renderItemType()
@@ -417,6 +453,20 @@ class MenuItemCreateView extends React.Component {
                         FormHelperTextProps={{ classes: { root: classes.helperText } }}
                     />
                 </div>
+                <label className={classes.inputLabel}>Brand Name</label>
+                <div className={classes.textCell}>
+                    <TextField
+                        placeholder="Ex. Proctor & Gamble"
+                        margin="dense"
+                        variant="outlined"
+                        type="text"
+                        helperText={brand_error_text}
+                        value={menuItem.brandName}
+                        className={classes.textField}
+                        onChange={e => this.handleChange(e, 'brandName')}
+                        FormHelperTextProps={{ classes: { root: classes.helperText } }}
+                    />
+                </div>
                 <label className={classes.inputLabel}>Item SKU</label>
                 <div className={classes.textCell}>
                     <TextField
@@ -448,7 +498,7 @@ class MenuItemCreateView extends React.Component {
             </div>
         );
 
-        const QuantitiesContainer = (
+        const QuantityContainer = (
             <div className={classes.outerCell}>
                 <div className={classes.subHeaderCell}>
                     <div className={classes.subHeaders}>
@@ -458,10 +508,14 @@ class MenuItemCreateView extends React.Component {
                 <div className={classes.block}>
                     <dl className={classes.detailList}>
                         <div className={classes.detailListFlex}>
-                            {Object.entries(menuItem.quantities).map(this.renderItemQuantities, this)}
+                            {menuItem.quantities.map(this.renderItemQuantities, this)}
                         </div>
                     </dl>
                 </div>
+                <IconButton onClick={(e) => this.toggleNewQuantity(e, !this.state.quantityOpen)}>
+                    <AddCircleOutlineIcon className={classes.iconButton} />
+                    <span style={{ fontSize: 16, paddingLeft: 10 }}>Add New Quantity</span>
+                </IconButton>
             </div>
         );
 
@@ -480,6 +534,7 @@ class MenuItemCreateView extends React.Component {
                       placeholder="Ex. $ 10.00"
                       margin="dense"
                       variant="outlined"
+                      type="number"
                       // helperText={'thcContent_error_text'}
                       value={quantity.pricePerUnit || ''}
                       className={classes.textFieldSmall}
@@ -490,7 +545,7 @@ class MenuItemCreateView extends React.Component {
                 </div>
                 </div>
                 <div className={classes.innerFlexCell}>
-                <label className={classes.inputLabel}>* Price</label>
+                <label className={classes.inputLabel}>* Stock</label>
                 <div className={classes.textCell}>
                     <TextField
                       placeholder="Ex. 10"
@@ -512,10 +567,10 @@ class MenuItemCreateView extends React.Component {
                   variant="contained"
                   disableRipple
                   disableFocusRipple
-                  onClick={this.handlePriceLevelSelected}
+                  onClick={this.handleQuantitySelected}
                   className={classes.createButton}
                 >
-                    {'Add Price Level'}
+                    {'Add Quantity'}
                 </Button>
             </div>
           </div>
@@ -530,7 +585,6 @@ class MenuItemCreateView extends React.Component {
                         disableFocusRipple
                         onClick={menuItem.active ? this.updateThisMenuItem : this.createNewMenuItem}
                         className={classes.createButton}
-                        disabled={disabled}
                         style={{ marginRight: 10 }}
                     >
                         {menuItem.active ? 'Update MenuItem' : 'Create MenuItem'}
@@ -557,7 +611,8 @@ class MenuItemCreateView extends React.Component {
                         </div>
                     </div>
                     {NameContainer}
-                    {CreateQuantityContainer}
+                    {QuantityContainer}
+                    {quantityOpen ? CreateQuantityContainer : null}
                     {CreateContainer}
                 </div>
             </div>
