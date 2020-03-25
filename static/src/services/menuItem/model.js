@@ -8,7 +8,7 @@ export function getMenuItemFromSnapshot(menuItem) {
         deleted: menuItem.deleted,
         itemID: menuItem.itemID,
         skuID: menuItem.skuID,
-        brand: menuItem.brand,
+        brandName: menuItem.brandName,
         itemName: menuItem.itemName,
         itemType: menuItem.itemType,
         locationID: menuItem.locationID,
@@ -30,13 +30,13 @@ export function toNewMenuItem() {
         deleted: false,
         itemID: null,
         skuID: null,
-        brand: null,
+        brandName: null,
         itemName: null,
         itemType: 'ppe',
         locationID: null,
         notes: null,
         oldItemRef: null,
-        quantities: {},
+        quantities: [],
         thumbItemImageURLs: [],
         updatedDate: null,
         createdDate: null,
@@ -44,12 +44,20 @@ export function toNewMenuItem() {
         unassignedStockPerItem: {},
     };
 }
+export function toNewQuantity() {
+    return {
+        pricePerUnit: 0,
+        stock: 0,
+    };
+}
 export function menuItemRowObject(menuItem) {
     return {
-        index: menuItem.menuItemID,
-        id: menuItem.menuItemID,
+        index: menuItem.itemID,
+        id: menuItem.itemID,
         active: menuItem.active,
         deleted: menuItem.deleted,
+        brandName: menuItem.brandName,
+        skuID: menuItem.skuID,
         itemName: menuItem.itemName,
         itemType: menuItem.itemType,
         updatedDate: menuItem.updatedDate,
