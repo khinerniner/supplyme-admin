@@ -39,9 +39,13 @@ export function getKeys(pathname) {
     const path = pathname.split('/');
     const firstID = path[2];
     const secondID = path[4];
+    const thirdID = path[6];
+    const fourthID = path[8];
     return {
         first: firstID,
         second: secondID,
+        third: thirdID,
+        fourth: fourthID,
     }
 }
 
