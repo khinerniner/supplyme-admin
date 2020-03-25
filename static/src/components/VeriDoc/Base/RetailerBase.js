@@ -73,6 +73,9 @@ const styles = theme => ({
         paddingTop: 20,
         paddingBottom: 20,
         textAlign: 'center',
+        position: 'absolute',
+        bottom: 0,
+        width: '100%'
     },
     footerMain: {
         textAlign: 'left',
@@ -129,7 +132,6 @@ class RetailerBase extends Component {
             baseDomain: '/accounts/',
             breadcrumb: 'account',
             listItems: [
-                'account',
                 'locations',
                 'requests',
                 'orders',
@@ -169,8 +171,6 @@ class RetailerBase extends Component {
     parseURL = (item) => {
         const { baseDomain } = this.state;
         switch (item) {
-        case 'account':
-            return `${baseDomain}/account`;
         case 'locations':
             return `${baseDomain}/locations`;
         case 'requests':
