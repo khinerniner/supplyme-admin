@@ -63,7 +63,7 @@ const styles = (theme) => ({
 
 
 
-function RequestResultsTable(props) {
+function PublicRequestResultsTable(props) {
   const { classes, type, rows, handleLink, handleAction } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -141,11 +141,11 @@ function RequestResultsTable(props) {
 
 
 
-RequestResultsTable.propTypes = {
+PublicRequestResultsTable.propTypes = {
   type: PropTypes.string.isRequired,
   rows: PropTypes.array.isRequired,
   handleLink: PropTypes.func.isRequired,
   handleAction: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(RequestResultsTable);
+export default withStyles(styles)(PublicRequestResultsTable);
