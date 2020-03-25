@@ -17,6 +17,10 @@ import TablePaginationActions from '../../TablePaginationActions';
 
 import { formatDateWTime, formatAddress, formatDateNoTime } from '../../../utils/misc';
 
+import {
+  formatOrderStatus
+} from '../../../utils/events';
+
 const styles = (theme) => ({
   root: {
     width: '100%',
@@ -73,10 +77,10 @@ function OrderResultsTable(props) {
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell className={classes.tableHeaders} >Name</TableCell>
-            <TableCell className={classes.tableHeaders} >Priority</TableCell>
-            <TableCell className={classes.tableHeaders} >Items</TableCell>
+            <TableCell className={classes.tableHeaders} >Order ID</TableCell>
+            <TableCell className={classes.tableHeaders} >Deliver To</TableCell>
             <TableCell className={classes.tableHeaders} >Required By</TableCell>
+            <TableCell className={classes.tableHeaders} >Total</TableCell>
             <TableCell className={classes.tableHeaders} >Status</TableCell>
             <TableCell className={classes.tableHeaders} >Updated Date</TableCell>
           </TableRow>
@@ -87,18 +91,18 @@ function OrderResultsTable(props) {
             : rows
           ).map(row => (
             <TableRow key={row.id}>
-              <TableCell><a onClick={e => handleLink(e, row.id)} className={classes.linkText}>{row.locationName || 'Unkown Name'}</a></TableCell>
+              <TableCell><a onClick={e => handleLink(e, row.id)} className={classes.linkText}>{row.id || 'Unkown Name'}</a></TableCell>
               <TableCell>
-                {row.priority}
-              </TableCell>
-              <TableCell>
-                {row.numItems}
+                {row.deliveryTo || 'Unknown Name'}
               </TableCell>
               <TableCell>
                 {formatDateNoTime(row.requiredBy)}
               </TableCell>
               <TableCell>
-                {row.isStatus}
+                {row.total}
+              </TableCell>
+              <TableCell>
+                {formatOrderStatus(row.isStatus)}
               </TableCell>
               <TableCell>{formatDateNoTime(row.updatedDate ? row.updatedDate : row.createdDate)}</TableCell>
             </TableRow>
