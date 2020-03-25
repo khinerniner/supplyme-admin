@@ -253,7 +253,7 @@ class RetailerBase extends Component {
                           onClick={e => dispatchNewRoute('/')}
                         >
                             <div style={{ paddingLeft: 10, fontWeight: 500, fontSize: 16, color: '#fff' }}>
-                                VeriDoc
+                                SupplyME
                           </div>
                         </IconButton>
                         <IconButton

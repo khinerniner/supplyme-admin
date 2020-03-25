@@ -418,9 +418,9 @@ class RegisterView extends Component {
                 <div className={classes.leftContent}>
                     <div className={classes.gridItem}>
                         <div className={classes.registerHeader}>
-                            VeriDoc
+                            SupplyME
                         </div>
-                        <p className={classes.registerSubHeader}>Please fill out the following information to register a new account in VeriDoc.</p>
+                        <p className={classes.registerSubHeader}>Please fill out the following information to register a new account in SupplyME.</p>
                         <p className={classes.registerSubHeader}>If you would like to donate, please send <span style={{fontWeight: 600}}>XRP</span> to <div onClick={(e) => this.copyCodeToClipboard(e)} style={{cursor: 'pointer', fontWeight: 600}}>rw2ciyaNshpHe7bCHo4bRWq6pqqynnWKQg</div></p>
                     </div>
                 </div>
