@@ -46,6 +46,42 @@ export const fetchRequests = (employeeID, accountID) => (dispatch) => {
         });
 };
 
+export const addPublicRequest = request => ({
+    type: 'ADD_PUBLIC_REQUEST',
+    ...request,
+});
+
+export const startFetchingPublicRequests = () => ({
+    type: 'START_FETCHING_PUBLIC_REQUESTS',
+});
+
+export const receivedPublicRequests = () => ({
+    type: 'RECEIVED_PUBLIC_REQUESTS',
+    receivedAt: Date.now(),
+});
+export const receivePublicRequests = querySnapshot => (dispatch) => {
+    if (querySnapshot) {
+        querySnapshot.forEach((doc) => {
+            const request = doc.data();
+            request.requestID = doc.id;
+            dispatch(addPublicRequest(request));
+        });
+        dispatch(receivedPublicRequests());
+    }
+};
+
+export const fetchPublicRequests = () => (dispatch) => {
+    dispatch(startFetchingPublicRequests());
+    db().collection('Requests').onSnapshot((querySnapshot) => {
+        setTimeout(() => {
+            const requests = querySnapshot || [];
+            dispatch(receivePublicRequests(requests));
+        }, 0);
+    }, (error) => {
+        console.log(error);
+    });
+};
+
 // Save New Request
 //
 // [START Save New Request]
