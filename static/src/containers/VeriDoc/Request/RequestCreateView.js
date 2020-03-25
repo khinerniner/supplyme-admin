@@ -228,17 +228,11 @@ class RequestCreateView extends React.Component {
         this.setState(next_state, () => {});
     }
 
-    handleRequestSelected = (request) => {
-        const { place_id, description } = request;
-        const { main_text } = request.structured_formatting;
-        const { idToken, accountID } = this.props;
+    handleLocationSelected = (location) => {
         const next_state = this.state;
-        next_state.request.name = description;
-        geocodeGooglePlace(idToken, accountID, description).then((result) => {
-            result.placeID = place_id
-            next_state.request.address = result;
-            this.setState(next_state, () => {});
-        });
+        console.log(location)
+        next_state.request.location = location;
+        this.setState(next_state, () => {});
     }
 
     isRequestDisabled() {
@@ -390,7 +384,7 @@ class RequestCreateView extends React.Component {
                 </div>
                 <label className={classes.inputLabel}>Location</label>
                 <div className={classes.textField}>
-                    <AutoCompleteLocations name={request.location.name} onFinishedSelecting={this.handleRequestSelected}/>
+                    <AutoCompleteLocations name={request.location.name} onFinishedSelecting={this.handleLocationSelected}/>
                 </div>
             </div>
         );
