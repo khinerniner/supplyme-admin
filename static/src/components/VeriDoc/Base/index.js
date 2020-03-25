@@ -286,7 +286,7 @@ class FinancierBase extends Component {
                           </div>
                         </IconButton>
                         <IconButton
-                          onClick={e => dispatchNewRoute('/account')}
+                          onClick={e => dispatchNewRoute('/valor')}
                         >
                             <div style={{ paddingLeft: 10, fontWeight: 500, fontSize: 16, color: '#fff' }}>
                                 The Wall
