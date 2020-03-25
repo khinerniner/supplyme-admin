@@ -73,9 +73,9 @@ function LocationResultsTable(props) {
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell className={classes.tableHeaders} >Name</TableCell>
-            <TableCell className={classes.tableHeaders} >Location</TableCell>
+            <TableCell className={classes.tableHeaders} >Contact Name</TableCell>
             <TableCell className={classes.tableHeaders} >Phone</TableCell>
+            <TableCell className={classes.tableHeaders} >Location</TableCell>
             <TableCell className={classes.tableHeaders} >PlaceID</TableCell>
             <TableCell className={classes.tableHeaders} >Updated Date</TableCell>
           </TableRow>
@@ -88,10 +88,10 @@ function LocationResultsTable(props) {
             <TableRow key={row.id}>
               <TableCell><a onClick={e => handleLink(e, row.id)} className={classes.linkText}>{row.name}</a></TableCell>
               <TableCell>
-                {row.address}
+                {row.phoneNumber || 'Invalid Phone Number'}
               </TableCell>
               <TableCell>
-                {row.phoneNumber || 'Invalid Phone Number'}
+                {row.address}
               </TableCell>
               <TableCell>
                 {row.placeID}
