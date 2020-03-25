@@ -151,9 +151,9 @@ class OrderListView extends React.Component {
               disableFocusRipple
               className={classes.firstButton}
               classes={{ label: classes.buttonLabel }}
-              onClick={e => dispatchNewRoute(`/accounts/${accountID}/orders/create`)}
+              onClick={e => dispatchNewRoute(`/accounts/${accountID}/orders/search`)}
             >
-                {'+ New Order'}
+                {'Search Open Requests'}
             </Button>
             </div>
         );
