@@ -9,6 +9,7 @@ import { getAccount } from '../../services/account/actions';
 import { fetchEmployees } from '../../services/employee/actions';
 import { fetchLocations } from '../../services/location/actions';
 import { fetchRequests } from '../../services/request/actions';
+import { fetchPublicRequests } from '../../services/request/actions';
 import { fetchMenuItems } from '../../services/menuItem/actions';
 
 // Login Employee
@@ -68,6 +69,7 @@ export const loginEmployeeWithPermissions = (employeeID, redirectRoute) => (disp
                         dispatch(fetchEmployees(employeeID, accountID));
                         dispatch(fetchLocations(employeeID, accountID));
                         dispatch(fetchRequests(employeeID, accountID));
+                        dispatch(fetchPublicRequests(employeeID, accountID));
                         dispatch(fetchMenuItems(employeeID, accountID));
                         dispatch(loginEmployeeSuccess(employeeID, accountID, empDoc.data(), idToken));
                         // NO "/" because of redirect starting with "/"
