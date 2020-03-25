@@ -74,9 +74,9 @@ function MenuItemResultsTable(props) {
         <TableHead>
           <TableRow>
             <TableCell className={classes.tableHeaders} >Name</TableCell>
-            <TableCell className={classes.tableHeaders} >MenuItem</TableCell>
-            <TableCell className={classes.tableHeaders} >Phone</TableCell>
-            <TableCell className={classes.tableHeaders} >PlaceID</TableCell>
+            <TableCell className={classes.tableHeaders} >Item Type</TableCell>
+            <TableCell className={classes.tableHeaders} >Brand Name</TableCell>
+            <TableCell className={classes.tableHeaders} >Sku ID</TableCell>
             <TableCell className={classes.tableHeaders} >Updated Date</TableCell>
           </TableRow>
         </TableHead>
@@ -86,15 +86,15 @@ function MenuItemResultsTable(props) {
             : rows
           ).map(row => (
             <TableRow key={row.id}>
-              <TableCell><a onClick={e => handleLink(e, row.id)} className={classes.linkText}>{row.name}</a></TableCell>
+              <TableCell><a onClick={e => handleLink(e, row.id)} className={classes.linkText}>{row.itemName}</a></TableCell>
               <TableCell>
-                {row.address}
+                {row.itemType}
               </TableCell>
               <TableCell>
-                {row.phoneNumber || 'Invalid Phone Number'}
+                {row.brandName}
               </TableCell>
               <TableCell>
-                {row.placeID}
+                {row.skuID || 'None'}
               </TableCell>
               <TableCell>{formatDateNoTime(row.updatedDate ? row.updatedDate : row.createdDate)}</TableCell>
             </TableRow>
