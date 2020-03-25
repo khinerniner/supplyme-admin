@@ -15,6 +15,7 @@ import ValorCreateView from './containers/NotAuth/Valor/ValorCreateView';
 import LocationListView from './containers/VeriDoc/Location/LocationListView';
 import LocationCreateView from './containers/VeriDoc/Location/LocationCreateView';
 import RequestListView from './containers/VeriDoc/Request/RequestListView';
+import PublicRequestListView from './containers/VeriDoc/Request/PublicRequestListView';
 import RequestCreateView from './containers/VeriDoc/Request/RequestCreateView';
 import MenuItemListView from './containers/VeriDoc/MenuItem/MenuItemListView';
 import MenuItemCreateView from './containers/VeriDoc/MenuItem/MenuItemCreateView';
@@ -43,7 +44,8 @@ export default (
             <Route exact path="/accounts/:id/menuItems" component={requireAuthentication(MenuItemListView)} />
             <Route exact path="/accounts/:id/menuItems/create" component={requireAuthentication(MenuItemCreateView)} />
             <Route exact path="/accounts/:id/orders" component={requireAuthentication(OrderListView)} />
-            <Route exact path="/accounts/:id/orders/create" component={requireAuthentication(OrderCreateView)} />
+            <Route exact path="/accounts/:id/orders/search" component={requireAuthentication(PublicRequestListView)} />
+            <Route exact path="/accounts/:id/orders/create/request/:id" component={requireAuthentication(OrderCreateView)} />
             <Route component={NotFoundView} />
         </Switch>
     </App>
