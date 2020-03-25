@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import IconButton from '@material-ui/core/IconButton';
-import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
@@ -13,8 +12,10 @@ import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import { KeyboardDatePicker } from '@material-ui/pickers';
+import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
-import { toNewRequest } from '../../../services/request/model';
+import { toNewRequest, toNewRequestItem } from '../../../services/request/model';
 import { saveNewRequest, updateRequest, deleteRequest } from '../../../services/request/actions';
 import { geocodeGooglePlace } from '../../../services/google/actions';
 import {
@@ -27,6 +28,7 @@ import {
 } from '../../../utils/misc';
 
 import AutoCompleteLocations from '../../../components/VeriDoc/AutoCompletes/AutoCompleteLocations';
+import AutoCompleteMenuItems from '../../../components/VeriDoc/AutoCompletes/AutoCompleteMenuItems';
 
 function renderPriorityType() {
     const array = [];
@@ -168,6 +170,8 @@ class RequestCreateView extends React.Component {
         super(props);
         this.state = {
             request: toNewRequest(),
+            menuItem: toNewRequestItem(),
+            menuItemOpen: false,
             requiredBy_error_text: null,
             // phoneNumber_error_text: null,
             redirectRoute: `/accounts/${this.props.accountID}/requests`,
@@ -232,6 +236,34 @@ class RequestCreateView extends React.Component {
         const next_state = this.state;
         console.log(location)
         next_state.request.location = location;
+        this.setState(next_state, () => {});
+    }
+
+    handleMenuItemChange = (e, name) => {
+        const { value } = e.target;
+        const next_state = this.state;
+        next_state.menuItem[name] = value;
+        this.setState(next_state, () => {});
+    }
+
+    handleMenuItemAdd = () => {
+        const next_state = this.state;
+        let next_items = this.state.request.menuItems;
+        if (this.state.request.menuItems.map(i => i).includes(this.state.menuItem.item.itemID)) {
+            next_items = next_items.filter(e => e !== this.state.menuItem.item.itemID);
+        } else {
+            next_items.push(this.state.menuItem);
+        }
+        next_state.request.menuItems = next_items;
+        next_state.menuItemOpen = false;
+        next_state.menuItem = toNewRequestItem();
+        this.setState(next_state, () => {});
+    }
+
+    handleMenuItemSelected = (item) => {
+        console.log(item)
+        const next_state = this.state;
+        next_state.menuItem.item = item;
         this.setState(next_state, () => {});
     }
 
@@ -332,12 +364,45 @@ class RequestCreateView extends React.Component {
 
     }
 
+    deleteMenuItem(e, item){
+        let next_state = this.state.request.menuItems
+        for(let i = 0; i < next_state.length; i++){
+            if(next_state[i] === item){
+                next_state.splice(i,1)
+            }
+        }
+        this.setState(next_state, () => { })
+    }
+
+    toggleAddMenuItem = (e, menuItemOpen) => {
+        this.setState({menuItemOpen: menuItemOpen})
+    }
+
+    renderRequestMenuItems = (item) => {
+        console.log(item)
+        const { classes } = this.props;
+        return (
+            <div key={item.item.itemID}>
+                <IconButton
+                  color='secondary'
+                  disabled={false}
+                  onClick={e => this.deleteMenuItem(e, item)}
+                >
+                    <RemoveCircleOutlineIcon className={classes.iconButton} />
+                </IconButton>
+                <span className={classes.detailListDt}>
+                    Item Name: {item.item.itemName} - Requested: {item.quantity}
+                </span>
+            </div>
+        );
+    }
+
     render() {
         const { classes } = this.props;
         const {
             request,
             requiredBy_error_text,
-            disabled,
+            menuItemOpen,
         } = this.state;
 
         const priorityTypes = renderPriorityType();
@@ -398,7 +463,6 @@ class RequestCreateView extends React.Component {
                         disableFocusRipple
                         onClick={request.active ? this.updateThisRequest : this.createNewRequest}
                         className={classes.createButton}
-                        disabled={disabled}
                         style={{ marginRight: 10 }}
                     >
                         {request.active ? 'Update Request' : 'Create Request'}
@@ -414,7 +478,67 @@ class RequestCreateView extends React.Component {
                     </Button>
                 </div>
             </div>
-        )
+        );
+
+        const MenuItemsContainer = (
+            <div className={classes.outerCell}>
+                <div className={classes.subHeaderCell}>
+                    <div className={classes.subHeaders}>
+                        Request Menu Items
+                    </div>
+                </div>
+                <div className={classes.block}>
+                    <dl className={classes.detailList}>
+                        <div className={classes.detailListFlex}>
+                            {request.menuItems.map(this.renderRequestMenuItems, this)}
+                        </div>
+                    </dl>
+                </div>
+                <IconButton onClick={(e) => this.toggleAddMenuItem(e, !menuItemOpen)}>
+                    <AddCircleOutlineIcon className={classes.iconButton} />
+                    <span style={{ fontSize: 16, paddingLeft: 10 }}>Add New Menu Item</span>
+                </IconButton>
+            </div>
+        );
+
+        const AddMenuItemContainer = (
+          <div className={classes.outerCell}>
+              <div className={classes.subHeaderCell}>
+                  <div className={classes.subHeaders}>
+                      Add Menu Item & Quantity
+                  </div>
+              </div>
+              <div>
+                  <AutoCompleteMenuItems onFinishedSelecting={this.handleMenuItemSelected} />
+              </div>
+              <div className={classes.textCell}>
+                  <TextField
+                    placeholder="Ex. 10"
+                    label="Quantity"
+                    margin="dense"
+                    variant="outlined"
+                    type="number"
+                    // helperText={'cbdContent_error_text'}
+                    // value={menuItemQuaa.stock || ''}
+                    className={classes.textFieldSmall}
+                    onChange={e => this.handleMenuItemChange(e, 'quantity')}
+                    // FormHelperTextProps={{ classes: { root: classes.helperText } }}
+                    autoComplete=""
+                  />
+              </div>
+              <div className={classes.textCell}>
+                  <Button
+                    variant="contained"
+                    disableRipple
+                    disableFocusRipple
+                    onClick={this.handleMenuItemAdd}
+                    className={classes.createButton}
+                  >
+                      {'Add Menu Item'}
+                  </Button>
+              </div>
+          </div>
+        );
 
         return (
             <div className={classes.root}>
@@ -425,6 +549,8 @@ class RequestCreateView extends React.Component {
                         </div>
                     </div>
                     {NameContainer}
+                    {MenuItemsContainer}
+                    {menuItemOpen ? AddMenuItemContainer : null}
                     {CreateContainer}
                 </div>
             </div>
