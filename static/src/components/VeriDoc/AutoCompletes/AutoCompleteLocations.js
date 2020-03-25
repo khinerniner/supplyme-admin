@@ -12,12 +12,9 @@ import parse from 'autosuggest-highlight/parse';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
-import IconButton from '@material-ui/core/IconButton';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 import { fetchLocations } from '../../../services/location/actions';
 import { validateString } from '../../../utils/misc';
-
 
 function renderInputComponent(inputProps) {
     const {
@@ -42,8 +39,8 @@ function renderInputComponent(inputProps) {
 }
 
 function renderSuggestion(suggestion, { query, isHighlighted }) {
-    const matches = match(`${suggestion.homeInfo.name}`, query);
-    const parts = parse(`${suggestion.homeInfo.name}`, matches);
+    const matches = match(`${suggestion.name}`, query);
+    const parts = parse(`${suggestion.name}`, matches);
 
     return (
         <MenuItem selected={isHighlighted} component="div">
@@ -63,8 +60,6 @@ function renderSuggestion(suggestion, { query, isHighlighted }) {
 }
 
 function getSuggestions(suggestions, value) {
-    console.log(suggestions)
-    console.log(value)
     const inputValue = deburr(value.trim()).toLowerCase();
     const inputLength = inputValue.length;
     let count = 0;
@@ -73,7 +68,7 @@ function getSuggestions(suggestions, value) {
         ? []
         : suggestions.filter((suggestion) => {
             const keep =
-                count < 5 && `${suggestion.homeInfo.name}`.slice(0, inputLength).toLowerCase() === inputValue;
+                count < 5 && `${suggestion.name}`.slice(0, inputLength).toLowerCase() === inputValue;
 
             if (keep) {
                 count += 1;
@@ -83,7 +78,7 @@ function getSuggestions(suggestions, value) {
 }
 
 function getSuggestionValue(suggestion) {
-    return `${suggestion.homeInfo.name}`;
+    return `${suggestion.name}`;
 }
 
 const styles = theme => ({
@@ -173,7 +168,7 @@ class AutoCompleteLocations extends React.Component {
         console.log('Handle Selected');
         const data = response.suggestion;
         const next_state = {};
-        next_state.location = response.suggestionValue;
+        next_state.name = response.suggestionValue;
         this.setState(next_state, () => { });
         this.props.onFinishedSelecting(data);
     };
