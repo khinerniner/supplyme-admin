@@ -77,7 +77,7 @@ export const saveNewMenuItem = (token, employeeID, accountID, menuItem, redirect
     menuItemInfo.active = true;
     menuItemInfo.deleted = false;
     menuItemInfo.createdDate = createdDate;
-    menuItemInfo.menuItemID = newAccountMenuItemRef.id;
+    menuItemInfo.itemID = newAccountMenuItemRef.id;
 
     console.warn(menuItemInfo);
 
