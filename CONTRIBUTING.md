@@ -9,7 +9,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ```
 cd veridoc-admin \
-workon aenet \
+workon veridocnet \
 python3 wsgi.py
 ```
 
@@ -26,7 +26,7 @@ npm run dev
 iOS X.X.X
 ```
 
-### Confirm Node Env
+### Confirm/Install Node Env
  Install
 ```
 brew install node
@@ -37,7 +37,7 @@ Version
 X.X.X
 ```
 
-### Confirm Virtual Env
+### Confirm/Install Virtual Env
 Install
 ```
 pip3 install virtualenv virtualenvwrapper
@@ -59,7 +59,6 @@ find / -name virtualenvwrapper.sh
 Add to Profile or Bash
 ```
 sudo nano ~/.bash_profile
-export APP_ENV="[server.config.]" # DevelopmentConfig or StageConfig
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.5
 export WORKON_HOME=$HOME/.virtualenvs
 source ~/.local/bin/virtualenvwrapper.sh
@@ -67,7 +66,7 @@ source ~/.local/bin/virtualenvwrapper.sh
 ### Clone
 ```
 git clone https://bitbucket.org/ae/veridoc-admin/src/master/
-&& mkvirtualenv aenet \
+&& mkvirtualenv veridoc \
 && cd veridoc-admin \
 && pip3 uninstall -r requirements.txt -y \
 && pip3 install -U -r requirements.txt \
@@ -130,7 +129,7 @@ server {
     root /srv/www/veridoc-admin/static;
     index index.html index.htm;
     location / {
-            proxy_pass http://127.0.0.1:3000;
+            proxy_pass http://127.0.0.1:3001;
             proxy_http_version 1.1;
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection 'upgrade';
