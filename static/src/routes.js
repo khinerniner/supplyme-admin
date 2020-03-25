@@ -12,9 +12,12 @@ import AccountRegisterView from './containers/NotAuth/Register/AccountRegisterVi
 
 import ValorListView from './containers/NotAuth/Valor/ValorListView';
 import ValorCreateView from './containers/NotAuth/Valor/ValorCreateView';
-
 import LocationListView from './containers/VeriDoc/Location/LocationListView';
 import LocationCreateView from './containers/VeriDoc/Location/LocationCreateView';
+import RequestListView from './containers/VeriDoc/Request/RequestListView';
+import RequestCreateView from './containers/VeriDoc/Request/RequestCreateView';
+import MenuItemListView from './containers/VeriDoc/MenuItem/MenuItemListView';
+import MenuItemCreateView from './containers/VeriDoc/MenuItem/MenuItemCreateView';
 
 /* Public Components */
 import { requireNoAuthentication } from './components/NotAuthenticatedComponent';
@@ -30,9 +33,13 @@ export default (
             <Route exact path="/valor" component={requireNoAuthentication(ValorListView)} />
             <Route exact path="/valor/create" component={requireNoAuthentication(ValorCreateView)} />
 
-            <Route exact path="/accounts/:id/dashboard" component={requireAuthentication(LocationListView)} />
+            <Route exact path="/accounts/:id/account" component={requireAuthentication(LocationListView)} />
             <Route exact path="/accounts/:id/locations" component={requireAuthentication(LocationListView)} />
             <Route exact path="/accounts/:id/locations/create" component={requireAuthentication(LocationCreateView)} />
+            <Route exact path="/accounts/:id/requests" component={requireAuthentication(RequestListView)} />
+            <Route exact path="/accounts/:id/requests/create" component={requireAuthentication(RequestCreateView)} />
+            <Route exact path="/accounts/:id/menuItems" component={requireAuthentication(MenuItemListView)} />
+            <Route exact path="/accounts/:id/menuItems/create" component={requireAuthentication(MenuItemCreateView)} />
             <Route component={NotFoundView} />
         </Switch>
     </App>
