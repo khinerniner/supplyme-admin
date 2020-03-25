@@ -127,10 +127,12 @@ class Base extends Component {
         this.state = {
             isMobileAndTablet: isMobileAndTablet(),
             baseDomain: '/accounts/',
-            breadcrumb: 'dashboard',
+            breadcrumb: 'account',
             listItems: [
-                'dashboard',
-                'locations'
+                'account',
+                'locations',
+                'requests',
+                'items',
             ],
         };
     }
@@ -165,10 +167,14 @@ class Base extends Component {
     parseURL = (item) => {
         const { baseDomain } = this.state;
         switch (item) {
-        case 'dashboard':
-            return `${baseDomain}/dashboard`;
+        case 'account':
+            return `${baseDomain}/account`;
         case 'locations':
             return `${baseDomain}/locations`;
+        case 'requests':
+            return `${baseDomain}/requests`;
+        case 'items':
+            return `${baseDomain}/menuItems`;
         default:
             return `unknown`;
         }
