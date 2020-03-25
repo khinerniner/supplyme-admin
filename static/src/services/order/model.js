@@ -8,12 +8,12 @@ export function getOrderFromSnapshot(order) {
         orderID: order.orderID,
         active: order.active,
         deleted: order.deleted,
-        priority: order.priority,
-        requiredBy: order.requiredBy,
         status: order.status,
         location: order.location,
-        reuqest: order.request,
+        request: order.request,
         menuItems: order.menuItems,
+        total: order.total,
+        stockPerItem: order.stockPerItem,
     };
 }
 export function toNewOrder() {
@@ -46,10 +46,10 @@ export function orderRowObject(order) {
         id: order.orderID,
         active: order.active,
         deleted: order.deleted,
-        priority: order.priority,
-        requiredBy: order.requiredBy,
         isStatus: order.status.isStatus,
-        locationName: order.location.name,
-        numItems: order.menuItems.length,
+        deliveryTo: order.location.name,
+        requiredBy: parseFirestoreTimeStamp(order.request.requiredBy),
+        total: order.location.total,
+        updatedDate: parseFirestoreTimeStamp(order.status.isStatusTime),
     };
 }

@@ -72,7 +72,6 @@ export const saveNewOrder = (token, employeeID, accountID, order, redirectRoute)
 
     const accountRef = db().collection("Accounts").doc(accountID)
     const newAccountOrderRef = accountRef.collection("Orders").doc()
-    const newOrderRef = db().collection("Orders").doc(newAccountOrderRef.id)
 
     const orderInfo = order;
     const newEvent = {
@@ -90,7 +89,6 @@ export const saveNewOrder = (token, employeeID, accountID, order, redirectRoute)
 
     return db().runTransaction((transaction) => {
         transaction.set(newAccountOrderRef, getOrderFromSnapshot(orderInfo));
-        transaction.set(newOrderRef, getOrderFromSnapshot(orderInfo));
         return Promise.resolve(orderInfo);
     }).then((orderInfo) => {
         console.log("Transaction successfully committed!");
