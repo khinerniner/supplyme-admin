@@ -74,9 +74,10 @@ function RequestResultsTable(props) {
         <TableHead>
           <TableRow>
             <TableCell className={classes.tableHeaders} >Name</TableCell>
-            <TableCell className={classes.tableHeaders} >Request</TableCell>
-            <TableCell className={classes.tableHeaders} >Phone</TableCell>
-            <TableCell className={classes.tableHeaders} >PlaceID</TableCell>
+            <TableCell className={classes.tableHeaders} >Priority</TableCell>
+            <TableCell className={classes.tableHeaders} >Items</TableCell>
+            <TableCell className={classes.tableHeaders} >Required By</TableCell>
+            <TableCell className={classes.tableHeaders} >Status</TableCell>
             <TableCell className={classes.tableHeaders} >Updated Date</TableCell>
           </TableRow>
         </TableHead>
@@ -86,15 +87,18 @@ function RequestResultsTable(props) {
             : rows
           ).map(row => (
             <TableRow key={row.id}>
-              <TableCell><a onClick={e => handleLink(e, row.id)} className={classes.linkText}>{row.name}</a></TableCell>
+              <TableCell><a onClick={e => handleLink(e, row.id)} className={classes.linkText}>{row.locationName || 'Unkown Name'}</a></TableCell>
               <TableCell>
-                {row.address}
+                {row.priority}
               </TableCell>
               <TableCell>
-                {row.phoneNumber || 'Invalid Phone Number'}
+                {row.numItems}
               </TableCell>
               <TableCell>
-                {row.placeID}
+                {formatDateNoTime(row.requiredBy)}
+              </TableCell>
+              <TableCell>
+                {row.isStatus}
               </TableCell>
               <TableCell>{formatDateNoTime(row.updatedDate ? row.updatedDate : row.createdDate)}</TableCell>
             </TableRow>
@@ -109,7 +113,7 @@ function RequestResultsTable(props) {
           <TableRow>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-              colSpan={5}
+              colSpan={6}
               count={rows.length}
               rowsPerPage={rowsPerPage}
               page={page}
