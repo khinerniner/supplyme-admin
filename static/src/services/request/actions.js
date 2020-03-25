@@ -72,6 +72,7 @@ export const saveNewRequest = (token, employeeID, accountID, request, redirectRo
 
     const accountRef = db().collection("Accounts").doc(accountID)
     const newAccountRequestRef = accountRef.collection("Requests").doc()
+    const newRequestRef = db().collection("Requests").doc(newAccountRequestRef.id)
 
     const requestInfo = request;
     const newEvent = {
@@ -83,12 +84,13 @@ export const saveNewRequest = (token, employeeID, accountID, request, redirectRo
     requestInfo.active = true;
     requestInfo.deleted = false;
     requestInfo.status.isStatus = 1;
-    requestInfo.status.isStatusTime = 1;
+    requestInfo.status.isStatusTime = createdDate;
     requestInfo.status.events = newEvent;
     requestInfo.requestID = newAccountRequestRef.id;
 
     return db().runTransaction((transaction) => {
         transaction.set(newAccountRequestRef, getRequestFromSnapshot(requestInfo));
+        transaction.set(newRequestRef, getRequestFromSnapshot(requestInfo));
         return Promise.resolve(requestInfo);
     }).then((requestInfo) => {
         console.log("Transaction successfully committed!");

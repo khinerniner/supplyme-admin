@@ -1,5 +1,6 @@
 import { parseFirestoreTimeStamp } from '../../utils/misc';
 import { toNewLocation } from '../../services/location/model';
+import { toNewMenuItem } from '../../services/menuItem/model';
 
 export function getRequestFromSnapshot(request) {
     return {
@@ -9,6 +10,8 @@ export function getRequestFromSnapshot(request) {
         priority: request.priority,
         requiredBy: request.requiredBy,
         status: request.status,
+        location: request.location,
+        menuItems: request.menuItems,
     };
 }
 export function toNewRequest() {
@@ -24,7 +27,13 @@ export function toNewRequest() {
             events: [],
         },
         location: toNewLocation(),
-        items: [],
+        menuItems: [],
+    };
+}
+export function toNewRequestItem() {
+    return {
+        quantity: 0,
+        item: toNewMenuItem(),
     };
 }
 export function requestRowObject(request) {
@@ -35,6 +44,8 @@ export function requestRowObject(request) {
         deleted: request.deleted,
         priority: request.priority,
         requiredBy: request.requiredBy,
-        status: request.status,
+        isStatus: request.status.isStatus,
+        locationName: request.location.name,
+        numItems: request.menuItems.length,
     };
 }
