@@ -10,6 +10,7 @@ import locationData from './location/reducer';
 import googleData from './google/reducer';
 import requestData from './request/reducer';
 import menuItemData from './menuItem/reducer';
+import orderData from './order/reducer';
 
 const appReducer = history => combineReducers({
     router: connectRouter(history),
@@ -20,6 +21,7 @@ const appReducer = history => combineReducers({
     googleData,
     requestData,
     menuItemData,
+    orderData,
 });
 
 export const rootReducer = history => (state, action) => {
