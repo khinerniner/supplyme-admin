@@ -251,7 +251,7 @@ class Base extends Component {
                           </div>
                         </IconButton>
                         <IconButton
-                          onClick={e => dispatchNewRoute('/dashboard')}
+                          onClick={e => dispatchNewRoute('/account')}
                         >
                             <div style={{ paddingLeft: 10, fontWeight: 500, fontSize: 16, color: '#fff' }}>
                                 The Wall

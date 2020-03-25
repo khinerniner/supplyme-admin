@@ -90,7 +90,7 @@ export function requireAuthentication(Component) {
                     if (props.accountID === process.env.PRIVALGO_ADMIN_KEY) {
                         history.push(`/admin/locations`);
                     } else {
-                        history.push(`/accounts/${props.accountID}/dashboard`);
+                        history.push(`/accounts/${props.accountID}/account`);
                     }
                 } else {
                     console.log('A4');
