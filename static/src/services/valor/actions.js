@@ -5,16 +5,16 @@ import { apiActivateValorCode } from '../../utils/http_functions';
 import { toNewValor } from './model';
 
 export const addValor = valor => ({
-    type: 'ADD_EMPLOYEE',
+    type: 'ADD_VALOR',
     ...valor,
 });
 
 export const startFetchingValors = () => ({
-    type: 'START_FETCHING_EMPLOYEES',
+    type: 'START_FETCHING_VALORS',
 });
 
 export const receivedValors = () => ({
-    type: 'RECEIVED_EMPLOYEES',
+    type: 'RECEIVED_VALORS',
     receivedAt: Date.now(),
 });
 export const receiveValors = querySnapshot => (dispatch) => {
@@ -28,9 +28,9 @@ export const receiveValors = querySnapshot => (dispatch) => {
     }
 };
 
-export const fetchValors = (accountID) =>  (dispatch) => {
+export const fetchValors = () =>  (dispatch) => {
     dispatch(startFetchingValors());
-    db().collection('Valors').get.then((querySnapshot) => {
+    db().collection('Valors').get().then((querySnapshot) => {
           setTimeout(() => {
               const valors = querySnapshot || [];
               dispatch(receiveValors(valors));
@@ -95,16 +95,16 @@ export const saveValorMedia = (image, ref) => {
 //
 // [START Save New Valor]
 export const saveNewValorRequest = () => ({
-    type: 'SAVE_NEW_EMPLOYEE_REQUEST',
+    type: 'SAVE_NEW_VALOR_REQUEST',
 });
 
 
 export const saveNewValorSuccess = () => ({
-    type: 'SAVE_NEW_EMPLOYEE_SUCCESS',
+    type: 'SAVE_NEW_VALOR_SUCCESS',
 });
 
 export const saveNewValorFailure = error => ({
-    type: 'SAVE_NEW_EMPLOYEE_FAILURE',
+    type: 'SAVE_NEW_VALOR_FAILURE',
     payload: {
         status: error.response.status,
         statusText: error.response.statusText,
@@ -112,8 +112,6 @@ export const saveNewValorFailure = error => ({
 });
 export const saveNewValor = (valorInfo, redirectRoute) => (dispatch) => {
     dispatch(saveNewValorRequest());
-    console.log(valorInfo)
-    console.log(redirectRoute)
 
     const createdTime = new Date()
 
