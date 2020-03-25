@@ -45,7 +45,7 @@ export function locationRowObject(location) {
         active: location.active,
         deleted: location.deleted,
         address: `${location.address.locality} ${location.address.region}, ${location.address.country}`,
-        name: location.name,
+        name: location.contactInfo.name,
         placeID: location.address.placeID,
         phoneNumber: location.contactInfo.phoneNumber,
         updatedDate: location.updatedDate,
