@@ -5,8 +5,10 @@ import PropTypes from 'prop-types';
 import history from '../history';
 import Loader from 'react-loaders';
 
-import RetailerBase from '../components/VeriDoc/Base/RetailerBase';
-import ManufacturerBase from '../components/VeriDoc/Base/ManufacturerBase';
+// import RetailerBase from '../components/VeriDoc/Base/RetailerBase';
+// import ManufacturerBase from '../components/VeriDoc/Base/ManufacturerBase';
+// import FinancierBase from '../components/VeriDoc/Base/FinancierBase';
+import Base from '../components/VeriDoc/Base';
 
 import { loginEmployeeWithPermissions, logoutAndRedirect } from '../services/app/actions';
 import { auth } from '../store/firebase';
@@ -124,12 +126,23 @@ export function requireAuthentication(Component) {
             );
         }
 
+        renderFinancier() {
+            return (
+                <div>
+                  <FinancierBase>
+                      <Component {...this.props} />
+                  </FinancierBase>
+                </div>
+            );
+        }
+
         renderSwitch() {
             const { accountType } = this.props;
             return (
                 <section>
-                {accountType === 'retail' ? this.renderRetailer() : null}
-                {accountType === 'manufacture' ? this.renderManufacturer() : null}
+                {accountType === 'retailer' ? this.renderRetailer() : null}
+                {accountType === 'manufacturer' ? this.renderManufacturer() : null}
+                {accountType === 'financier' ? this.renderFinancier() : null}
                 </section>
             )
         }
@@ -139,7 +152,11 @@ export function requireAuthentication(Component) {
                 <div>
                     {this.props.isAuthenticated && this.props.isAccountLoaded && this.state.isLoaded
                         ? (
-                          this.renderSwitch()
+                            <div>
+                              <Base>
+                                  <Component {...this.props} />
+                              </Base>
+                            </div>
                         )
                         : <div style={styles.overlay}>
                             <Loader color="#5e4443" type="ball-scale-multiple" />

@@ -18,6 +18,8 @@ import { logoutAndRedirect } from '../../../services/app/actions';
 import { isMobileAndTablet } from '../../../utils/isMobileAndTablet';
 import { dispatchNewRoute, parseLabel } from '../../../utils/misc';
 
+import { version } from '../../../../package.json';
+
 const styles = theme => ({
     root: {
         flexGrow: 1,
@@ -104,11 +106,34 @@ const styles = theme => ({
         borderfColor: theme.palette.primary.lightBlue,
         // backgroundColor: theme.palette.primary.appBar,
     },
+    accountBox: {
+        position: 'fixed',
+        top: 70,
+        right: 20,
+        background: '#fff',
+        border: 1,
+        width: 325,
+        height: 'auto',
+        borderRadius: 4,
+        zIndex: 999999,
+    },
+    accountBoxHeading: {
+        padding: 20,
+        fontWeight: 'bold',
+        color: '#fff',
+        zIndex: 2,
+    },
+    img: {
+        borderRadius: '50%',
+        float: 'left',
+    },
 });
 
 function mapStateToProps(state) {
     return {
         pathname: state.router.location.pathname,
+        email: state.app.email,
+        displayName: state.app.displayName,
         isAccountLoaded: state.accountData.account.isLoaded,
         isAuthenticated: state.app.isAuthenticated,
     };
@@ -124,7 +149,7 @@ function mapDispatchToProps(dispatch) {
 
 
 @connect(mapStateToProps, mapDispatchToProps)
-class RetailerBase extends Component {
+class ManufacturerBase extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -138,6 +163,7 @@ class RetailerBase extends Component {
                 'items',
                 'employees',
             ],
+            showAccount: false,
         };
     }
 
@@ -189,8 +215,6 @@ class RetailerBase extends Component {
         const { classes } = this.props;
         const { breadcrumb } = this.state;
         const route = this.parseURL(item);
-        console.warn(item)
-        console.warn(breadcrumb === `${item}`)
         return (
             <IconButton
                 key={item}
@@ -219,15 +243,22 @@ class RetailerBase extends Component {
         });
     }
 
+    toggleAccount(showAccount) {
+        this.setState({showAccount});
+    }
+
     render() {
         const {
             classes,
             pathname,
             isAuthenticated,
+            displayName,
+            email,
         } = this.props;
         const {
             listItems,
             isMobileAndTablet,
+            showAccount,
         } = this.state;
 
         const MainAppBar = (
@@ -267,7 +298,9 @@ class RetailerBase extends Component {
                     </div>
                     <div className={classes.root} />
                     <div className={classes.sectionDesktop}>
-                        <IconButton>
+                        <IconButton
+                            onClick={e => this.toggleAccount(!showAccount)}
+                        >
                             <div style={{ fontSize: 14, color: '#adadad' }}>
                                 <i class="fa fa-globe"></i>
                                 <span style={{ marginLeft: 8 }}>EN</span>
@@ -303,10 +336,35 @@ class RetailerBase extends Component {
                 </Toolbar>
             </AppBar>
         );
+
+        const Account = (
+            <Paper className={classes.accountBox} style={{ overflow: 'auto' }}>
+                <div className={classes.accountBoxHeading}>
+                    <div style={{ display: 'block' }}>
+                        <img style={{ display: 'inline-block', position: 'relative' }} alt="image" height="60" width="60" className={classes.img} src={'/src/containers/App/styles/img/temp_anon.jpg'} />
+                        <div style={{ display: 'inline-block' }}>
+                            <div style={{ paddingLeft: 10, color: '#000000', fontSize: '1.0em' }}><strong><em>{displayName}</em></strong></div>
+                            <div style={{ paddingLeft: 10, color: 'gray', fontSize: '1.0em' }}><em>{email}</em></div>
+                            <div style={{ paddingLeft: 10, color: '#5ba244', fontSize: '1.0em' }}><a onClick={e => this.dispatchNewRoute('/privacy')}><strong><em>Privacy</em></strong></a></div>
+                            <div style={{ paddingLeft: 10, color: '#33b739', fontSize: '1.0em' }}><strong><em><span>{version}</span></em></strong></div>
+                        </div>
+                    </div>
+                </div>
+                <div className={classes.accountBoxHeading}>
+                    <div style={{ textAlign: 'center' }}>
+                        <Button onClick={e => this.logout(e)}>
+                          Sign Out
+                        </Button>
+                    </div>
+                </div>
+            </Paper>
+        );
+
         return (
             <div className={classes.root}>
                 <div className={classes.appFrame}>
                     {MainAppBar}
+                    {showAccount ? Account : null}
                     <div className={classes.content}>
                         <div className={classes.toolbar} />
                         {this.props.children}
@@ -320,11 +378,17 @@ class RetailerBase extends Component {
     }
 }
 
-RetailerBase.propTypes = {
+ManufacturerBase.defaultProps = {
+    displayName: '',
+    email: '',
+};
+ManufacturerBase.propTypes = {
     pathname: PropTypes.string,
+    displayName: PropTypes.string,
+    email: PropTypes.string,
     logoutAndRedirect: PropTypes.func,
     classes: PropTypes.object.isRequired,
     children: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(RetailerBase);
+export default withStyles(styles)(ManufacturerBase);
