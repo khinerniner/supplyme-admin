@@ -25,6 +25,7 @@ import {
     validateEmail,
     validateDatePick,
     roundUp,
+    formatDateNoTime,
 } from '../../../utils/misc';
 
 import AutoCompleteLocations from '../../../components/VeriDoc/AutoCompletes/AutoCompleteLocations';
@@ -150,6 +151,8 @@ function mapStateToProps(state) {
         accountID: state.app.accountID,
         orders: state.orderData.orders,
         receivedAt: state.orderData.receivedAt,
+        requests: state.requestData.publicRequests,
+        receivedPublicRequestsAt: state.requestData.receivedPublicRequestsAt,
     };
 }
 
@@ -170,7 +173,6 @@ class OrderCreateView extends React.Component {
         super(props);
         this.state = {
             order: toNewOrder(),
-            menuItem: toNewOrderItem(),
             menuItemOpen: false,
             requiredBy_error_text: null,
             // phoneNumber_error_text: null,
@@ -181,11 +183,15 @@ class OrderCreateView extends React.Component {
     componentDidMount() {
         console.log('Order Create Mounted')
         this.loadCompData();
+        this.loadRequestData();
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.receivedAt !== null && this.props.receivedAt === null) {
             this.loadCompData(nextProps);
+        }
+        if (nextProps.receivedPublicRequestsAt !== null && this.props.receivedPublicRequestsAt === null) {
+            this.loadRequestData(nextProps);
         }
     }
 
@@ -204,16 +210,34 @@ class OrderCreateView extends React.Component {
         const { orders, pathname } = props;
         const keys = getKeys(pathname);
         const orderID = keys.second;
-        console.warn(orderID);
         if (orderID && orderID !== null) {
             orders.forEach((order) => {
                 if (order.orderID === orderID) {
                     console.log('Setting Order State')
                     const next_state = this.state;
                     next_state.order = order;
-                    this.setState(next_state, () => {
-                        this.isOrderDisabled();
-                    });
+                    this.setState(next_state, () => {});
+                }
+            })
+        }
+    }
+
+    loadRequestData = (props = this.props) => {
+        const { requests, pathname } = props;
+        const keys = getKeys(pathname);
+        const requestID = keys.third;
+        if (requestID && requestID !== null) {
+            requests.forEach((request) => {
+                if (request.requestID === requestID) {
+                    console.log('Setting Request State')
+                    const next_state = this.state;
+                    next_state.order.request = request;
+                    request.menuItems.forEach((item) => {
+                        const newItem = toNewOrderItem();
+                        newItem.item = item.item;
+                        next_state.order.menuItems.push(newItem)
+                    })
+                    this.setState(next_state, () => {});
                 }
             })
         }
@@ -239,10 +263,10 @@ class OrderCreateView extends React.Component {
         this.setState(next_state, () => {});
     }
 
-    handleMenuItemChange = (e, name) => {
+    handleMenuItemChange = (e, name, index) => {
         const { value } = e.target;
         const next_state = this.state;
-        next_state.menuItem[name] = value;
+        next_state.order.menuItems[index][name] = value;
         this.setState(next_state, () => {});
     }
 
@@ -378,20 +402,32 @@ class OrderCreateView extends React.Component {
         this.setState({menuItemOpen: menuItemOpen})
     }
 
-    renderOrderMenuItems = (item) => {
+    renderOrderMenuItems = (item, index) => {
         console.log(item)
+        console.log(index)
         const { classes } = this.props;
         return (
             <div key={item.item.itemID}>
-                <IconButton
-                  color='secondary'
-                  disabled={false}
-                  onClick={e => this.deleteMenuItem(e, item)}
-                >
-                    <RemoveCircleOutlineIcon className={classes.iconButton} />
-                </IconButton>
                 <span className={classes.detailListDt}>
-                    Item Name: {item.item.itemName} - Ordered: {item.quantity}
+                    Item Name: {item.item.itemName} - Requested: {item.quantity}
+                </span>
+                <div className={classes.textCell}>
+                    <TextField
+                      placeholder="Ex. 10"
+                      label="Quantity"
+                      margin="dense"
+                      variant="outlined"
+                      type="number"
+                      // helperText={'cbdContent_error_text'}
+                      // value={menuItemQuaa.stock || ''}
+                      className={classes.textFieldSmall}
+                      onChange={e => this.handleMenuItemChange(e, 'quantity', index)}
+                      // FormHelperTextProps={{ classes: { root: classes.helperText } }}
+                      autoComplete=""
+                    />
+                </div>
+                <span className={classes.detailListDt}>
+                    Available: 240
                 </span>
             </div>
         );
@@ -407,49 +443,39 @@ class OrderCreateView extends React.Component {
 
         const priorityTypes = renderPriorityType();
 
+        console.log(order)
+
         const NameContainer = (
             <div className={classes.outerCell}>
                 <div className={classes.subHeaderCell}>
                     <div className={classes.subHeaders}>
-                        Order Information
+                        Request Information
                     </div>
                 </div>
                 <div className={classes.childHeaderCell}>
                     <div className={classes.childHeaders}>
-                        Enter the order name and contact information.
+                        The Request information attached to the order.
                     </div>
                 </div>
-                <label className={classes.inputLabel}>Priority</label>
-                <div style={{paddingBottom: 20}} className={classes.textCell}>
-                    <Select
-                        onChange={e => this.handleChange(e, 'priority')}
-                        value={order.priority}
-                        variant="outlined"
-                        inputProps={{
-                            name: 'priority',
-                            id: 'priority',
-                        }}
-                    >
-                        {priorityTypes}
-                    </Select>
+                <div className={classes.childHeaderCell}>
+                    <div className={classes.childHeaders}>
+                        <span style={{fontWeight: 600}}>Request ID:</span> {order.request.requestID}
+                    </div>
                 </div>
-                <label className={classes.inputLabel}>{'Required By'}</label>
-                <div className={classes.textCell}>
-                    <KeyboardDatePicker
-                        autoOk
-                        value={order.requiredBy}
-                        margin="normal"
-                        variant="inline"
-                        helperText={requiredBy_error_text}
-                        className={classes.pickerField}
-                        onChange={this.handleDateChange('requiredBy')}
-                        format="MM/DD/YYYY"
-                        id="date-picker-inline"
-                    />
+                <div className={classes.childHeaderCell}>
+                    <div className={classes.childHeaders}>
+                        <span style={{fontWeight: 600}}>Request Budget:</span> {order.request.budget}
+                    </div>
                 </div>
-                <label className={classes.inputLabel}>Location</label>
-                <div className={classes.textField}>
-                    <AutoCompleteLocations name={order.location.name} onFinishedSelecting={this.handleLocationSelected}/>
+                <div className={classes.childHeaderCell}>
+                    <div className={classes.childHeaders}>
+                        <span style={{fontWeight: 600}}>Request Priority:</span> {order.request.priority}
+                    </div>
+                </div>
+                <div className={classes.childHeaderCell}>
+                    <div className={classes.childHeaders}>
+                        <span style={{fontWeight: 600}}>Request Required By:</span> {formatDateNoTime(order.request.requiredBy)}
+                    </div>
                 </div>
             </div>
         );
@@ -484,60 +510,17 @@ class OrderCreateView extends React.Component {
             <div className={classes.outerCell}>
                 <div className={classes.subHeaderCell}>
                     <div className={classes.subHeaders}>
-                        Order Menu Items
+                        Requested Menu Items
                     </div>
                 </div>
                 <div className={classes.block}>
                     <dl className={classes.detailList}>
                         <div className={classes.detailListFlex}>
-                            {order.menuItems.map(this.renderOrderMenuItems, this)}
+                            {order.request.menuItems.map(this.renderOrderMenuItems, this)}
                         </div>
                     </dl>
                 </div>
-                <IconButton onClick={(e) => this.toggleAddMenuItem(e, !menuItemOpen)}>
-                    <AddCircleOutlineIcon className={classes.iconButton} />
-                    <span style={{ fontSize: 16, paddingLeft: 10 }}>Add New Menu Item</span>
-                </IconButton>
             </div>
-        );
-
-        const AddMenuItemContainer = (
-          <div className={classes.outerCell}>
-              <div className={classes.subHeaderCell}>
-                  <div className={classes.subHeaders}>
-                      Add Menu Item & Quantity
-                  </div>
-              </div>
-              <div>
-                  <AutoCompleteMenuItems onFinishedSelecting={this.handleMenuItemSelected} />
-              </div>
-              <div className={classes.textCell}>
-                  <TextField
-                    placeholder="Ex. 10"
-                    label="Quantity"
-                    margin="dense"
-                    variant="outlined"
-                    type="number"
-                    // helperText={'cbdContent_error_text'}
-                    // value={menuItemQuaa.stock || ''}
-                    className={classes.textFieldSmall}
-                    onChange={e => this.handleMenuItemChange(e, 'quantity')}
-                    // FormHelperTextProps={{ classes: { root: classes.helperText } }}
-                    autoComplete=""
-                  />
-              </div>
-              <div className={classes.textCell}>
-                  <Button
-                    variant="contained"
-                    disableRipple
-                    disableFocusRipple
-                    onClick={this.handleMenuItemAdd}
-                    className={classes.createButton}
-                  >
-                      {'Add Menu Item'}
-                  </Button>
-              </div>
-          </div>
         );
 
         return (
@@ -550,7 +533,6 @@ class OrderCreateView extends React.Component {
                     </div>
                     {NameContainer}
                     {MenuItemsContainer}
-                    {menuItemOpen ? AddMenuItemContainer : null}
                     {CreateContainer}
                 </div>
             </div>
@@ -571,3 +553,29 @@ OrderCreateView.propTypes = {
 };
 
 export default withStyles(styles)(OrderCreateView);
+
+
+// const AddMenuItemContainer = (
+//   <div className={classes.outerCell}>
+//       <div className={classes.subHeaderCell}>
+//           <div className={classes.subHeaders}>
+//               Add Menu Item & Quantity
+//           </div>
+//       </div>
+//       <div>
+//           <AutoCompleteMenuItems onFinishedSelecting={this.handleMenuItemSelected} />
+//       </div>
+
+//       <div className={classes.textCell}>
+//           <Button
+//             variant="contained"
+//             disableRipple
+//             disableFocusRipple
+//             onClick={this.handleMenuItemAdd}
+//             className={classes.createButton}
+//           >
+//               {'Add Menu Item'}
+//           </Button>
+//       </div>
+//   </div>
+// );
