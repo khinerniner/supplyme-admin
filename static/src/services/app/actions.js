@@ -6,8 +6,10 @@ import { errorAlert, successAlert } from '../../utils/alerts';
 import { getAccount } from '../../services/account/actions';
 
 // For AppItems in Swift
-import { fetchLocations } from '../../services/location/actions';
 import { fetchEmployees } from '../../services/employee/actions';
+import { fetchLocations } from '../../services/location/actions';
+import { fetchRequests } from '../../services/request/actions';
+import { fetchMenuItems } from '../../services/menuItem/actions';
 
 // Login Employee
 //
@@ -63,8 +65,10 @@ export const loginEmployeeWithPermissions = (employeeID, redirectRoute) => (disp
                         }
                         localStorage.setItem('idToken', idToken);
                         dispatch(getAccount(accountID));
-                        dispatch(fetchLocations(employeeID, accountID));
                         dispatch(fetchEmployees(employeeID, accountID));
+                        dispatch(fetchLocations(employeeID, accountID));
+                        dispatch(fetchRequests(employeeID, accountID));
+                        dispatch(fetchMenuItems(employeeID, accountID));
                         dispatch(loginEmployeeSuccess(employeeID, accountID, empDoc.data(), idToken));
                         // NO "/" because of redirect starting with "/"
                         history.push(redirectRoute);
