@@ -3,7 +3,6 @@ export function toNewAccount() {
         accountID: null,
         name: null,
         accountType: 'retail',
-        locations: [],
     };
 }
 
@@ -26,7 +25,6 @@ export function getAccountFromSnapshot(account) {
         accountID: account.accountID,
         name: account.name,
         accountType: account.accountType,
-        locations: account.locations,
     }
 }
 
@@ -36,7 +34,6 @@ export function accountRowObject(account) {
         id: account.accountID,
         name: account.name,
         accountType: account.accountType,
-        locations: account.locations,
     };
 }
 export function toNewAccountCode() {
