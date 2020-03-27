@@ -58,18 +58,18 @@ workflows:
     jobs:
       - static_init
       - server_tests
-      - static_tests:
-          requires:
-            - static_init
-      - build:
-          requires:
-            - static_init
-            - static_tests
-            - server_tests
-      - deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only:
-                - master
+      # - static_tests:
+      #     requires:
+      #       - static_init
+      # - build:
+      #     requires:
+      #       - static_init
+      #       # - static_tests
+      #       - server_tests
+      # - deploy:
+      #     requires:
+      #       - build
+      #     filters:
+      #       branches:
+      #         only:
+      #           - master
