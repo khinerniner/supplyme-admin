@@ -1,4 +1,4 @@
-# VeriDoc Admin Portal - React/WebPack
+# SupplyME Web Portal - React/WebPack
 
 ## Getting Started
 
