@@ -30,7 +30,7 @@ There are 3 users. “Retailers”, “Manufacturers” & “Financiers”.
 
 
 # Project Status
-Right now we’re in the very early stages of project development, but moving very rapidly! We’re currently assembling [teams](https://github.com/covidaidapp/info#project-team), speaking to organizations to assess needs, designing app workflows, and building the initial MVP.
+Right now we’re in the very early stages of project development, but moving very rapidly! We’re currently assembling [teams](https://github.com/CASL-AE/supplyme-admin/blob/master/TEAM.md), speaking to organizations to assess needs, designing app workflows, and building the initial MVP.
 
 # Tech Stack
 
@@ -42,6 +42,7 @@ Right now we’re in the very early stages of project development, but moving ve
 * [Gunicorn](https://github.com/benoitc/gunicorn) - Python WSGI HTTP Server for UNIX
 * [Redis](https://redis.io/) - In-memory Data Structure Store
 * [Celery](https://github.com/celery/celery) - Distributed Task Queue
+* [Google Cloud](https://google.com) - Deployment of Application & Hosting
 
 # Contributing
 

@@ -55,19 +55,6 @@ Slack Channel: `#project-neighbourhood-assistance-ux-design`
 |----------------------|--------------------------------------------------------|----------|----------------|
 | You?                 |                                                        |          |                |
 
-### Map Project
-
-| Slack                | GitHub Handle                                          | Role     | Timezone (DST) |
-|----------------------|--------------------------------------------------------|----------|----------------|
-| You?                 |                                                        |          |                |
-
-
-## Tech Stack
-
-* Frontend: React/WebPack
-* Backend APIs: Python (Flask)
-* DB: Firestore
-* CI/CD: Google
 
 ## Get Involved
 
