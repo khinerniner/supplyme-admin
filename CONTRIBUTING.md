@@ -1,4 +1,4 @@
-# SupplyME Web Portal - React/WebPack
+# SupplyME
 
 ## Getting Started
 
@@ -6,18 +6,25 @@ These instructions will get you a copy of the project up and running on your loc
 
 **For Designers** Please note you do NOT need to setup the python backend server to run the frontend react application.
 
+## Clone Project Repo
+```
+git clone https://github.com/CASL-AE/supplyme-admin.git
+```
+
 ### Launch Development API Python
 
 ```
-cd supplyme-admin \
-workon supplymenet \
+cd supplyme-admin
+workon supplymenet
+pip3 install -U -r requirements.txt
 python3 wsgi.py
 ```
 
 ### Launch Development Node Server
 
 ```
-cd supplyme-admin/static \
+cd supplyme-admin/static
+npm i
 npm run dev
 ```
 
