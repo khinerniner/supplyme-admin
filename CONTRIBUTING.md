@@ -1,4 +1,4 @@
-# SupplyME Web Portal - React/WebPack
+# SupplyME
 
 ## Getting Started
 
