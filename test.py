@@ -1,17 +1,13 @@
 
-from basedir import basedir
 import os
 import shutil
 import sys
-import requests
-import json
 import pytest
-
-
 import logging
 
 # Create Logger
 logger = logging.getLogger('supplyme.test')
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 def main():
     argv = []
