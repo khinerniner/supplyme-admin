@@ -46,7 +46,7 @@ Right now we’re in the very early stages of project development, but moving ve
 
 # Contributing
 
-Please read [CONTRIBUTING](CONTRIBUTING.md) and [GUIDELINES](GUIDELINES.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING](CONTRIBUTING.md) and [CODE_OF_CONDUCT](https://github.com/CASL-AE/supplyme-admin/blob/master/CODE_OF_CONDUCT.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 Thank you to all the users who have contributed to this library!
 
