@@ -364,7 +364,7 @@ class FinancierBase extends Component {
             <div className={classes.root}>
                 <div className={classes.appFrame}>
                     {MainAppBar}
-                    {showAccount ? Account : null}
+                    {showAccount && isAuthenticated ? Account : null}
                     <div className={classes.content}>
                         <div className={classes.toolbar} />
                         {this.props.children}
