@@ -1,12 +1,10 @@
-# SupplyME Admin Platform - Node/JS / Python
+# SupplyME
 
 [![CircleCI](https://circleci.com/gh/CASL-AE/supplyme-admin.svg?style=svg&circle-token=96cba64460e7ac5f2a898d06b3755b6fb9e599bc)](https://circleci.com/gh/CASL-AE/supplyme-admin)
 [![SupplyME site released under the MIT license.](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![PRs welcome!](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
-
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-blue.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
+
 
 <p align="center">
   <img height="300px" width="auto" src="public/www/images/logo.png">
