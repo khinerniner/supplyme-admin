@@ -4,19 +4,20 @@
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See production for notes on how to deploy the project on a live system.
 
+**For Designers** Please note you do NOT need to setup the python backend server to run the frontend react application.
 
 ### Launch Development API Python
 
 ```
-cd veridoc-admin \
-workon veridocnet \
+cd supplyme-admin \
+workon supplymenet \
 python3 wsgi.py
 ```
 
 ### Launch Development Node Server
 
 ```
-cd veridoc-admin/static \
+cd supplyme-admin/static \
 npm run dev
 ```
 
@@ -65,9 +66,9 @@ source ~/.local/bin/virtualenvwrapper.sh
 ```
 ### Clone
 ```
-git clone https://bitbucket.org/ae/veridoc-admin/src/master/
-&& mkvirtualenv veridoc \
-&& cd veridoc-admin \
+git clone https://bitbucket.org/ae/supplyme-admin/src/master/
+&& mkvirtualenv supplyme \
+&& cd supplyme-admin \
 && pip3 uninstall -r requirements.txt -y \
 && pip3 install -U -r requirements.txt \
 ```
@@ -101,7 +102,7 @@ sudo nano /usr/local/etc/nginx/nginx.conf
 server {
         listen 80;
         server_name localhost;
-        root /srv/www/veridoc-admin/public;
+        root /srv/www/supplyme-admin/public;
         index index.html index.htm;
         location / {
                 try_files $uri $uri/ =404;
@@ -126,7 +127,7 @@ server {
 
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload";
 
-    root /srv/www/veridoc-admin/static;
+    root /srv/www/supplyme-admin/static;
     index index.html index.htm;
     location / {
             proxy_pass http://127.0.0.1:3001;
@@ -143,7 +144,7 @@ Link (3 Functions to insure a srv/www structure)
 ```
 mkdir /srv
 mkdir /srv/www
-ln -s [~/path/to/cloned/veridoc-admin]  /srv/www/
+ln -s [~/path/to/cloned/supplyme-admin]  /srv/www/
 ```
 
 Test
