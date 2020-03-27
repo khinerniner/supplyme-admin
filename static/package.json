@@ -1,7 +1,7 @@
 {
-  "name": "ae",
-  "version": "0.0.5",
-  "description": "VeriDoc",
+  "name": "SupplyMe",
+  "version": "0.0.1",
+  "description": "SupplyME",
   "engines": {
     "node": ">=8.0.0"
   },
@@ -18,13 +18,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "caslnpo.org"
+    "url": "https://bitbucket.org/angellenterprises/veridoc-admin/src/master/"
   },
   "keywords": [
-    "veridoc"
+    "retailers",
+    "manufacturers",
+    "financiers",
+    "suppliers"
   ],
   "author": "https://bitbucket.com/Harpangell",
-  "license": "AE, Inc",
+  "license": "MIT",
   "dependencies": {
     "@babel/core": "^7.8.3",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
