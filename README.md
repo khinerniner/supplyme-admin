@@ -42,6 +42,7 @@ Right now we’re in the very early stages of project development, but moving ve
 * [Gunicorn](https://github.com/benoitc/gunicorn) - Python WSGI HTTP Server for UNIX
 * [Redis](https://redis.io/) - In-memory Data Structure Store
 * [Celery](https://github.com/celery/celery) - Distributed Task Queue
+* [Google Cloud](https://google.com) - Deployment of Application & Hosting
 
 # Contributing
 
