@@ -46,7 +46,7 @@ jobs:
 
   build:
     machine:
-      docker_layer_caching: true
+      docker_layer_caching: false
 
     steps:
       - checkout
@@ -58,13 +58,13 @@ workflows:
     jobs:
       - static_init
       - server_tests
-      # - static_tests:
-      #     requires:
-      #       - static_init
+      - static_tests:
+          requires:
+            - static_init
       - build:
           requires:
             - static_init
-            # - static_tests
+            - static_tests
             - server_tests
       - deploy:
           requires:
