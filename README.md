@@ -1,12 +1,10 @@
-# SupplyME Admin Platform - Node/JS / Python
+# SupplyME
 
 [![CircleCI](https://circleci.com/gh/CASL-AE/supplyme-admin.svg?style=svg&circle-token=96cba64460e7ac5f2a898d06b3755b6fb9e599bc)](https://circleci.com/gh/CASL-AE/supplyme-admin)
 [![SupplyME site released under the MIT license.](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![PRs welcome!](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
-
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-blue.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
+
 
 <p align="center">
   <img height="300px" width="auto" src="public/www/images/logo.png">
@@ -31,10 +29,10 @@ There are 3 users. “Retailers”, “Manufacturers” & “Financiers”.
 **Suppliers:** We do also want to add “suppliers” and allow the manufacturers to request supplies from them. Much like a retailer would a manufacturer.
 
 
-## Project Status
+# Project Status
 Right now we’re in the very early stages of project development, but moving very rapidly! We’re currently assembling [teams](https://github.com/covidaidapp/info#project-team), speaking to organizations to assess needs, designing app workflows, and building the initial MVP.
 
-## SupplyME Web Platform Built With
+# Tech Stack
 
 * [React](https://www.react.com/) - 16.5 - The web framework used
 * [Python](https://www.python.org/download/releases/3.5.1/) - 3.5.1 - Programing Language
