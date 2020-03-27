@@ -66,7 +66,7 @@ volunteering.
 1. **Volunteer Sign-Up Form:** Apply to become a member of our team by filling out
   [this form](https://forms.gle/1gVTDcNw6AD6roLE9)!
 2. **Slack Channel**: Join our Slack - [casltalk.slack.com](https://join.slack.com/t/casltalk/shared_invite/zt-d00vatoz-rBxT2nqeMmkyn_xgqq0hGw)
-3. **GitHub Project Board:** Watch our progress through our tasks and milestones on our [Main Project Board](https://github.com/orgs/supplyme/projects/1).
+3. **GitHub Project Board:** Watch our progress through our tasks and milestones on our [Main Project Board](https://github.com/CASL-AE/supplyme-admin/projects/1).
 4. **Trello:** Apply to become a member of our team by filling out
   [Trello Board](https://trello.com/invite/b/BlUmk2MZ/2e323240da99eafd0e16e0431feaf6f3/supplyme-application)!
 
