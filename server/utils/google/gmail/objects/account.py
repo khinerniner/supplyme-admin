@@ -18,13 +18,13 @@ class SupplyMeAccountEmails(object):
     # Activation Code Email
     # TODO
     # [START Activation Code Email]
-    def send_activation_code_email(self, to_name=None, to_est_name=None, from_name=None, activation_code=None):
+    def send_activation_code_email(self, to_name=None, to_account_name=None, from_name=None, activation_code=None):
         try:
             to = self.user_email
             campaign_id = activation_code
             subject = 'Your Exclusive SupplyMe Invite'
             header = 'Congratulations {},'.format(to_name)
-            body = 'Your account {} has been approved for SupplyMe. Please use the key below to register your account.'.format(to_est_name)
+            body = 'Your account {} has been approved for SupplyMe. Please use the key below to register your account.'.format(to_account_name)
             abody = '<a href="{base_domain}/register?type={is_type}&code={code}">{code}</a>'.format(base_domain=BASE_DOMAIN, is_type='account', code=activation_code)
             footer = 'Cheers,'
             footer_sign = from_name
@@ -48,14 +48,14 @@ class SupplyMeAccountEmails(object):
     # Registration Email
     # TODO: None
     # [START Registration Email]
-    def send_registration_email(self, to_name=None, to_est_name=None, from_name=None, activation_code=None):
+    def send_registration_email(self, to_name=None, to_account_name=None, from_name=None, activation_code=None):
         try:
             to = self.user_email
             campaign_id = activation_code
             subject = 'Welcome to SupplyMe'
             header = 'Dear {},'.format(to_name)
-            body = 'We have registered {} in SupplyMe. Once you have finshed migrating your menu, you will be able to accept payment with SupplyMe'.format(to_est_name)
-            abody = '<a href="{base_domain}/register?type={is_type}&code={code}">{code}</a>'.format(base_domain=BASE_DOMAIN, is_type='establishment', code=activation_code)
+            body = 'We have registered {} in SupplyMe. Once you have finshed creating locations, you will be able to create requests with SupplyMe'.format(to_account_name)
+            abody = None
             footer = 'Cheers,'
             footer_sign = from_name
             email = self.email_server.email_template_single_body(
