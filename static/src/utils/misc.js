@@ -198,3 +198,13 @@ export function parseLabel(label) {
     })
     return finalLabel
 }
+
+export function dispatchNewObject(e, accountID, objectType, objectID, subObjectType) {
+    var route = '';
+    if (subObjectType) {
+        route = `/accounts/${accountID}/${objectType}s/${objectID}/${subObjectType}`;
+    } else {
+        route = `/accounts/${accountID}/${objectType}s/${objectID}`
+    }
+    dispatchNewRoute(route);
+}
