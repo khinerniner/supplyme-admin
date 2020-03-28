@@ -194,7 +194,7 @@ class AutoCompleteHospitals extends React.Component {
           this.setState(next_state, () => {});
           if (this.timeout) clearTimeout(this.timeout);
           this.timeout = setTimeout(() => {
-              console.log(`Establishment: ${newValue}`);
+              console.log(`Account: ${newValue}`);
               const newCapQuery = newValue.charAt(0).toUpperCase() + newValue.slice(1);
               actions.searchGoogleHospitals(newCapQuery);
           }, 300);
@@ -254,13 +254,13 @@ class AutoCompleteHospitals extends React.Component {
 
 AutoCompleteHospitals.defaultProps = {
     employeeID: '',
-    dispensaryID: '',
+    accountID: '',
     places: [],
     searchGoogleHospitals: f => f,
 };
 AutoCompleteHospitals.propTypes = {
     employeeID: PropTypes.string,
-    dispensaryID: PropTypes.string,
+    accountID: PropTypes.string,
     places: PropTypes.array,
     searchGoogleHospitals: PropTypes.func,
     place: PropTypes.string.isRequired,
