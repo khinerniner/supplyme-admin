@@ -1,15 +1,15 @@
 #!/bin/sh
 {
-  pm2 delete veridoc \
+  pm2 delete supplyme \
   && git pull \
-  && cd /srv/www/veridoc-admin/static \
+  && cd /srv/www/supplyme-admin/static \
   && npm install \
   && npm run build:production \
-  && pm2 start "/usr/local/bin/npm" --name "veridoc" -- start
+  && pm2 start "/usr/local/bin/npm" --name "supplyme" -- start
 } || {
   git pull \
-  && cd /srv/www/veridoc-admin/static \
+  && cd /srv/www/supplyme-admin/static \
   && npm install \
   && npm run build:production \
-  && pm2 start "/usr/local/bin/npm" --name "veridoc" -- start
+  && pm2 start "/usr/local/bin/npm" --name "supplyme" -- start
 }
