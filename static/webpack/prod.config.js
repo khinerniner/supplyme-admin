@@ -95,7 +95,7 @@ module.exports = {
                 PORT: '"3001"',
                 NODE_ENV: '"production"',
                 FIREBASE_BROWSER_KEY: '"AIzaSyBw-8dt7mhh3002Pkyzgqc8hyxgwntUf1Y"',
-                VERIDOC_ADMIN_KEY: '"SvaUdmV1XbLcuoqkDow8"',
+                SUPPLYME_ADMIN_KEY: '"SvaUdmV1XbLcuoqkDow8"',
             },
             __DEVELOPMENT__: false,
         }),
@@ -107,7 +107,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             title: 'caching',
             inject: true,
-            template: './veridoc.html',
+            template: './supplyme.html',
             filename: '../index.html',
         }),
         new webpack.HashedModuleIdsPlugin(),
