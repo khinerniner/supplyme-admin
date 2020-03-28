@@ -15,6 +15,26 @@ const dataUploadConfig = token => ({
     },
 });
 
+// Activate Account Code Endpoint
+// TODO: None
+// [START Activate Account Code Endpoint]
+export function apiActivateAccountCode(token, activationCode) {
+    return axios.post('/api/google/v1/account/activationCode/send', {
+        activationCode,
+    }, tokenConfig(token));
+}
+// [END Activate Account Code Endpoint]
+
+// Registration Account Email Endpoint
+// TODO: None
+// [START Registration Account Email Endpoint]
+export function apiRegisteredAccountEmail(token, employeeInd) {
+    return axios.post('/api/google/v1/account/registration/send', {
+        activationCode,
+    }, tokenConfig(token));
+}
+// [END Registration Account Email Endpoint]
+
 // Search Google Places
 // TODO: None
 // [START Search Google Places]
