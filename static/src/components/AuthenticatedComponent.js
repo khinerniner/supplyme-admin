@@ -140,7 +140,7 @@ export function requireAuthentication(Component) {
             const { accountType } = this.props;
             return (
                 <section>
-                {accountType === 'retailer' ? this.renderRetailer() : null}
+                {accountType === 'hcp' ? this.renderRetailer() : null}
                 {accountType === 'manufacturer' ? this.renderManufacturer() : null}
                 {accountType === 'financier' ? this.renderFinancier() : null}
                 </section>

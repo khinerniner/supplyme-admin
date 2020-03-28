@@ -2,7 +2,7 @@ export function toNewAccount() {
     return {
         accountID: null,
         name: null,
-        accountType: 'retail',
+        accountType: 'hcp',
     };
 }
 
@@ -41,7 +41,7 @@ export function toNewAccountCode() {
         activationCode: null,
         accountID: null,
         ownerName: null,
-        accountType: 'retailer',
+        accountType: 'hcp',
         email: null,
         phoneNumber: null,
         valid: false,
