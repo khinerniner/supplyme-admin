@@ -2,7 +2,7 @@
 import logging
 
 # Create Logger
-logger = logging.getLogger('supplyme.test.account.test_account_activation_send')
+logger = logging.getLogger('supplyme.test.account.test_account_registration_send')
 
 from testing_config import BaseTestConfig
 import json
@@ -10,7 +10,7 @@ import pytest
 
 from server.account.model import SupplyMeAccountCode
 
-# @pytest.mark.skip(reason="Using Prod Cert")
+@pytest.mark.skip(reason="Using Prod Cert")
 class TestAccountEmailActivationSend(BaseTestConfig):
 
     emailAccountCode = SupplyMeAccountCode(
