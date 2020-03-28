@@ -9,6 +9,7 @@ const initialState = {
     isRegistering: false,
     statusText: null,
     accountID: null,
+    accountType: null,
     employeeID: null,
     idToken: null,
     permissionLevel: null,
@@ -37,6 +38,7 @@ const app = (state = initialState, action) => {
             idToken: action.payload.idToken,
             permissionLevel: action.payload.employee.permissionLevel,
             accountID: action.payload.accountID,
+            accountType: action.payload.accountType,
             email: action.payload.employee.email,
             displayName: action.payload.employee.name,
         });
@@ -60,6 +62,7 @@ const app = (state = initialState, action) => {
             idToken: action.payload.idToken,
             permissionLevel: action.payload.employee.permissionLevel,
             accountID: action.payload.accountID,
+            accountType: action.payload.accountType,
             email: action.payload.employee.email,
             displayName: action.payload.employee.name,
         });
@@ -82,7 +85,7 @@ const app = (state = initialState, action) => {
             employeeID: action.payload.employeeID,
             idToken: action.payload.idToken,
             permissionLevel: action.payload.employee.permissionLevel,
-            dispensaryID: action.payload.dispensaryID,
+            accountID: action.payload.accountID,
             email: action.payload.employee.email,
             displayName: action.payload.employee.name,
         });

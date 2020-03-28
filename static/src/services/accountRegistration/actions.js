@@ -78,13 +78,13 @@ export const registerAccount = (accountCode, password, redirectRoute) => (dispat
             return db().runTransaction((transaction) => {
                 return auth().currentUser.getIdToken().then((idToken) => {
 
-                  const employmentDate = Date.now()
+                  const createdDate = new Date()
 
                   const newUserRef = db().collection('MasterUserList').doc(user.user.uid);
-                  transaction.set(newUserRef, { accountID: accountRef.id });
+                  transaction.set(newUserRef, { accountID: accountRef.id, accountType: accountCode.accountType });
 
                   transaction.set(accountRef, accountInfo );
-                  transaction.set(activationCodeRef, { accountID: accountRef.id, valid: false, updatedDate: employmentDate });
+                  transaction.set(activationCodeRef, { accountID: accountRef.id, valid: false, updatedDate: createdDate });
                   transaction.set(employeeActivationCodeRef, { valid: false });
 
 
@@ -95,14 +95,15 @@ export const registerAccount = (accountCode, password, redirectRoute) => (dispat
                   employeeInfo.email = accountCode.email;
                   employeeInfo.activationCode = accountCode.activationCode;
                   employeeInfo.permissionLevel = 'owner';
-                  employeeInfo.employmentDate = employmentDate;
-                  employeeInfo.creationDate = employmentDate;
-                  employeeInfo.updatedDate = employmentDate;
+                  employeeInfo.createdDate = createdDate;
+                  employeeInfo.updatedDate = createdDate;
                   employeeInfo.employeeID = user.user.uid;
-                  employeeInfo.unenrolled = false;
-                  employeeInfo.isActive = true;
-                  employeeInfo.isOnline = true;
-                  employeeInfo.isLoggedIn = true;
+                  employeeInfo.active = true;
+                  employeeInfo.deleted = false;
+                  employeeInfo.terms = true;
+                  employeeInfo.termsTime = createdDate;
+                  employeeInfo.privacy = true;
+                  employeeInfo.privacyTime = createdDate;
                   transaction.set(newEmployeeRef, employeeInfo);
                   return {
                       employeeID: user.user.uid,
@@ -131,7 +132,7 @@ export const registerAccount = (accountCode, password, redirectRoute) => (dispat
                   result.employeeInfo,
                   result.idToken,
                 ));
-                dispatch(apiRegisteredAccountEmail(token, accountCode));
+                dispatch(apiRegisteredAccountEmail(result.idToken, accountCode));
                 dispatch(getAccount(result.accountID));
                 supplyMeAnalytic('register_account_success', null);
                 history.push(redirectRoute);

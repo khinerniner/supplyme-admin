@@ -1,22 +1,40 @@
+import { parseFirestoreTimeStamp } from '../../utils/misc';
+
+export function getEmployeeFromSnapshot(employee) {
+    return {
+        employeeID: employee.employeeID,
+        permissionLevel: employee.employeeID,
+        active: employee.active,
+        deleted: employee.deleted,
+        createdDate: parseFirestoreTimeStamp(employee.createdDate),
+        updatedDate: parseFirestoreTimeStamp(employee.updatedDate),
+        terms: employee.terms,
+        termsTime: parseFirestoreTimeStamp(employee.termsTime),
+        privacy: employee.privacy,
+        privacyTime: parseFirestoreTimeStamp(employee.privacyTime),
+        name: employee.name,
+        email: employee.email,
+        phoneNumber: employee.phoneNumber,
+        oldEmployeeRef: employee.oldEmployeeRef,
+    };
+}
+
 export function toNewEmployee() {
     return {
         employeeID: null,
-        permissionLevel: "server",
+        permissionLevel: "owner",
         active: false,
         deleted: false,
         createdDate: null,
         updatedDate: null,
         terms: false,
-        termTime: null,
+        termsTime: null,
         privacy: false,
         privacyTime: null,
-        mapAvatarImageUrl: null,
-        thumbAvatarImageUrl: null,
-        userName: null,
-        firstName: null,
-        lastName: null,
+        name: null,
         email: null,
-        phoneNumber: null
+        phoneNumber: null,
+        oldEmployeeRef: null,
     }
 }
 export function employeeRowObject(employee) {
@@ -30,6 +48,20 @@ export function employeeRowObject(employee) {
         createdDate: employee.createdDate,
     };
 }
+export function getEmployeeCodeFromSnapshot(employee) {
+    return {
+        activationCode: employee.activationCode,
+        accountID: employee.accountID,
+        ownerName: employee.ownerName,
+        accountName: employee.accountName,
+        email: employee.email,
+        permissionLevel: employee.permissionLevel,
+        phoneNumber: employee.phoneNumber,
+        valid: employee.valid,
+        updatedDate: parseFirestoreTimeStamp(employee.updatedDate),
+        createdDate: parseFirestoreTimeStamp(employee.createdDate),
+    };
+}
 export function toNewEmployeeCode() {
     return {
         activationCode: null,
@@ -37,7 +69,7 @@ export function toNewEmployeeCode() {
         ownerName: null,
         accountName: null,
         email: null,
-        permissionLevel: null,
+        permissionLevel: 'owner',
         phoneNumber: null,
         valid: false,
         updatedDate: null,
