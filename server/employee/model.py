@@ -18,8 +18,8 @@ class SupplyMeEmployee(object):
                 permissionLevel=None,
                 active=None,
                 deleted=None,
-                createdTime=None,
-                updatedTime=None,
+                createdDate=None,
+                updatedDate=None,
                 terms=None,
                 termTime=None,
                 privacy=None,
@@ -37,8 +37,8 @@ class SupplyMeEmployee(object):
         self.permissionLevel = permissionLevel
         self.active = active
         self.deleted = deleted
-        self.createdTime = createdTime
-        self.updatedTime = updatedTime
+        self.createdDate = createdDate
+        self.updatedDate = updatedDate
         self.terms = terms
         self.termTime = termTime
         self.privacy = privacy
@@ -64,8 +64,8 @@ class SupplyMeEmployee(object):
         self.permissionLevel = snapshotValue['permissionLevel']
         self.active = snapshotValue['active']
         self.deleted = snapshotValue['deleted']
-        self.createdTime = snapshotValue['createdTime']
-        self.updatedTime = snapshotValue['updatedTime']
+        self.createdDate = snapshotValue['createdDate']
+        self.updatedDate = snapshotValue['updatedDate']
         self.terms = snapshotValue['terms']
         self.termTime = snapshotValue['termTime']
         self.privacy = snapshotValue['privacy']
@@ -90,8 +90,8 @@ class SupplyMeEmployee(object):
             "permissionLevel": self.permissionLevel,
             "active": self.active,
             "deleted": self.deleted,
-            "createdTime": self.createdTime,
-            "updatedTime": self.updatedTime,
+            "createdDate": self.createdDate,
+            "updatedDate": self.updatedDate,
             "terms": self.terms,
             "termTime": self.termTime,
             "privacy": self.privacy,
@@ -125,7 +125,7 @@ class SupplyMeEmployeeCode(object):
                  phoneNumber=None,
                  valid=None,
                  updatedDate=None,
-                 createdTime=None):
+                 createdDate=None):
 
         self.activationCode = activationCode
         self.accountID = accountID
