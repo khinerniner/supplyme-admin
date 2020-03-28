@@ -7,7 +7,7 @@ export function generalAnalytic(userId, event, eventCategory) {
     );
 }
 
-export function privalgoAnalytic(event, parameters) {
+export function supplyMeAnalytic(event, parameters) {
     return gtag(
         'event', event, {
             parameters: parameters,

@@ -4,7 +4,7 @@ import { parseJSON, formatFirestoreDateString, validateString, validateKey } fro
 import { apiBulkUploadMenuItems } from '../../utils/http_functions';
 import { toNewMenuItem, getMenuItemFromSnapshot } from './model';
 import { errorAlert, successAlert } from '../../utils/alerts';
-import { privalgoAnalytic } from '../../utils/analytics';
+import { supplyMeAnalytic } from '../../utils/analytics';
 
 export const addMenuItem = menuItem => ({
     type: 'ADD_MENUITEM',
@@ -171,7 +171,7 @@ export const updateMenuItem = (employeeID, accountID, menuItem, redirectRoute) =
 
     })).then((result) => {
         console.log('Transaction successfully committed!');
-        // privalgoAnalytic('update_menuItem_success', null);
+        // supplyMeAnalytic('update_menuItem_success', null);
         dispatch(updateMenuItemSuccess(result.currentMenuItemInfo));
         successAlert('Update MenuItem Success!');
         history.push(`/accounts/${accountID}/menuItems`)
@@ -179,7 +179,7 @@ export const updateMenuItem = (employeeID, accountID, menuItem, redirectRoute) =
         console.log('Transaction failed: ', error.message || error);
         console.log(error.message || error);
         errorAlert(error.message || error);
-        // privalgoAnalytic('update_menuItem_failure', null);
+        // supplyMeAnalytic('update_menuItem_failure', null);
         dispatch(updateMenuItemFailure({
             response: {
                 status: 403,
@@ -242,10 +242,10 @@ export const deleteMenuItem = (employeeID, accountID, menuItem, redirectRoute) =
         dispatch(deleteMenuItemSuccess());
         history.push(`/accounts/${accountID}/menuItems`)
         // errorAlert(200, 'Delete Menu Item Success');
-        // privalgoAnalytic(employeeID, 'menuItem', 'deleteMenuItemSuccess');
+        // supplyMeAnalytic(employeeID, 'menuItem', 'deleteMenuItemSuccess');
     }).catch((error) => {
         // errorAlert(400, error.message || error);
-        // privalgoAnalytic(employeeID, 'menuItem', 'deleteMenuItemFailure');
+        // supplyMeAnalytic(employeeID, 'menuItem', 'deleteMenuItemFailure');
         dispatch(deleteMenuItemFailure({
             response: {
                 status: 400,
