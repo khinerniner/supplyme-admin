@@ -12,7 +12,7 @@ import Button from '@material-ui/core/Button';
 
 import EmployeeResultsTable from '../../../components/VeriDoc/Employee/EmployeeResultsTable';
 
-import { validateString, dispatchNewRoute } from '../../../utils/misc';
+import { validateString, dispatchNewRoute, filterBy } from '../../../utils/misc';
 import { fetchEmployees, sendEmployeeCodeEmail } from '../../../services/employee/actions';
 import { employeeRowObject } from '../../../services/employee/model';
 
@@ -123,7 +123,7 @@ class EmployeeListView extends React.Component {
 
     receiveEmployees = (employees) => {
         console.warn('Received Employees');
-        const rows = employees.map(e => employeeRowObject(e));
+        const rows = filterBy(employees).map(e => employeeRowObject(e));
         this.setState({
             rows,
         });
