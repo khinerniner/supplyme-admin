@@ -2,7 +2,6 @@ from flask_testing import TestCase
 from server import app
 from server.utils import firestore
 import os
-from setup import basedir
 import json
 # from celery import Celery
 
