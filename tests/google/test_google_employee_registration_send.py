@@ -11,20 +11,21 @@ import pytest
 from server.employee.model import SupplyMeEmployeeCode
 
 @pytest.mark.skip(reason="Using Prod Cert")
-class TestGoogleEmployeeActivationSend(BaseTestConfig):
+class TestEmployeeEmailActivationSend(BaseTestConfig):
 
-    emailEmployeeCode = SupplyMeEmployeeCode(
-        activationCode='O4LBaoJ7edRvBL3GxOHH',
-        accountID=None,
-        ownerName='John Doe',
-        accountName='Test Account',
-        email='denis@harpangell.com',
-        permissionLevel='hcp',
-        updatedDate=None,
-        createdDate=None
-    )
+    # emailEmployeeCode = SupplyMeEmployeeCode(
+    #     activationCode='O4LBaoJ7edRvBL3GxOHH',
+    #     employeeID=None,
+    #     valid=True,
+    #     ownerName='John Doe',
+    #     employeeName='Test Employee',
+    #     email='denis@caslnpo.org',
+    #     phoneNumber=None,
+    #     createdDate=None,
+    #     updatedDate=None
+    # )
 
-    def test_employee_text_activation_send(self):
+    def test_employee_email_registration_send(self):
 
         data = {
             'activationCode': self.emailEmployeeCode.to_any_object(),

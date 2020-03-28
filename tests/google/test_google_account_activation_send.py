@@ -10,7 +10,7 @@ import pytest
 
 from server.account.model import SupplyMeAccountCode
 
-# @pytest.mark.skip(reason="Using Prod Cert")
+@pytest.mark.skip(reason="Using Prod Cert")
 class TestAccountEmailActivationSend(BaseTestConfig):
 
     emailAccountCode = SupplyMeAccountCode(
@@ -25,17 +25,16 @@ class TestAccountEmailActivationSend(BaseTestConfig):
         updatedDate=None
     )
 
-    def test_account_email_registration_send(self):
+    def test_account_email_activation_send(self):
 
         data = {
             'activationCode': self.emailAccountCode.to_any_object(),
         }
 
         res = self.app.post(
-                "/api/google/v1/account/registration/send",
+                "/api/google/v1/account/activationCode/send",
                 json=data,
                 content_type='application/json',
                 headers=self.headers
         )
         self.assertEqual(res.status_code, 200)
-        print(e)
