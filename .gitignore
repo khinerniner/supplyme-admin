@@ -14,7 +14,6 @@ aenet.log
 /nodemodules
 /.eggs
 /static/index.html.gz
-/static/index.html
 celerybeat-schedule
 
 # OS generated files #
