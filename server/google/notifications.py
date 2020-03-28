@@ -50,7 +50,7 @@ def account_registration_email_notification_task(to_name=None, to_account_name=N
 def employee_code_email_notification_task(to_name=None, to_account_name=None, from_name=None, user_email=None, activation_code=None):
     try:
         logger.info('Sending Employee Authorization Email for code: {}'.format(activation_code))
-        SupplyMeEmployeeEmails(user_email=user_email).send_employee_activation_code_email(
+        SupplyMeEmployeeEmails(user_email=user_email).send_activation_code_email(
             to_name=to_name,
             to_account_name=to_account_name,
             from_name=from_name,
