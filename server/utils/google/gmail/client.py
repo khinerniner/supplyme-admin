@@ -32,7 +32,7 @@ from apiclient import errors, discovery
 
 SCOPES = 'https://www.googleapis.com/auth/gmail.send'
 
-class TabsGoogleClient(object):
+class SupplyMeGoogleClient(object):
     def __init__(self, userEmail):
         self.sender = 'denis@virtualtabs.org'
         self.userEmail = userEmail

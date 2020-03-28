@@ -5,15 +5,15 @@ import time
 
 logger = logging.getLogger('cattail.utils.google.gmail.objects.establishment.py')
 
-from server.utils.google.gmail.client import TabsGoogleClient
+from server.utils.google.gmail.client import SupplyMeGoogleClient
 
 BASE_DOMAIN = 'https://app.localhost'
-# BASE_DOMAIN = 'https://app.cattails.io'
+# BASE_DOMAIN = 'https://app.caslnpo.org'
 
-class TabsEstablishmentEmails(object):
+class SupplyMeAccountEmails(object):
     def __init__(self, user_email=None):
         self.user_email = user_email
-        self.email_server = TabsGoogleClient(self.user_email)
+        self.email_server = SupplyMeGoogleClient(self.user_email)
 
     # Activation Code Email
     # TODO
@@ -22,10 +22,10 @@ class TabsEstablishmentEmails(object):
         try:
             to = self.user_email
             campaign_id = activation_code
-            subject = 'Your Exclusive Tabs Invite'
+            subject = 'Your Exclusive SupplyMe Invite'
             header = 'Congratulations {},'.format(to_name)
-            body = 'Your establishment {} has been approved for Tabs. Please use the key below to register your establishment.'.format(to_est_name)
-            abody = '<a href="{base_domain}/register?type={is_type}&code={code}">{code}</a>'.format(base_domain=BASE_DOMAIN, is_type='establishment', code=activation_code)
+            body = 'Your account {} has been approved for SupplyMe. Please use the key below to register your account.'.format(to_est_name)
+            abody = '<a href="{base_domain}/register?type={is_type}&code={code}">{code}</a>'.format(base_domain=BASE_DOMAIN, is_type='account', code=activation_code)
             footer = 'Cheers,'
             footer_sign = from_name
             email = self.email_server.email_template_single_body(
@@ -52,9 +52,9 @@ class TabsEstablishmentEmails(object):
         try:
             to = self.user_email
             campaign_id = activation_code
-            subject = 'Welcome to Tabs'
+            subject = 'Welcome to SupplyMe'
             header = 'Dear {},'.format(to_name)
-            body = 'We have registered {} in Tabs. Once you have finshed migrating your menu, you will be able to accept payment with Tabs'.format(to_est_name)
+            body = 'We have registered {} in SupplyMe. Once you have finshed migrating your menu, you will be able to accept payment with SupplyMe'.format(to_est_name)
             abody = '<a href="{base_domain}/register?type={is_type}&code={code}">{code}</a>'.format(base_domain=BASE_DOMAIN, is_type='establishment', code=activation_code)
             footer = 'Cheers,'
             footer_sign = from_name
