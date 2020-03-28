@@ -111,7 +111,7 @@ sudo nano /usr/local/etc/nginx/nginx.conf
 server {
         listen 80;
         server_name localhost;
-        root /srv/www/supplyme-admin/public;
+        root [path-to-repo]/supplyme-admin/public;
         index index.html index.htm;
         location / {
                 try_files $uri $uri/ =404;
@@ -139,7 +139,7 @@ server {
 
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload";
 
-    root /srv/www/samy-admin/static;
+    root [path-to-repo]/supplyme-admin/static;
     index index.html index.htm;
     location / {
                     proxy_pass http://127.0.0.1:3001;
