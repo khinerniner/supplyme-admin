@@ -152,12 +152,6 @@ server {
     error_page 401 403 404 /404.html;
 }
 ```
-Link (3 Functions to insure a srv/www structure)
-```
-mkdir /srv
-mkdir /srv/www
-ln -s [~/path/to/cloned/supplyme-admin]  /srv/www/
-```
 
 Test
 ```
