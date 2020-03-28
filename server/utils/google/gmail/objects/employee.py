@@ -18,12 +18,12 @@ class SupplyMeEmployeeEmails(object):
     # Activation Code Email
     # TODO: None
     # [START Activation Code Email]
-    def send_activation_code_email(self, to_name=None, to_est_name=None, from_name=None, activation_code=None):
+    def send_activation_code_email(self, to_name=None, to_account_name=None, from_name=None, activation_code=None):
         to = self.user_email
         campaign_id = activation_code
         subject = 'Welcome to SupplyMe'
         header = 'Congratulations {},'.format(to_name)
-        body = 'You have been approved for SupplyMe by {}. Please use the key below to register your account.'.format(to_est_name)
+        body = 'You have been approved for SupplyMe by {}. Please use the key below to register your account.'.format(to_account_name)
         abody = '<a href="{base_domain}/register?type={isType}&code={code}">{code}</a>'.format(base_domain=BASE_DOMAIN, isType='employee', code=activation_code)
         footer = 'Cheers,'
         footer_sign = from_name
