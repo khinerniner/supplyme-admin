@@ -118,31 +118,25 @@ class SupplyMeEmployeeCode(object):
     def __init__(self,
                  activationCode=None,
                  accountID=None,
-                 valid=None,
-                 facilities=None,
-                 stockPerItem=None,
-                 location=None,
-                 permissionLevel=None,
                  ownerName=None,
                  accountName=None,
                  email=None,
+                 permissionLevel=None,
                  phoneNumber=None,
-                 creationDate=None,
-                 updateDate=None):
+                 valid=None,
+                 updatedDate=None,
+                 createdTime=None):
 
         self.activationCode = activationCode
         self.accountID = accountID
-        self.valid = valid
-        self.facilities = facilities
-        self.stockPerItem = stockPerItem
-        self.location = location
-        self.permissionLevel = permissionLevel
         self.ownerName = ownerName
         self.accountName = accountName
         self.email = email
+        self.permissionLevel = permissionLevel
         self.phoneNumber = phoneNumber
-        self.creationDate = creationDate
-        self.updateDate = updateDate
+        self.valid = valid
+        self.updatedDate = updatedDate
+        self.createdDate = createdDate
 
     # [END Init]
     # Firebase DB Snapshot
@@ -152,17 +146,14 @@ class SupplyMeEmployeeCode(object):
         self.activationCode = snapshot.id
         snapshotValue = snapshot.to_dict()
         self.accountID = snapshotValue['accountID']
-        self.valid = snapshotValue['valid']
-        self.facilities = snapshotValue['facilities']
-        self.stockPerItem = snapshotValue['stockPerItem']
-        self.location = snapshotValue['location']
-        self.permissionLevel = snapshotValue['permissionLevel']
         self.ownerName = snapshotValue['ownerName']
         self.accountName = snapshotValue['accountName']
         self.email = snapshotValue['email']
+        self.permissionLevel = snapshotValue['permissionLevel']
         self.phoneNumber = snapshotValue['phoneNumber']
-        self.creationDate = snapshotValue['creationDate']
-        self.updateDate = snapshotValue['updateDate']
+        self.valid = snapshotValue['valid']
+        self.updatedDate = snapshotValue['updatedDate']
+        self.createdDate = snapshotValue['createdDate']
         return self
     # [END Firebase DB Snapshot]
 
@@ -172,31 +163,16 @@ class SupplyMeEmployeeCode(object):
         snapshotValue = snapshot
         self.activationCode = snapshotValue['activationCode']
         self.accountID = snapshotValue['accountID']
-        self.valid = snapshotValue['valid']
-        self.facilities = snapshotValue['facilities']
-        self.stockPerItem = snapshotValue['stockPerItem']
-        self.location = snapshotValue['location']
-        self.permissionLevel = snapshotValue['permissionLevel']
         self.ownerName = snapshotValue['ownerName']
         self.accountName = snapshotValue['accountName']
         self.email = snapshotValue['email']
+        self.permissionLevel = snapshotValue['permissionLevel']
         self.phoneNumber = snapshotValue['phoneNumber']
-        self.creationDate = snapshotValue['creationDate']
-        self.updateDate = snapshotValue['updateDate']
+        self.valid = snapshotValue['valid']
+        self.updatedDate = snapshotValue['updatedDate']
+        self.createdDate = snapshotValue['createdDate']
         return self
     # [END Dictionary Snapshot]
-
-    # CSV Snapshot
-    # TODO: None
-    # [START CSV Snapshot]
-    def csv_snapshot(self, csv_json=None):
-        print(csv_json)
-        self.permissionLevel = csv_json['permissionLevel']
-        self.ownerName = csv_json['name']
-        self.email = csv_json['email']
-        self.phoneNumber = csv_json['phoneNumber']
-        return self
-    # [END CSV Snapshot]
 
     # Return To Any Object
     # [START To Any Object]
@@ -204,17 +180,14 @@ class SupplyMeEmployeeCode(object):
         return {
             "activationCode": self.activationCode,
             "accountID": self.accountID,
-            "valid": self.valid,
-            "facilities": self.facilities,
-            "stockPerItem": self.stockPerItem,
-            "location": self.location,
-            "permissionLevel": self.permissionLevel,
             "ownerName": self.ownerName,
             "accountName": self.accountName,
             "email": self.email,
+            "permissionLevel": self.permissionLevel,
             "phoneNumber": self.phoneNumber,
-            "creationDate": self.creationDate,
-            "updateDate": self.updateDate,
+            "valid": self.valid,
+            "updatedDate": self.updatedDate,
+            "createdDate": self.createdDate,
         }
     # [END To Any Object]
 # [END SupplyMe Employee Code Object]
