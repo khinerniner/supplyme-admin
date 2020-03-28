@@ -60,8 +60,7 @@ function EmployeeResultsTable(props) {
             <TableCell className={classes.tableHeaders} align="left">Employee Permissions</TableCell>
             <TableCell className={classes.tableHeaders} align="left">Email</TableCell>
             <TableCell className={classes.tableHeaders} align="left">Phone</TableCell>
-            <TableCell className={classes.tableHeaders} align="left">LoggedIn</TableCell>
-            <TableCell className={classes.tableHeaders} align="left">Enrolled</TableCell>
+            <TableCell className={classes.tableHeaders} align="left">Active</TableCell>
             <TableCell className={classes.tableHeaders} align="left">Updated Date</TableCell>
           </TableRow>
         </TableHead>
@@ -79,10 +78,7 @@ function EmployeeResultsTable(props) {
                 {row.phoneNumber || 'No Current Phone'}
               </TableCell>
               <TableCell component="th" scope="row">
-                {row.isLoggedIn ? 'True' : 'False'}
-              </TableCell>
-              <TableCell component="th" scope="row">
-                {!row.unenrolled ? 'True' : 'False'}
+                {row.active ? 'True' : 'False'}
               </TableCell>
               <TableCell component="th" scope="row">{row.updatedDate ? formatDateWTime(new Date(row.updatedDate)) : formatDateWTime(new Date(row.creationDate))}</TableCell>
             </TableRow>
