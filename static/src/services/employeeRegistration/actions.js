@@ -67,13 +67,13 @@ export const registerEmployee = (employeeCode, password, redirectRoute) => (disp
                     const createdTime = new Date();
 
                     const newUserRef = db().collection('MasterUserList').doc(user.user.uid);
-                    const establishmentRef = db().collection('Establishments').doc(newEmployeeCode.establishmentID);
-                    transaction.set(newUserRef, { establishmentID: establishmentRef.id });
+                    const accountRef = db().collection('Accounts').doc(newEmployeeCode.accountID);
+                    transaction.set(newUserRef, { accountID: accountRef.id });
                     transaction.set(employeeActivationCodeRef, { valid: false });
 
                     const newEmployeeRef = dispensaryRef.collection('Employees').doc(user.user.uid);
                     const employeeInfo = toNewEmployee();
-                    const newName = establishmentCode.ownerName.split(' ')
+                    const newName = accountCode.ownerName.split(' ')
                     employeeInfo.firstName = newName[0]
                     employeeInfo.lastName = newName[1]
                     employeeInfo.name = employeeCode.ownerName;
@@ -88,13 +88,13 @@ export const registerEmployee = (employeeCode, password, redirectRoute) => (disp
                     employeeInfo.terms = true
                     employeeInfo.privacy = true
                     transaction.set(newEmployeeRef, employeeInfo);
-                    const oldTempEmployeeRef = establishmentRef.collection("Employees").doc(newEmployeeCode.activationCode)
+                    const oldTempEmployeeRef = accountRef.collection("Employees").doc(newEmployeeCode.activationCode)
                     transaction.delete(oldTempEmployeeRef)
 
                     return {
                         employeeID: user.user.uid,
-                        establishmentID: establishmentRef.id,
-                        accountType: 'establishment',
+                        accountID: accountRef.id,
+                        accountType: 'account',
                         employeeInfo,
                         idToken
                     }
@@ -142,12 +142,12 @@ export const registerEmployee = (employeeCode, password, redirectRoute) => (disp
           }
           dispatch(registerEmployeeSuccess(
               result.employeeID,
-              result.establshmentID,
+              result.accountID,
               result.accountType,
               result.employeeInfo,
               result.idToken,
           ));
-          dispatch(getDispensary(result.establshmentID));
+          dispatch(getAccount(result.accountID));
           tabsAnalytic('register_employee_success', null);
           history.push(redirectRoute);
       }).catch((error) => {

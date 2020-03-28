@@ -4,7 +4,7 @@ import { parseJSON, formatFirestoreDateString, validateString, validateKey } fro
 import { apiBulkUploadRequests } from '../../utils/http_functions';
 import { toNewRequest, getRequestFromSnapshot } from './model';
 import { errorAlert, successAlert } from '../../utils/alerts';
-import { privalgoAnalytic } from '../../utils/analytics';
+import { supplyMeAnalytic } from '../../utils/analytics';
 
 export const addRequest = request => ({
     type: 'ADD_REQUEST',
@@ -215,7 +215,7 @@ export const updateRequest = (employeeID, accountID, request, redirectRoute) => 
 
     })).then((result) => {
         console.log('Transaction successfully committed!');
-        // privalgoAnalytic('update_request_success', null);
+        // supplyMeAnalytic('update_request_success', null);
         dispatch(updateRequestSuccess(result.currentRequestInfo));
         successAlert('Update Request Success!');
         history.push(`/accounts/${accountID}/requests`)
@@ -223,7 +223,7 @@ export const updateRequest = (employeeID, accountID, request, redirectRoute) => 
         console.log('Transaction failed: ', error.message || error);
         console.log(error.message || error);
         errorAlert(error.message || error);
-        // privalgoAnalytic('update_request_failure', null);
+        // supplyMeAnalytic('update_request_failure', null);
         dispatch(updateRequestFailure({
             response: {
                 status: 403,
@@ -286,10 +286,10 @@ export const deleteRequest = (employeeID, accountID, request, redirectRoute) => 
         dispatch(deleteRequestSuccess());
         history.push(`/accounts/${accountID}/requests`)
         // errorAlert(200, 'Delete Menu Item Success');
-        // privalgoAnalytic(employeeID, 'request', 'deleteRequestSuccess');
+        // supplyMeAnalytic(employeeID, 'request', 'deleteRequestSuccess');
     }).catch((error) => {
         // errorAlert(400, error.message || error);
-        // privalgoAnalytic(employeeID, 'request', 'deleteRequestFailure');
+        // supplyMeAnalytic(employeeID, 'request', 'deleteRequestFailure');
         dispatch(deleteRequestFailure({
             response: {
                 status: 400,

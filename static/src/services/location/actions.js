@@ -4,7 +4,7 @@ import { parseJSON, formatFirestoreDateString, validateString, validateKey } fro
 import { apiBulkUploadLocations } from '../../utils/http_functions';
 import { toNewLocation, getLocationFromSnapshot } from './model';
 import { errorAlert, successAlert } from '../../utils/alerts';
-import { privalgoAnalytic } from '../../utils/analytics';
+import { supplyMeAnalytic } from '../../utils/analytics';
 
 export const addLocation = location => ({
     type: 'ADD_LOCATION',
@@ -171,7 +171,7 @@ export const updateLocation = (employeeID, accountID, location, redirectRoute) =
 
     })).then((result) => {
         console.log('Transaction successfully committed!');
-        // privalgoAnalytic('update_location_success', null);
+        // supplyMeAnalytic('update_location_success', null);
         dispatch(updateLocationSuccess(result.currentLocationInfo));
         successAlert('Update Location Success!');
         history.push(`/accounts/${accountID}/locations`)
@@ -179,7 +179,7 @@ export const updateLocation = (employeeID, accountID, location, redirectRoute) =
         console.log('Transaction failed: ', error.message || error);
         console.log(error.message || error);
         errorAlert(error.message || error);
-        // privalgoAnalytic('update_location_failure', null);
+        // supplyMeAnalytic('update_location_failure', null);
         dispatch(updateLocationFailure({
             response: {
                 status: 403,
@@ -242,10 +242,10 @@ export const deleteLocation = (employeeID, accountID, location, redirectRoute) =
         dispatch(deleteLocationSuccess());
         history.push(`/accounts/${accountID}/locations`)
         // errorAlert(200, 'Delete Menu Item Success');
-        // privalgoAnalytic(employeeID, 'location', 'deleteLocationSuccess');
+        // supplyMeAnalytic(employeeID, 'location', 'deleteLocationSuccess');
     }).catch((error) => {
         // errorAlert(400, error.message || error);
-        // privalgoAnalytic(employeeID, 'location', 'deleteLocationFailure');
+        // supplyMeAnalytic(employeeID, 'location', 'deleteLocationFailure');
         dispatch(deleteLocationFailure({
             response: {
                 status: 400,

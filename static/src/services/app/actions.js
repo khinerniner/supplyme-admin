@@ -21,11 +21,12 @@ export const loginEmployeeRequest = () => ({
 });
 
 
-export const loginEmployeeSuccess = (employeeID, accountID, employee, idToken) => ({
+export const loginEmployeeSuccess = (employeeID, accountID, accountType, employee, idToken) => ({
     type: 'LOGIN_EMPLOYEE_SUCCESS',
     payload: {
         employeeID,
         accountID,
+        accountType,
         employee,
         idToken,
     },
@@ -51,6 +52,7 @@ export const loginEmployeeWithPermissions = (employeeID, redirectRoute) => (disp
             if (userDoc.exists) {
                 console.log('Account ID' + userDoc.data().accountID);
                 const accountID = userDoc.data().accountID;
+                const accountType = userDoc.data().accountType;
                 const accountRef = db().collection('Accounts').doc(accountID);
                 accountRef.collection('Employees').doc(employeeID).get().then((empDoc) => {
                     if (empDoc.exists) {
@@ -73,7 +75,7 @@ export const loginEmployeeWithPermissions = (employeeID, redirectRoute) => (disp
                         dispatch(fetchPublicRequests(employeeID, accountID));
                         dispatch(fetchMenuItems(employeeID, accountID));
                         dispatch(fetchOrders(employeeID, accountID));
-                        dispatch(loginEmployeeSuccess(employeeID, accountID, empDoc.data(), idToken));
+                        dispatch(loginEmployeeSuccess(employeeID, accountID, accountType, empDoc.data(), idToken));
                         // NO "/" because of redirect starting with "/"
                         history.push(redirectRoute);
                     } else {

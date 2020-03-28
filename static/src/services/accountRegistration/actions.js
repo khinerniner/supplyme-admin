@@ -2,10 +2,11 @@ import history from '../../history';
 import { auth, db } from '../../store/firebase';
 import { parseJSON } from '../../utils/misc';
 import { errorAlert } from '../../utils/alerts';
-import { privalgoAnalytic } from '../../utils/analytics';
+import { supplyMeAnalytic } from '../../utils/analytics';
 import { toNewAccount } from '../account/model';
 import { getAccount } from '../../services/account/actions';
 import { toNewEmployee } from '../employee/model';
+import { apiRegisteredAccountEmail } from '../../utils/http_functions';
 
 // Register Account
 // TODO: None
@@ -44,7 +45,7 @@ export const validateActivationCode = (code) => {
       }
     }).catch((error) => {
       console.log(error);
-      privalgoAnalytic('activation_code_ref_failure');
+      supplyMeAnalytic('activation_code_ref_failure');
       return false;
     })
 }
@@ -58,7 +59,7 @@ export const registerAccount = (accountCode, password, redirectRoute) => (dispat
         if (!response) {
           console.log('Error Validating Auth Code');
           errorAlert('Error Validating Auth Code')
-          privalgoAnalytic('register_account_failure');
+          supplyMeAnalytic('register_account_failure');
           dispatch(registerAccountFailure({
               response: {
                   status: 403,
@@ -77,13 +78,13 @@ export const registerAccount = (accountCode, password, redirectRoute) => (dispat
             return db().runTransaction((transaction) => {
                 return auth().currentUser.getIdToken().then((idToken) => {
 
-                  const employmentDate = Date.now()
+                  const createdDate = new Date()
 
                   const newUserRef = db().collection('MasterUserList').doc(user.user.uid);
-                  transaction.set(newUserRef, { accountID: accountRef.id });
+                  transaction.set(newUserRef, { accountID: accountRef.id, accountType: accountCode.accountType });
 
                   transaction.set(accountRef, accountInfo );
-                  transaction.set(activationCodeRef, { accountID: accountRef.id, valid: false, updatedDate: employmentDate });
+                  transaction.set(activationCodeRef, { accountID: accountRef.id, valid: false, updatedDate: createdDate });
                   transaction.set(employeeActivationCodeRef, { valid: false });
 
 
@@ -94,14 +95,15 @@ export const registerAccount = (accountCode, password, redirectRoute) => (dispat
                   employeeInfo.email = accountCode.email;
                   employeeInfo.activationCode = accountCode.activationCode;
                   employeeInfo.permissionLevel = 'owner';
-                  employeeInfo.employmentDate = employmentDate;
-                  employeeInfo.creationDate = employmentDate;
-                  employeeInfo.updatedDate = employmentDate;
+                  employeeInfo.createdDate = createdDate;
+                  employeeInfo.updatedDate = createdDate;
                   employeeInfo.employeeID = user.user.uid;
-                  employeeInfo.unenrolled = false;
-                  employeeInfo.isActive = true;
-                  employeeInfo.isOnline = true;
-                  employeeInfo.isLoggedIn = true;
+                  employeeInfo.active = true;
+                  employeeInfo.deleted = false;
+                  employeeInfo.terms = true;
+                  employeeInfo.termsTime = createdDate;
+                  employeeInfo.privacy = true;
+                  employeeInfo.privacyTime = createdDate;
                   transaction.set(newEmployeeRef, employeeInfo);
                   return {
                       employeeID: user.user.uid,
@@ -112,7 +114,7 @@ export const registerAccount = (accountCode, password, redirectRoute) => (dispat
                 }).catch((error) => {
                   console.log(error)
                   errorAlert(error.message);
-                  privalgoAnalytic('register_account_failure', null);
+                  supplyMeAnalytic('register_account_failure', null);
                   dispatch(registerAccountFailure({
                       response: {
                           status: 999,
@@ -130,13 +132,14 @@ export const registerAccount = (accountCode, password, redirectRoute) => (dispat
                   result.employeeInfo,
                   result.idToken,
                 ));
+                dispatch(apiRegisteredAccountEmail(result.idToken, accountCode));
                 dispatch(getAccount(result.accountID));
-                privalgoAnalytic('register_account_success', null);
+                supplyMeAnalytic('register_account_success', null);
                 history.push(redirectRoute);
             }).catch((error) => {
                 console.log("Transaction failed: ", error);
                 errorAlert(error.message);
-                privalgoAnalytic('register_account_failure', null);
+                supplyMeAnalytic('register_account_failure', null);
                 dispatch(registerAccountFailure({
                     response: {
                         status: 999,
@@ -147,7 +150,7 @@ export const registerAccount = (accountCode, password, redirectRoute) => (dispat
         }).catch((error) => {
             console.log(error)
             errorAlert(error.message);
-            privalgoAnalytic('register_account_failure', null);
+            supplyMeAnalytic('register_account_failure', null);
             return dispatch(registerAccountFailure({
                 response: {
                     status: 999,

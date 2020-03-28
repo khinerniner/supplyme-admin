@@ -1,8 +1,10 @@
 import history from '../../history';
 import { db } from '../../store/firebase';
-import { parseJSON } from '../../utils/misc';
-import { apiActivateEmployeeCode } from '../../utils/http_functions';
+import { parseJSON, validateKey } from '../../utils/misc';
+import { apiSendEmailEmployeeCode } from '../../utils/http_functions';
 import { toNewEmployee } from './model';
+import { supplyMeAnalytic } from '../../utils/analytics';
+import { successAlert, errorAlert } from '../../utils/alerts';
 
 export const addEmployee = employee => ({
     type: 'ADD_EMPLOYEE',
@@ -28,11 +30,11 @@ export const receiveEmployees = querySnapshot => (dispatch) => {
     }
 };
 
-export const fetchEmployees = (establishmentID) =>  (dispatch) => {
+export const fetchEmployees = (employeeID, accountID) =>  (dispatch) => {
     dispatch(startFetchingEmployees());
     db()
-        .collection('Establishments')
-        .doc(establishmentID)
+        .collection('Accounts')
+        .doc(accountID)
         .collection('Employees')
         .onSnapshot((querySnapshot) => {
             setTimeout(() => {
@@ -43,54 +45,6 @@ export const fetchEmployees = (establishmentID) =>  (dispatch) => {
             console.log(error);
         });
 };
-
-// Get Employee Data
-//
-// [START Get Employee Data]
-export const getEmployeeRequest = () => ({
-    type: 'FETCH_EMPLOYEE_REQUEST',
-});
-
-
-export const getEmployeeSuccess = (key, employee) => ({
-    type: 'RECEIVE_EMPLOYEE_SUCCESS',
-    payload: {
-        key,
-        employee,
-    },
-});
-
-export const getEmployeeFailure = error => ({
-    type: 'RECEIVE_EMPLOYEE_FAILURE',
-    payload: {
-        status: error.response.status,
-        statusText: error.response.statusText,
-    },
-});
-export const getEmployee = (establishmentID, employeeID) => (dispatch) => {
-    dispatch(getEmployeeRequest());
-    console.error(establishmentID)
-    console.log(employeeID)
-    const establishmentRef = db().collection('Establishments').doc(establishmentID);
-    const employeeRef = establishmentRef.collection('Employees').doc(employeeID);
-    employeeRef.get().then((doc) => {
-        if (doc.exists) {
-            console.log('Employee data:', doc.data());
-            const key = doc.id;
-            const value = doc.data();
-            dispatch(getEmployeeSuccess(key, value));
-        } else {
-            console.log('No such employee document!');
-            dispatch(getEmployeeFailure({
-                response: {
-                    status: 400,
-                    statusText: 'No Employee Account',
-                },
-            }));
-        }
-    });
-};
-// [END Get Employee Data]
 
 // Save New Employee
 //
@@ -117,12 +71,12 @@ export const saveNewEmployee = (token, employeeCodeInfo, redirectRoute) => (disp
     console.log(employeeCodeInfo)
     console.log(redirectRoute)
 
-    const establishmentID = employeeCodeInfo.establishmentID;
+    const accountID = employeeCodeInfo.accountID;
 
     const employmentDate = new Date()
 
     const newEmployeeCodeDocRef = db().collection("EmployeeActivationCodes").doc();
-    const newTempEstablishmentEmployeeRef = db().collection("Establishments").doc(establishmentID).collection("Employees").doc(newEmployeeCodeDocRef.id)
+    const newTempAccountEmployeeRef = db().collection("Accounts").doc(accountID).collection("Employees").doc(newEmployeeCodeDocRef.id)
 
     const employeeID = newEmployeeCodeDocRef.id;
     const employee = toNewEmployee();
@@ -145,12 +99,12 @@ export const saveNewEmployee = (token, employeeCodeInfo, redirectRoute) => (disp
 
     return db().runTransaction((transaction) => {
       transaction.set(newEmployeeCodeDocRef, employeeCodeInfo);
-      transaction.set(newTempEstablishmentEmployeeRef, employee);
-      return Promise.resolve({ employeeID, establishmentID });
-    }).then((employeeID, establishmentID) => {
+      transaction.set(newTempAccountEmployeeRef, employee);
+      return Promise.resolve({ employeeID, accountID });
+    }).then((employeeID, accountID) => {
         console.log("Transaction successfully committed!");
         dispatch(saveNewEmployeeSuccess());
-        dispatch(activateEmployeeCode(token, employeeCodeInfo))
+        dispatch(apiSendEmailEmployeeCode(token, employeeCodeInfo))
         // Analytics
         history.back();
     }).catch((error) => {
@@ -189,10 +143,10 @@ export const receiveEmployeeCodes = querySnapshot => function (dispatch) {
     }
 };
 
-export const fetchEmployeeCodes = (establishmentID) => function (dispatch) {
+export const fetchEmployeeCodes = (accountID) => function (dispatch) {
     dispatch(startFetchingEmployeeCodes());
     db()
-        .collection('EmployeeActivationCodes').where('establishmentID', '==', establishmentID)
+        .collection('EmployeeActivationCodes').where('accountID', '==', accountID)
         .onSnapshot((querySnapshot) => {
             setTimeout(() => {
                 const employeeCodes = querySnapshot || [];
@@ -204,84 +158,40 @@ export const fetchEmployeeCodes = (establishmentID) => function (dispatch) {
         });
 };
 
-// Get Employee Code
-//
-// [START Get Employee Code]
-export const getEmployeeCodeRequest = () => ({
-    type: 'FETCH_EMPLOYEE_CODE_REQUEST',
-});
-
-
-export const getEmployeeCodeSuccess = (employeeCode) => ({
-    type: 'RECEIVE_EMPLOYEE_CODE_SUCCESS',
-    payload: {
-        employeeCode,
-    },
-});
-
-export const getEmployeeCodeFailure = error => ({
-    type: 'RECEIVE_EMPLOYEE_CODE_FAILURE',
-    payload: {
-        status: error.response.status,
-        statusText: error.response.statusText,
-    },
-});
-export const getEmployeeCode = activationCode => (dispatch) => {
-    dispatch(getEmployeeCodeRequest());
-    const employeeCodeRef = db().collection('EmployeeActivationCodes').doc(activationCode);
-    employeeCodeRef.get().then((doc) => {
-        if (doc.exists) {
-            console.log('Employee Code data:', doc.data());
-            const employeeCode = doc.data();
-            employeeCode.activationCode = doc.id;
-            dispatch(getEmployeeCodeSuccess(employeeCode));
-        } else {
-            console.log('No such Employee Code document!');
-            dispatch(getEmployeeCodeFailure({
-                response: {
-                    status: 400,
-                    statusText: 'No Employee Account',
-                },
-            }));
-        }
-    });
-};
-// [END Get Employee Code]
-
-// Activate Employee Code
+// Email Employee Code
 // TODO: None
-// [START Activate Employee Code]
-export const activateEmployeeCodeRequest = () => ({
+// [START Email Employee Code]
+export const sendEmployeeCodeEmailRequest = () => ({
     type: 'ACTIVATE_EMPLOYEE_CODE_REQUEST',
 });
 
-export const activateEmployeeCodeSuccess = () => ({
+export const sendEmployeeCodeEmailSuccess = () => ({
     type: 'ACTIVATE_EMPLOYEE_CODE_SUCCESS',
 });
 
-export const activateEmployeeCodeFailure = error => ({
+export const sendEmployeeCodeEmailFailure = error => ({
     type: 'ACTIVATE_EMPLOYEE_CODE_FAILURE',
     payload: {
         status: error.response.status,
         statusText: error.response.statusText,
     },
 });
-export const activateEmployeeCode = (token, employeeCode) => (dispatch) => {
-        dispatch(activateEmployeeCodeRequest());
+export const sendEmployeeCodeEmail = (token, employeeCode) => (dispatch) => {
+        dispatch(sendEmployeeCodeEmailRequest());
         db().collection('EmployeeActivationCodes').doc(employeeCode.activationCode).update({
             valid: true,
         }).then((response) => {
-          return apiActivateEmployeeCode(token, employeeCode)
+          return apiSendEmailEmployeeCode(token, employeeCode)
           .then(parseJSON)
               .then((response) => {
-                  dispatch(activateEmployeeCodeSuccess());
-
+                  dispatch(sendEmployeeCodeEmailSuccess());
                   // Add Analytics
                   // Add Swal Alert
               })
               .catch((error) => {
                   // Add Analytics
-                  dispatch(activateEmployeeCodeFailure({
+                  console.error(error)
+                  dispatch(sendEmployeeCodeEmailFailure({
                       response: {
                           status: error.response.status,
                           statusText: error.response.data.statusText,
@@ -290,7 +200,8 @@ export const activateEmployeeCode = (token, employeeCode) => (dispatch) => {
               });
         }).catch((error) => {
             // Add Analytics
-            dispatch(activateEmployeeCodeFailure({
+            console.error(error)
+            dispatch(sendEmployeeCodeEmailFailure({
                 response: {
                     status: error.response.status,
                     statusText: error.response.data.statusText,
@@ -298,43 +209,112 @@ export const activateEmployeeCode = (token, employeeCode) => (dispatch) => {
             }));
         });
 };
-// [END Activate Employee Code]
+// [END Email Employee Code]
 
-// Deactivate Employee Code
+// Delete Employee Code
 // TODO: None
-// [START Deactivate Employee Code]
-export const deactivateEmployeeCodeRequest = () => ({
-    type: 'DEACTIVATE_EMPLOYEE_CODE_REQUEST',
+// [START Delete Employee Code]
+export const deleteEmployeeCodeRequest = () => ({
+    type: 'DELETE_EMPLOYEE_CODE_REQUEST',
 });
 
-export const deactivateEmployeeCodeSuccess = () => ({
-    type: 'DEACTIVATE_EMPLOYEE_CODE_SUCCESS',
+
+export const deleteEmployeeCodeSuccess = employeeCode => ({
+    type: 'DELETE_EMPLOYEE_CODE_SUCCESS',
+    payload: {
+        employeeCode,
+    },
 });
 
-export const deactivateEmployeeCodeFailure = error => ({
-    type: 'DEACTIVATE_EMPLOYEE_CODE_FAILURE',
+export const deleteEmployeeCodeFailure = error => ({
+    type: 'DELETE_EMPLOYEE_CODE_FAILURE',
     payload: {
         status: error.response.status,
         statusText: error.response.statusText,
     },
 });
-export const deactivateEmployeeCode = (token, employeeCode) => (dispatch) => {
-    console.log(employeeCode)
-        dispatch(deactivateEmployeeCodeRequest());
-        db().collection('EmployeeActivationCodes').doc(employeeCode.activationCode).update({
-            valid: false,
-        }).then((response) => {
-            // Add Analytics
-            // Add Alert
-            dispatch(deactivateEmployeeCodeSuccess());
-        }).catch((error) => {
-            // Add Analytics
-            dispatch(deactivateEmployeeCodeFailure({
-                response: {
-                    status: error.response.status,
-                    statusText: error.response.data.statusText,
-                },
-            }));
-        });
+
+export const deleteEmployeeCode = (employeeID, accountID, employeeCode) => (dispatch) => {
+    console.log(employeeID);
+    console.log(accountID);
+    console.log(employeeCode);
+    dispatch(deleteEmployeeCodeRequest());
+
+    if (!validateKey(accountID)) {
+        errorAlert('Invalid Account ID');
+    }
+
+    const accountRef = db().collection('Accounts').doc(accountID);
+    const docRef = accountRef.collection('EmployeeCodes').doc(employeeCode.activationCode);
+
+    const updatedDate = Date.now();
+    docRef.update({"active": false, "deleted": true, "updatedDate": updatedDate}).then(() => {
+        dispatch(deleteEmployeeCodeSuccess());
+        successAlert('Delete Employee Code Success');
+        supplyMeAnalytic(employeeID, 'employee', 'deleteEmployeeCodeSuccess');
+    }).catch((error) => {
+        errorAlert(error.message || error);
+        supplyMeAnalytic(employeeID, 'employee', 'deleteEmployeeCodeFailure');
+        dispatch(deleteEmployeeCodeFailure({
+            response: {
+                status: 400,
+                statusText: error.message,
+            },
+        }));
+    });
 };
-// [END Deactivate Employee Code]
+// [END Delete Employee Code]
+
+// Delete Employee
+// TODO: None
+// [START Delete Employee]
+export const deleteEmployeeRequest = () => ({
+    type: 'DELETE_EMPLOYEE_REQUEST',
+});
+
+
+export const deleteEmployeeSuccess = employee => ({
+    type: 'DELETE_EMPLOYEE_SUCCESS',
+    payload: {
+        employee,
+    },
+});
+
+export const deleteEmployeeFailure = error => ({
+    type: 'DELETE_EMPLOYEE_FAILURE',
+    payload: {
+        status: error.response.status,
+        statusText: error.response.statusText,
+    },
+});
+
+export const deleteEmployee = (employeeID, accountID, employee) => (dispatch) => {
+    console.log(employeeID);
+    console.log(accountID);
+    console.log(employee);
+    dispatch(deleteEmployeeRequest());
+
+    if (!validateKey(accountID)) {
+        errorAlert('Invalid Account ID');
+    }
+
+    const accountRef = db().collection('Accounts').doc(accountID);
+    const docRef = accountRef.collection('Employees').doc(employee.employeeID);
+
+    const updatedDate = Date.now();
+    docRef.update({"active": false, "deleted": true, "updatedDate": updatedDate}).then(() => {
+        dispatch(deleteEmployeeSuccess());
+        successAlert('Delete Employee Success');
+        supplyMeAnalytic(employeeID, 'employee', 'deleteEmployeeSuccess');
+    }).catch((error) => {
+        errorAlert(error.message || error);
+        supplyMeAnalytic(employeeID, 'employee', 'deleteEmployeeFailure');
+        dispatch(deleteEmployeeFailure({
+            response: {
+                status: 400,
+                statusText: error.message,
+            },
+        }));
+    });
+};
+// [END Delete Employee]

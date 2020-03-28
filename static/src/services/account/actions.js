@@ -1,7 +1,7 @@
 import history from '../../history';
 import { db } from '../../store/firebase';
 import { errorAlert, successAlert } from '../../utils/alerts';
-import { privalgoAnalytic } from '../../utils/analytics';
+import { supplyMeAnalytic } from '../../utils/analytics';
 import {
   parseJSON,
   validateKey,
@@ -290,13 +290,13 @@ export const updateAccount = (employeeID, accountID, account, redirectRoute) => 
             console.log('Transaction successfully committed!');
             dispatch(updateAccountSuccess());
             successAlert('update Account Success!');
-            // privalgoAnalytic('update_account_success', null);
+            // supplyMeAnalytic('update_account_success', null);
             history.push(redirectRoute)
         }).catch((error) => {
             console.log('Transaction failed: ', error.message || error);
             console.log(error.message || error);
             errorAlert(error.message || error);
-            // privalgoAnalytic('update_account_failure', null);
+            // supplyMeAnalytic('update_account_failure', null);
             dispatch(updateAccountFailure({
                 response: {
                     status: 403,

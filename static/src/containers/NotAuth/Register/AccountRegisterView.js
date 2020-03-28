@@ -139,7 +139,7 @@ class RegisterView extends Component {
     }
 
     componentDidMount() {
-        const { actions, search } = this.props;
+        const { search } = this.props;
         const keys = getRegistrationSearch(search);
         const next_state = this.state;
         next_state.activationCode.activationCode = keys.code;

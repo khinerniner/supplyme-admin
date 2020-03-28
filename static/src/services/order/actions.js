@@ -4,7 +4,7 @@ import { parseJSON, formatFirestoreDateString, validateString, validateKey } fro
 import { apiBulkUploadOrders } from '../../utils/http_functions';
 import { toNewOrder, getOrderFromSnapshot } from './model';
 import { errorAlert, successAlert } from '../../utils/alerts';
-import { privalgoAnalytic } from '../../utils/analytics';
+import { supplyMeAnalytic } from '../../utils/analytics';
 
 export const addOrder = order => ({
     type: 'ADD_ORDER',
@@ -177,7 +177,7 @@ export const updateOrder = (employeeID, accountID, order, redirectRoute) => (dis
 
     })).then((result) => {
         console.log('Transaction successfully committed!');
-        // privalgoAnalytic('update_order_success', null);
+        // supplyMeAnalytic('update_order_success', null);
         dispatch(updateOrderSuccess(result.currentOrderInfo));
         successAlert('Update Order Success!');
         history.push(`/accounts/${accountID}/orders`)
@@ -185,7 +185,7 @@ export const updateOrder = (employeeID, accountID, order, redirectRoute) => (dis
         console.log('Transaction failed: ', error.message || error);
         console.log(error.message || error);
         errorAlert(error.message || error);
-        // privalgoAnalytic('update_order_failure', null);
+        // supplyMeAnalytic('update_order_failure', null);
         dispatch(updateOrderFailure({
             response: {
                 status: 403,
@@ -248,10 +248,10 @@ export const deleteOrder = (employeeID, accountID, order, redirectRoute) => (dis
         dispatch(deleteOrderSuccess());
         history.push(`/accounts/${accountID}/orders`)
         // errorAlert(200, 'Delete Menu Item Success');
-        // privalgoAnalytic(employeeID, 'order', 'deleteOrderSuccess');
+        // supplyMeAnalytic(employeeID, 'order', 'deleteOrderSuccess');
     }).catch((error) => {
         // errorAlert(400, error.message || error);
-        // privalgoAnalytic(employeeID, 'order', 'deleteOrderFailure');
+        // supplyMeAnalytic(employeeID, 'order', 'deleteOrderFailure');
         dispatch(deleteOrderFailure({
             response: {
                 status: 400,

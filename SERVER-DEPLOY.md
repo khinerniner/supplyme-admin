@@ -1,4 +1,4 @@
-# veridoc Platform - React
+# SupplyMe
 
 Decentralized Article Credibility Rating Application
 
