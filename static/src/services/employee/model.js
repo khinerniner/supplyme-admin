@@ -16,14 +16,7 @@ export function toNewEmployee() {
         firstName: null,
         lastName: null,
         email: null,
-        phoneNumber: null,
-        followers: 0,
-        following: 0,
-        merchantHash: null,
-        signorAddress: null,
-        isEther: false,
-        posHash: null,
-        apiKey: null
+        phoneNumber: null
     }
 }
 export function employeeRowObject(employee) {
@@ -34,18 +27,15 @@ export function employeeRowObject(employee) {
         permissionLevel: employee.permissionLevel,
         email: employee.email,
         phoneNumber: employee.phoneNumber,
-        isLoggedIn: employee.isLoggedIn,
-        isActive: employee.isActive,
-        unenrolled: employee.unenrolled,
         createdTime: employee.createdTime,
     };
 }
 export function toNewEmployeeCode() {
     return {
         activationCode: null,
-        establishmentID: null,
+        accountID: null,
         ownerName: 'Jenny Lewis',
-        establishmentName: null,
+        accountName: null,
         email: 'jenny@virtualtabs.org',
         permissionLevel: 'admin',
         phoneNumber: '155555555555',
@@ -58,9 +48,9 @@ export function employeeCodeRowObject(employeeCode) {
     return {
         index: employeeCode.activationCode,
         id: employeeCode.activationCode,
-        establishmentID: employeeCode.establishmentID,
+        accountID: employeeCode.accountID,
         ownerName: employeeCode.ownerName,
-        establishmentName: employeeCode.establishmentName,
+        accountName: employeeCode.accountName,
         email: employeeCode.email,
         permissionLevel: employeeCode.permissionLevel,
         phoneNumber: employeeCode.phoneNumber,
