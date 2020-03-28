@@ -3,7 +3,7 @@
 import logging
 import time
 
-logger = logging.getLogger('cattails.utils.google.gmail.client.py')
+logger = logging.getLogger('supplyme.utils.google.gmail.client.py')
 
 from server.env import APP_ENV
 
@@ -34,7 +34,7 @@ SCOPES = 'https://www.googleapis.com/auth/gmail.send'
 
 class SupplyMeGoogleClient(object):
     def __init__(self, userEmail):
-        self.sender = 'denis@virtualtabs.org'
+        self.sender = 'support@caslnpo.org'
         self.userEmail = userEmail
         self.service = self.get_service()
         self.analytics_id = 'UA-107201661-1'
@@ -47,15 +47,15 @@ class SupplyMeGoogleClient(object):
             credentials = ''
             if APP_ENV == 'server.config.DevelopmentConfig':
                 from server.config import Config, DevelopmentConfig
-                credentials = DevelopmentConfig.GMAIL_CRED.create_delegated('denis@virtualtabs.org')
+                credentials = DevelopmentConfig.GMAIL_CRED.create_delegated('support@caslnpo.org')
                 self.analytics_id = 'UA-107201661-1'
             elif APP_ENV == 'server.config.ProductionConfig':
                 from server.config import Config, ProductionConfig
-                credentials = ProductionConfig.GMAIL_CRED.create_delegated('denis@virtualtabs.org')
+                credentials = ProductionConfig.GMAIL_CRED.create_delegated('support@caslnpo.org')
                 self.analytics_id = 'UA-107201661-2'
             elif APP_ENV == 'server.config.StageConfig':
                 from server.config import Config, StageConfig
-                credentials = StageConfig.GMAIL_CRED.create_delegated('denis@virtualtabs.org')
+                credentials = StageConfig.GMAIL_CRED.create_delegated('support@caslnpo.org')
                 self.analytics_id = 'UA-107201661-2'
             return credentials
         except Exception as e:
