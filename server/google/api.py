@@ -12,12 +12,239 @@ from server.utils.google.places.utils import (
     geocode_google_place,
     parse_google_geocode
 )
-# from server.google import notifications
 from server.utils.firestore import verify_firebase_token
+from server.account.model import SupplyMeAccountCode
+from server.employee.model import SupplyMeEmployeeCode
+from server.google import notifications
 
 import time
 
 google_blueprint = Blueprint('google', __name__)
+
+# Account Code Send Email
+# TODO: None
+# [START Account Code Send Email]
+class AccountCodeSendEmail(MethodView):
+    def post(self):
+        try:
+            id_token = request.headers.get('Authorization').split(' ').pop()
+            claims = verify_firebase_token(id_token)
+            if not claims:
+                responseObject = {
+                    'status': 'failed',
+                    'statusText': 'Invalid Token'
+                }
+                return make_response(jsonify(responseObject)), 403
+
+            incoming = request.get_json()
+            activation_code = incoming['activationCode']
+            if not activation_code:
+                responseObject = {
+                    'status': 'failed',
+                    'statusText': 'Invalid Request Parameters'
+                }
+                return make_response(jsonify(responseObject)), 400
+
+            accountCode = SupplyMeAccountCode().dict_snapshot(snapshot=activation_code)
+            data = {
+                'to_name': accountCode.ownerName,
+                'to_account_name': accountCode.accountName,
+                'from_name': 'The SupplyMe Team',
+                'activation_code': accountCode.activationCode,
+            }
+            clean_email = accountCode.email
+            data['user_email'] = accountCode.email
+            # notifications.account_code_email_notification_task.apply_async(kwargs=data)
+            # notifications.account_code_email_notification_task(
+            #     user_email=data['user_email'],
+            #     to_name=data['to_name'],
+            #     to_account_name=data['to_account_name'],
+            #     from_name=data['from_name'],
+            #     activation_code=data['activation_code']
+            # )
+
+            responseObject = {
+                'status': 'success',
+                'statusText': 'Account Code Email Successfully Sent'
+            }
+            return make_response(jsonify(responseObject)), 200
+
+        except Exception as e:
+            logger.error('Error on AccountCodeSendEmail.post; Error: %s', e)
+            responseObject = {
+                'status': 'failed',
+                'statusText': str(e)
+            }
+            return make_response(jsonify(responseObject)), 403
+# [END Account Code Send Email]
+
+# Account Registration Send Email
+# TODO: None
+# [START Account Registration Send Email]
+class AccountRegistrationSendEmail(MethodView):
+    def post(self):
+        try:
+            id_token = request.headers.get('Authorization').split(' ').pop()
+            claims = verify_firebase_token(id_token)
+            if not claims:
+                responseObject = {
+                    'status': 'failed',
+                    'statusText': 'Invalid Token'
+                }
+                return make_response(jsonify(responseObject)), 403
+
+            incoming = request.get_json()
+            activation_code = incoming['activationCode']
+            if not activation_code:
+                responseObject = {
+                    'status': 'failed',
+                    'statusText': 'Invalid Request Parameters'
+                }
+                return make_response(jsonify(responseObject)), 400
+
+            accountCode = SupplyMeAccountCode().dict_snapshot(snapshot=activation_code)
+            data = {
+                'to_name': accountCode.ownerName,
+                'to_account_name': accountCode.accountName,
+                'from_name': 'The SupplyMe Team',
+                'activation_code': accountCode.activationCode,
+            }
+            clean_email = accountCode.email
+            data['user_email'] = accountCode.email
+            # notifications.account_code_email_notification_task.apply_async(kwargs=data)
+            notifications.account_registration_email_notification_task(
+                user_email=data['user_email'],
+                to_name=data['to_name'],
+                to_account_name=data['to_account_name'],
+                from_name=data['from_name']
+            )
+
+            responseObject = {
+                'status': 'success',
+                'statusText': 'Account Registration Email Successfully Sent'
+            }
+            return make_response(jsonify(responseObject)), 200
+
+        except Exception as e:
+            logger.error('Error on AccountRegistrationSendEmail.post; Error: %s', e)
+            responseObject = {
+                'status': 'failed',
+                'statusText': str(e)
+            }
+            return make_response(jsonify(responseObject)), 403
+# [END Account Registration Send Email]
+
+# Employee Code Send Email
+# TODO: None
+# [START Employee Code Send Email]
+class EmployeeCodeSendEmail(MethodView):
+    def post(self):
+        try:
+            id_token = request.headers.get('Authorization').split(' ').pop()
+            claims = verify_firebase_token(id_token)
+            if not claims:
+                responseObject = {
+                    'status': 'failed',
+                    'statusText': 'Invalid Token'
+                }
+                return make_response(jsonify(responseObject)), 403
+
+            incoming = request.get_json()
+            activation_code = incoming['activationCode']
+            if not activation_code:
+                responseObject = {
+                    'status': 'failed',
+                    'statusText': 'Invalid Request Parameters'
+                }
+                return make_response(jsonify(responseObject)), 400
+
+            employeeCode = SupplyMeEmployeeCode().dict_snapshot(snapshot=activation_code)
+            data = {
+                'to_name': employeeCode.ownerName,
+                'to_account_name': employeeCode.accountName,
+                'from_name': 'The SupplyMe Team',
+                'activation_code': employeeCode.activationCode,
+            }
+            data['user_email'] = employeeCode.email
+            # notifications.employee_code_email_notification_task.apply_async(kwargs=data)
+            # notifications.employee_code_email_notification_task(
+            #     user_email=data['user_email'],
+            #     to_name=data['to_name'],
+            #     to_account_name=data['to_account_name'],
+            #     from_name=data['from_name'],
+            #     activation_code=data['activation_code']
+            # )
+
+            responseObject = {
+                'status': 'success',
+                'statusText': 'Employee Code Email Successfully Sent'
+            }
+            return make_response(jsonify(responseObject)), 200
+
+        except Exception as e:
+            logger.error('Error on EmployeeCodeSendEmail.post; Error: %s', e)
+            responseObject = {
+                'status': 'failed',
+                'statusText': str(e)
+            }
+            return make_response(jsonify(responseObject)), 403
+# [END Employee Code Send Email]
+
+# Employee Registration Send Email
+# TODO: None
+# [START Employee Registration Send Email]
+class EmployeeRegistrationSendEmail(MethodView):
+    def post(self):
+        try:
+            id_token = request.headers.get('Authorization').split(' ').pop()
+            claims = verify_firebase_token(id_token)
+            if not claims:
+                responseObject = {
+                    'status': 'failed',
+                    'statusText': 'Invalid Token'
+                }
+                return make_response(jsonify(responseObject)), 403
+
+            incoming = request.get_json()
+            activation_code = incoming['activationCode']
+            if not activation_code:
+                responseObject = {
+                    'status': 'failed',
+                    'statusText': 'Invalid Request Parameters'
+                }
+                return make_response(jsonify(responseObject)), 400
+
+            employeeCode = SupplyMeEmployeeCode().dict_snapshot(snapshot=activation_code)
+            data = {
+                'to_name': employeeCode.ownerName,
+                'to_account_name': employeeCode.accountName,
+                'from_name': 'The SupplyMe Team',
+                'activation_code': employeeCode.activationCode,
+            }
+            data['user_email'] = employeeCode.email
+            # notifications.employee_code_email_notification_task.apply_async(kwargs=data)
+            # notifications.employee_code_email_notification_task(
+            #     user_email=data['user_email'],
+            #     to_name=data['to_name'],
+            #     to_account_name=data['to_account_name'],
+            #     from_name=data['from_name'],
+            #     activation_code=data['activation_code']
+            # )
+
+            responseObject = {
+                'status': 'success',
+                'statusText': 'Employee Registration Email Successfully Sent'
+            }
+            return make_response(jsonify(responseObject)), 200
+
+        except Exception as e:
+            logger.error('Error on EmployeeRegistrationSendEmail.post; Error: %s', e)
+            responseObject = {
+                'status': 'failed',
+                'statusText': str(e)
+            }
+            return make_response(jsonify(responseObject)), 403
+# [END Employee Registration Send Email]
 
 # Search Google Places
 # TODO: None
@@ -83,11 +310,35 @@ class GeocodeGooglePlace(MethodView):
 # [END Geocode Google Place]
 
 # Define API resources
+send_account_code = AccountCodeSendEmail.as_view('send_account_code')
+send_account_registration = AccountRegistrationSendEmail.as_view('send_account_registration')
+send_employee_code = EmployeeCodeSendEmail.as_view('send_employee_code')
+send_employee_registration = EmployeeRegistrationSendEmail.as_view('send_employee_registration')
 google_places_search = SearchGooglePlaces.as_view('google_places_search')
 google_place_geocode = GeocodeGooglePlace.as_view('google_place_geocode')
 # Specify API Version
 
 # Add rules for endpoints
+google_blueprint.add_url_rule(
+    '/api/google/v1/account/activationCode/send',
+    view_func=send_account_code,
+    methods=['POST']
+)
+google_blueprint.add_url_rule(
+    '/api/google/v1/account/registration/send',
+    view_func=send_account_registration,
+    methods=['POST']
+)
+google_blueprint.add_url_rule(
+    '/api/google/v1/employee/activationCode/send',
+    view_func=send_employee_code,
+    methods=['POST']
+)
+google_blueprint.add_url_rule(
+    '/api/google/v1/employee/registration/send',
+    view_func=send_employee_registration,
+    methods=['POST']
+)
 google_blueprint.add_url_rule(
     '/api/google/v1/places/search',
     view_func=google_places_search,
