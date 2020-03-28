@@ -9,7 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
-import { getEmployee, deleteEmployee } from '../../../services/employee/actions';
+import { deleteEmployee } from '../../../services/employee/actions';
 import { toNewEmployee } from '../../../services/employee/model';
 import { getKeys, formatDateWTime, dispatchNewObject } from '../../../utils/misc';
 
@@ -116,14 +116,13 @@ function mapStateToProps(state) {
         employeeID: state.app.employeeID,
         accountID: state.app.accountID,
         employees: state.employeeData.employees,
-        employee: state.employeeData.employee,
+        receivedAt: state.employeeData.receivedAt,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         actions: {
-            getEmployee: bindActionCreators(getEmployee, dispatch),
             deleteEmployee: bindActionCreators(deleteEmployee, dispatch)
         },
     };
@@ -145,10 +144,8 @@ class EmployeeDetailView extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.employee.isLoaded && !this.props.employee.isLoaded) {
-            this.setState({
-                employee: nextProps.employee
-            });
+        if (nextProps.receivedAt !== null && this.props.receivedAt === null) {
+            this.loadCompData(nextProps);
         }
     }
 
@@ -168,18 +165,11 @@ class EmployeeDetailView extends React.Component {
         const keys = getKeys(pathname);
         const employeeID = keys.second;
         if (employeeID && employeeID !== null) {
-            var found = false;
             employees.forEach((employee) => {
                 if (employee.employeeID === employeeID) {
-                    this.setState({
-                        employee
-                    });
-                    found = true;
+                    this.setState({employee});
                 }
             })
-            if (found === false) {
-                // actions.getEmployee(accountID, employeeID);
-            }
         }
     }
 
@@ -233,14 +223,6 @@ class EmployeeDetailView extends React.Component {
                                 <span className={classes.detailTitleText}>{`${employee.name}`}</span>
                               </div>
                               <div className={classes.detailActions}>
-                                  <Button
-                                    variant="contained"
-                                    disableRipple
-                                    disableFocusRipple
-                                    className={classes.button}
-                                  >
-                                      {'+ New Employee'}
-                                  </Button>
                                   <Button
                                     variant="contained"
                                     disableRipple
