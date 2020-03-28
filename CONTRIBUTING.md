@@ -86,7 +86,7 @@ brew install nginx
 ```
 Create SSL
 ```
-sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /private/localhost.key -out /private/localhost.crt
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /private/localhost.key -out /private localhost.crt
 sudo openssl dhparam -out /private/dhparam.pem 2048
 ```
 Output
@@ -105,6 +105,8 @@ Config Nginx
 sudo nano /usr/local/etc/nginx/nginx.conf
 ```
 
+
+## For Public Html
 ```
 server {
         listen 80;
@@ -116,10 +118,13 @@ server {
         }
         error_page 401 403 404 /404.html;
 }
+```
 
-#
-# Main
-#
+## For App
+```
+
+#gzip  on;
+
 server {
     server_name app.localhost;
 
@@ -129,21 +134,21 @@ server {
     ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
     ssl_prefer_server_ciphers on;
     ssl_dhparam /private/dhparam.pem;
-    ssl_certificate /private/localhost.us.crt;
-    ssl_certificate_key /private/localhost.us.key;
+    ssl_certificate /private/localhost.crt;
+    ssl_certificate_key /private/localhost.key;
 
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload";
 
-    root /srv/www/supplyme-admin/static;
+    root /srv/www/samy-admin/static;
     index index.html index.htm;
     location / {
-            proxy_pass http://127.0.0.1:3001;
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection 'upgrade';
-            proxy_set_header Host $host;
-            proxy_cache_bypass $http_upgrade;
-    }
+                    proxy_pass http://127.0.0.1:3000;
+                    proxy_http_version 1.1;
+                    proxy_set_header Upgrade $http_upgrade;
+                    proxy_set_header Connection 'upgrade';
+                    proxy_set_header Host $host;
+                    proxy_cache_bypass $http_upgrade;
+            }
     error_page 401 403 404 /404.html;
 }
 ```
