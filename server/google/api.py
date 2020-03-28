@@ -167,13 +167,13 @@ class EmployeeCodeSendEmail(MethodView):
             }
             data['user_email'] = employeeCode.email
             # notifications.employee_code_email_notification_task.apply_async(kwargs=data)
-            # notifications.employee_code_email_notification_task(
-            #     user_email=data['user_email'],
-            #     to_name=data['to_name'],
-            #     to_account_name=data['to_account_name'],
-            #     from_name=data['from_name'],
-            #     activation_code=data['activation_code']
-            # )
+            notifications.employee_code_email_notification_task(
+                user_email=data['user_email'],
+                to_name=data['to_name'],
+                to_account_name=data['to_account_name'],
+                from_name=data['from_name'],
+                activation_code=data['activation_code']
+            )
 
             responseObject = {
                 'status': 'success',
