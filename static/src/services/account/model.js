@@ -46,7 +46,7 @@ export function toNewAccountCode() {
         phoneNumber: null,
         valid: false,
         updatedDate: null,
-        creationDate: null,
+        createdDate: null,
     };
 }
 export function accountCodeRowObject(accountCode) {
@@ -60,6 +60,6 @@ export function accountCodeRowObject(accountCode) {
         phoneNumber: accountCode.phoneNumber,
         valid: accountCode.valid,
         updatedDate: accountCode.updatedDate,
-        creationDate: accountCode.creationDate,
+        createdDate: accountCode.createdDate,
     };
 }
