@@ -139,7 +139,7 @@ server {
 
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload";
 
-    root /srv/www/supplyme-admin/static;
+    root /srv/www/samy-admin/static;
     index index.html index.htm;
     location / {
                     proxy_pass http://127.0.0.1:3001;
