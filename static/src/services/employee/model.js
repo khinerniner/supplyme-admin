@@ -27,21 +27,21 @@ export function employeeRowObject(employee) {
         permissionLevel: employee.permissionLevel,
         email: employee.email,
         phoneNumber: employee.phoneNumber,
-        createdTime: employee.createdTime,
+        createdDate: employee.createdDate,
     };
 }
 export function toNewEmployeeCode() {
     return {
         activationCode: null,
         accountID: null,
-        ownerName: 'Jenny Lewis',
+        ownerName: null,
         accountName: null,
-        email: 'jenny@virtualtabs.org',
-        permissionLevel: 'admin',
-        phoneNumber: '155555555555',
+        email: null,
+        permissionLevel: null,
+        phoneNumber: null,
         valid: false,
         updatedDate: null,
-        createdTime: null,
+        createdDate: null,
     };
 }
 export function employeeCodeRowObject(employeeCode) {
@@ -56,6 +56,6 @@ export function employeeCodeRowObject(employeeCode) {
         phoneNumber: employeeCode.phoneNumber,
         valid: employeeCode.valid,
         updatedDate: employeeCode.updatedDate || new Date(),
-        createdTime: employeeCode.createdTime || new Date(),
+        createdDate: employeeCode.createdDate || new Date(),
     };
 }
