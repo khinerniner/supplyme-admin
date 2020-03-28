@@ -211,9 +211,9 @@ export const sendEmployeeCodeEmail = (token, employeeCode) => (dispatch) => {
 };
 // [END Email Employee Code]
 
-// Delete Employee
+// Delete Employee Code
 // TODO: None
-// [START Delete Employee]
+// [START Delete Employee Code]
 export const deleteEmployeeCodeRequest = () => ({
     type: 'DELETE_EMPLOYEE_CODE_REQUEST',
 });
@@ -256,6 +256,60 @@ export const deleteEmployeeCode = (employeeID, accountID, employeeCode) => (disp
         errorAlert(error.message || error);
         supplyMeAnalytic(employeeID, 'employee', 'deleteEmployeeCodeFailure');
         dispatch(deleteEmployeeCodeFailure({
+            response: {
+                status: 400,
+                statusText: error.message,
+            },
+        }));
+    });
+};
+// [END Delete Employee Code]
+
+// Delete Employee
+// TODO: None
+// [START Delete Employee]
+export const deleteEmployeeRequest = () => ({
+    type: 'DELETE_EMPLOYEE_REQUEST',
+});
+
+
+export const deleteEmployeeSuccess = employee => ({
+    type: 'DELETE_EMPLOYEE_SUCCESS',
+    payload: {
+        employee,
+    },
+});
+
+export const deleteEmployeeFailure = error => ({
+    type: 'DELETE_EMPLOYEE_FAILURE',
+    payload: {
+        status: error.response.status,
+        statusText: error.response.statusText,
+    },
+});
+
+export const deleteEmployee = (employeeID, accountID, employee) => (dispatch) => {
+    console.log(employeeID);
+    console.log(accountID);
+    console.log(employee);
+    dispatch(deleteEmployeeRequest());
+
+    if (!validateKey(accountID)) {
+        errorAlert('Invalid Account ID');
+    }
+
+    const accountRef = db().collection('Accounts').doc(accountID);
+    const docRef = accountRef.collection('Employees').doc(employee.employeeID);
+
+    const updatedDate = Date.now();
+    docRef.update({"active": false, "deleted": true, "updatedDate": updatedDate}).then(() => {
+        dispatch(deleteEmployeeSuccess());
+        successAlert('Delete Employee Success');
+        supplyMeAnalytic(employeeID, 'employee', 'deleteEmployeeSuccess');
+    }).catch((error) => {
+        errorAlert(error.message || error);
+        supplyMeAnalytic(employeeID, 'employee', 'deleteEmployeeFailure');
+        dispatch(deleteEmployeeFailure({
             response: {
                 status: 400,
                 statusText: error.message,

@@ -3,7 +3,7 @@ import { parseFirestoreTimeStamp } from '../../utils/misc';
 export function getEmployeeFromSnapshot(employee) {
     return {
         employeeID: employee.employeeID,
-        permissionLevel: employee.employeeID,
+        permissionLevel: employee.permissionLevel,
         active: employee.active,
         deleted: employee.deleted,
         createdDate: parseFirestoreTimeStamp(employee.createdDate),
@@ -41,7 +41,9 @@ export function employeeRowObject(employee) {
     return {
         index: employee.employeeID,
         id: employee.employeeID,
-        name: `${employee.firstName} ${employee.lastName}`,
+        active: employee.active,
+        deleted: employee.deleted,
+        name: employee.name,
         permissionLevel: employee.permissionLevel,
         email: employee.email,
         phoneNumber: employee.phoneNumber,

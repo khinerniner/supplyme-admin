@@ -13,7 +13,7 @@ const addEmployee = (state, action) => {
 const employees = (state = [], action) => {
     switch (action.type) {
         case 'ADD_EMPLOYEE':
-            if (state.map(employee => employee.key).includes(action.key)) {
+            if (state.map(employee => employee.employeeID).includes(action.employeeID)) {
               return [
                 addEmployee(undefined, action)
               ]
