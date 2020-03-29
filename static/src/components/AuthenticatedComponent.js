@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import history from '../history';
-import Loader from 'react-loaders';
+// import Loader from 'react-loaders';
 
 import Base from '../components/VeriDoc/Base';
+import Loader from '../components/VeriDoc/Base/Loader';
 
 import { loginEmployeeWithPermissions, logoutAndRedirect } from '../services/app/actions';
 import { auth } from '../store/firebase';
@@ -114,7 +115,7 @@ export function requireAuthentication(Component) {
                             </div>
                         )
                         : <div style={styles.overlay}>
-                            <Loader color="#5e4443" type="ball-scale-multiple" />
+                            <Loader open={true} />
                           </div>
                     }
                 </div>
