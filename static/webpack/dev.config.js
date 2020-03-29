@@ -1,4 +1,16 @@
 const webpack = require('webpack');
+const dotenv = require('dotenv');
+
+// call dotenv and it will return an Object with a parsed key
+const env = dotenv.config().parsed;
+
+// reduce it to a nice object, the same as before
+const envKeys = Object.keys(env).reduce((prev, next) => {
+  prev[`process.env.${next}`] = JSON.stringify(env[next]);
+  return prev;
+}, {});
+
+console.log(envKeys)
 
 module.exports = {
 
@@ -56,16 +68,7 @@ module.exports = {
     },
 
     plugins: [
-        new webpack.DefinePlugin({
-            'process.env': {
-                PORT: '"3001"',
-                NODE_ENV: '"development"',
-                FIREBASE_BROWSER_KEY: '"AIzaSyAVsdLvWCtVoyKgriUWqsJ7rXucOsAXWrs"',
-                SUPPLYME_ADMIN_KEY: '"SvaUdmV1XbLcuoqkDow8"',
-                GOOGLE_API_KEY: '"AIzaSyAwKy9HM8mOHQ4t0wOrMW09w4MGucrfShA"'
-            },
-            __DEVELOPMENT__: true,
-        }),
+        new webpack.DefinePlugin(envKeys),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin()
     ],
