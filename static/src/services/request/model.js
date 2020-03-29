@@ -52,3 +52,16 @@ export function requestRowObject(request) {
         numItems: request.menuItems.length,
     };
 }
+export function requestMarkerObject(request) {
+    return {
+        index: request.requestID,
+        id: request.requestID,
+        active: request.active,
+        budget: request.budget,
+        priority: request.priority,
+        requiredBy: request.requiredBy,
+        latitude: request.location.latitude,
+        longitude: request.location.longitude,
+        img: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/info-i_maps.png',
+    };
+}
