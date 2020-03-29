@@ -104,7 +104,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
-class UploadValorMedia extends Component {
+class UploadMedia extends Component {
 
     constructor(props) {
         super(props);
@@ -159,17 +159,11 @@ class UploadValorMedia extends Component {
         } = this.state;
         return (
           <div>
-              {hasFile ? (
-                    <div className={classes.mediaBox}>
-                        <img alt={`media-${filePreview}`} height={140} src={filePreview} />
-                    </div>
-                ) : null
-              }
               <Dropzone onDrop={this.onDrop}>
                   {({ getRootProps, getInputProps, isDragActive }) => (
                       <div {...getRootProps()} style={{width: 150}} className={classNames('dropzone', { 'dropzone--isActive': isDragActive })}>
                           <input onClick={e => e.preventDefault()} {...getInputProps()} />
-                          {this.renderDropDisplay(isDragActive)}
+                          {!hasFile ? this.renderDropDisplay(isDragActive) : (<img alt={`media-${filePreview}`} height={140} src={filePreview} />)}
                       </div>
                   )}
               </Dropzone>
@@ -178,12 +172,12 @@ class UploadValorMedia extends Component {
     }
 }
 
-UploadValorMedia.defaultProps = {};
-UploadValorMedia.propTypes = {
+UploadMedia.defaultProps = {};
+UploadMedia.propTypes = {
     onFinishedSelecting: PropTypes.func.isRequired,
     classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
-export default withStyles(styles)(UploadValorMedia);
+export default withStyles(styles)(UploadMedia);
 
 // {sortByValue(medias, 'createdTime').map(this.renderMediaMedia, this)}
