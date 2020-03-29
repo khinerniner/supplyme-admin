@@ -14,6 +14,7 @@ import IconButton from '@material-ui/core/IconButton';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
+import Loader from '../../../components/VeriDoc/Base/Loader';
 import UploadMedia from '../../../components/VeriDoc/Media/UploadMedia';
 
 import { toNewMenuItem, toNewQuantity } from '../../../services/menuItem/model';
@@ -32,6 +33,26 @@ function renderItemType() {
     const array = [];
     array.push(<MenuItem key={'ppe'} value={'ppe'}>PPE</MenuItem>);
     array.push(<MenuItem key={'other'} value={'other'}>Other</MenuItem>);
+    return array;
+}
+function renderPackageType() {
+    const array = [];
+    array.push(<MenuItem key={'piece'} value={'piece'}>Piece</MenuItem>);
+    array.push(<MenuItem key={'case'} value={'case'}>Case</MenuItem>);
+    array.push(<MenuItem key={'carton'} value={'carton'}>Carton</MenuItem>);
+    array.push(<MenuItem key={'pallet'} value={'pallet'}>Pallet</MenuItem>);
+    array.push(<MenuItem key={'weight'} value={'weight'}>Weight</MenuItem>);
+    return array;
+}
+function renderWeightType() {
+    const array = [];
+    array.push(<MenuItem key={'grain'} value={'grain'}>Grain</MenuItem>);
+    array.push(<MenuItem key={'dr'} value={'dr'}>Dram</MenuItem>);
+    array.push(<MenuItem key={'oz'} value={'oz'}>Ounce</MenuItem>);
+    array.push(<MenuItem key={'lb'} value={'lb'}>Pound</MenuItem>);
+    array.push(<MenuItem key={'cwt'} value={'cwt'}>Hundred Weight</MenuItem>);
+    array.push(<MenuItem key={'ton'} value={'ton'}>Ton</MenuItem>);
+    array.push(<MenuItem key={'lngcwt'} value={'lngcwt'}>Long CWT</MenuItem>);
     return array;
 }
 
@@ -80,6 +101,9 @@ const styles = (theme) => ({
     },
     textField: {
         width: 250,
+    },
+    textSmallField: {
+        width: 100,
     },
     textCell: {
         marginBottom: 15,
@@ -170,11 +194,11 @@ class MenuItemCreateView extends React.Component {
             quantity: toNewQuantity(),
             quantityOpen: false,
             name_error_text: null,
+            desc_error_text: null,
             brand_error_text: null,
-            certID_error_text: null,
-            sku_error_text: null,
-            notes_error_text: null,
+            upc_error_text: null,
             redirectRoute: `/accounts/${this.props.accountID}/menuItems`,
+            loading: false,
         };
     }
 
@@ -187,6 +211,7 @@ class MenuItemCreateView extends React.Component {
         if (nextProps.receivedAt !== null && this.props.receivedAt === null) {
             this.loadCompData(nextProps);
         }
+
     }
 
     componentWillUnmount() {
@@ -203,11 +228,11 @@ class MenuItemCreateView extends React.Component {
     loadCompData = (props = this.props) => {
         const { menuItems, pathname } = props;
         const keys = getKeys(pathname);
-        const menuItemID = keys.second;
-        console.warn(menuItemID);
-        if (menuItemID && menuItemID !== null) {
+        const itemID = keys.second;
+        console.warn(itemID);
+        if (itemID && itemID !== null) {
             menuItems.forEach((menuItem) => {
-                if (menuItem.menuItemID === menuItemID) {
+                if (menuItem.itemID === itemID) {
                     console.log('Setting MenuItem State')
                     const next_state = this.state;
                     next_state.menuItem = menuItem;
@@ -326,7 +351,7 @@ class MenuItemCreateView extends React.Component {
             accountID,
         } = this.props;
         const { menuItem, redirectRoute } = this.state;
-        e.prmenuItemDefault();
+        e.preventDefault();
         swal({
             title: `Delete this Property?`,
             text: `Doing so will permanently delete the data for this Property?.`,
@@ -354,12 +379,14 @@ class MenuItemCreateView extends React.Component {
     createNewMenuItem = () => {
         const { actions, idToken, employeeID, accountID } = this.props;
         const { menuItem, redirectRoute } = this.state;
+        this.setState({loading: true});
         actions.saveNewMenuItem(idToken, employeeID, accountID, menuItem, redirectRoute);
     }
 
     updateThisMenuItem = () => {
         const { actions, idToken, employeeID, accountID } = this.props;
         const { menuItem, redirectRoute } = this.state;
+        this.setState({loading: true});
         actions.updateMenuItem(employeeID, accountID, menuItem, redirectRoute);
 
     }
@@ -380,14 +407,16 @@ class MenuItemCreateView extends React.Component {
                     <RemoveCircleOutlineIcon className={classes.iconButton} />
                 </IconButton>
                 <span className={classes.detailListDt}>
-                    Stock: {quantity.stock} - Price: {quantity.pricePerUnit}
+                    On Hand: {quantity.stock} - Price: $ {quantity.pricePerUnit} - {quantity.packageQuantity} / {quantity.packageType}
                 </span>
             </div>
         );
     }
 
-    onFinishedMediaSelected = () => {
-        console.log('HERE')
+    onFinishedMediaSelected = (file) => {
+        const next_state = this.state;
+        next_state.menuItem.imageData = file;
+        this.setState(next_state, () => {});
     }
 
     render() {
@@ -397,15 +426,17 @@ class MenuItemCreateView extends React.Component {
             quantity,
             quantityOpen,
             name_error_text,
+            desc_error_text,
             brand_error_text,
-            certID_error_text,
-            sku_error_text,
-            notes_error_text,
+            upc_error_text,
+            loading,
         } = this.state;
 
         const itemTypes = renderItemType();
+        const packageTypes = renderPackageType();
+        const weightTypes = renderWeightType();
 
-        console.log(menuItem)
+        console.log(menuItem);
 
         const NameContainer = (
             <div className={classes.outerCell}>
@@ -425,6 +456,7 @@ class MenuItemCreateView extends React.Component {
                         onChange={e => this.handleChange(e, 'itemType')}
                         value={menuItem.itemType}
                         variant="outlined"
+                        margin="dense"
                         inputProps={{
                             name: 'itemType',
                             id: 'itemType',
@@ -436,7 +468,7 @@ class MenuItemCreateView extends React.Component {
                 <label className={classes.inputLabel}>Item Name</label>
                 <div className={classes.textCell}>
                     <TextField
-                        placeholder="Ex. n95 Masks"
+                        placeholder="Ex. N95 Mask"
                         margin="dense"
                         variant="outlined"
                         helperText={name_error_text}
@@ -453,7 +485,7 @@ class MenuItemCreateView extends React.Component {
                 <label className={classes.inputLabel}>Brand Name</label>
                 <div className={classes.textCell}>
                     <TextField
-                        placeholder="Ex. Proctor & Gamble"
+                        placeholder="Ex. 3M"
                         margin="dense"
                         variant="outlined"
                         type="text"
@@ -464,45 +496,30 @@ class MenuItemCreateView extends React.Component {
                         FormHelperTextProps={{ classes: { root: classes.helperText } }}
                     />
                 </div>
-                <label className={classes.inputLabel}>Certification ID</label>
+                <label className={classes.inputLabel}>Item Description</label>
                 <div className={classes.textCell}>
                     <TextField
-                        placeholder="Ex. CRT-10463"
+                        placeholder="Ex. Particulate Respirator 8210"
                         margin="dense"
                         variant="outlined"
-                        type="text"
-                        helperText={certID_error_text}
-                        value={menuItem.certID || ''}
+                        helperText={desc_error_text}
+                        value={menuItem.description || ''}
                         className={classes.textField}
-                        onChange={e => this.handleChange(e, 'certID')}
+                        onChange={e => this.handleChange(e, 'description')}
                         FormHelperTextProps={{ classes: { root: classes.helperText } }}
                     />
                 </div>
-                <label className={classes.inputLabel}>Item SKU</label>
+                <label className={classes.inputLabel}>Item UPC</label>
                 <div className={classes.textCell}>
                     <TextField
-                        placeholder="Ex. 123-DHFG23"
+                        placeholder="Ex. 50051138464573"
                         margin="dense"
                         variant="outlined"
                         type="text"
-                        helperText={sku_error_text}
-                        value={menuItem.skuID || ''}
+                        helperText={upc_error_text}
+                        value={menuItem.upcID || ''}
                         className={classes.textField}
-                        onChange={e => this.handleChange(e, 'skuID')}
-                        FormHelperTextProps={{ classes: { root: classes.helperText } }}
-                    />
-                </div>
-                <label className={classes.inputLabel}>Item Notes</label>
-                <div className={classes.textCell}>
-                    <TextField
-                        placeholder="Ex. Notes"
-                        margin="dense"
-                        variant="outlined"
-                        type="text"
-                        helperText={notes_error_text}
-                        value={menuItem.notes || ''}
-                        className={classes.textField}
-                        onChange={e => this.handleChange(e, 'notes')}
+                        onChange={e => this.handleChange(e, 'upcID')}
                         FormHelperTextProps={{ classes: { root: classes.helperText } }}
                     />
                 </div>
@@ -516,13 +533,17 @@ class MenuItemCreateView extends React.Component {
                         Menu Item Quantites Information
                     </div>
                 </div>
-                <div className={classes.block}>
-                    <dl className={classes.detailList}>
-                        <div className={classes.detailListFlex}>
-                            {menuItem.quantities.map(this.renderItemQuantities, this)}
-                        </div>
-                    </dl>
-                </div>
+                {menuItem.quantities.length > 0
+                  ? (
+                    <div className={classes.block}>
+                        <dl className={classes.detailList}>
+                            <div className={classes.detailListFlex}>
+                                {menuItem.quantities.map(this.renderItemQuantities, this)}
+                            </div>
+                        </dl>
+                    </div>
+                  ) : null
+                }
                 <IconButton onClick={(e) => this.toggleNewQuantity(e, !this.state.quantityOpen)}>
                     <AddCircleOutlineIcon className={classes.iconButton} />
                     <span style={{ fontSize: 16, paddingLeft: 10 }}>Add New Quantity</span>
@@ -539,39 +560,97 @@ class MenuItemCreateView extends React.Component {
               </div>
               <div className={classes.outerFlexCell}>
                 <div className={classes.innerFlexCell}>
-                <label className={classes.inputLabel}>* Price</label>
-                <div className={classes.textCell}>
-                    <TextField
-                      placeholder="Ex. $ 10.00"
-                      margin="dense"
-                      variant="outlined"
-                      type="number"
-                      // helperText={'thcContent_error_text'}
-                      value={quantity.pricePerUnit || ''}
-                      className={classes.textFieldSmall}
-                      onChange={e => this.handleQuantityChange(e, 'pricePerUnit')}
-                      // FormHelperTextProps={{ classes: { root: classes.helperText } }}
-                      autoComplete=""
-                    />
+                    <label className={classes.inputLabel}>* Package Type</label>
+                    <div className={classes.textCell}>
+                        <Select
+                            onChange={e => this.handleQuantityChange(e, 'packageType')}
+                            value={quantity.packageType}
+                            margin="dense"
+                            variant="outlined"
+                            inputProps={{
+                                name: 'packageType',
+                                id: 'packageType',
+                            }}
+                        >
+                            {packageTypes}
+                        </Select>
+                    </div>
                 </div>
+                {
+                  quantity.packageType === 'weight'
+                  ? (
+                    <div className={classes.innerFlexCell}>
+                        <label className={classes.inputLabel}>* Weight Type</label>
+                        <div className={classes.textCell}>
+                            <Select
+                                onChange={e => this.handleQuantityChange(e, 'weightType')}
+                                value={quantity.weightType}
+                                variant="outlined"
+                                margin="dense"
+                                inputProps={{
+                                    name: 'weightType',
+                                    id: 'weightType',
+                                }}
+                            >
+                                {weightTypes}
+                            </Select>
+                        </div>
+                    </div>
+                  ) : null
+                }
+                <div className={classes.innerFlexCell}>
+                    <label className={classes.inputLabel}>* Package Quantity</label>
+                    <div className={classes.textCell}>
+                        <TextField
+                          placeholder="Ex. 10"
+                          margin="dense"
+                          variant="outlined"
+                          type="number"
+                          // helperText={'thcContent_error_text'}
+                          value={quantity.packageQuantity || ''}
+                          className={classes.textSmallField}
+                          onChange={e => this.handleQuantityChange(e, 'packageQuantity')}
+                          // FormHelperTextProps={{ classes: { root: classes.helperText } }}
+                          autoComplete=""
+                        />
+                    </div>
+                </div>
+            </div>
+            <div className={classes.outerFlexCell}>
+                <div className={classes.innerFlexCell}>
+                    <label className={classes.inputLabel}>* Est. Price</label>
+                    <div className={classes.textCell}>
+                        <TextField
+                          placeholder="$ 10.00"
+                          margin="dense"
+                          variant="outlined"
+                          type="number"
+                          // helperText={'thcContent_error_text'}
+                          value={quantity.pricePerUnit || ''}
+                          className={classes.textSmallField}
+                          onChange={e => this.handleQuantityChange(e, 'pricePerUnit')}
+                          // FormHelperTextProps={{ classes: { root: classes.helperText } }}
+                          autoComplete=""
+                        />
+                    </div>
                 </div>
                 <div className={classes.innerFlexCell}>
-                <label className={classes.inputLabel}>* Stock</label>
-                <div className={classes.textCell}>
-                    <TextField
-                      placeholder="Ex. 10"
-                      margin="dense"
-                      variant="outlined"
-                      type="number"
-                      // helperText={'cbdContent_error_text'}
-                      value={quantity.stock || ''}
-                      className={classes.textFieldSmall}
-                      onChange={e => this.handleQuantityChange(e, 'stock')}
-                      // FormHelperTextProps={{ classes: { root: classes.helperText } }}
-                      autoComplete=""
-                    />
+                    <label className={classes.inputLabel}>* On Hand</label>
+                    <div className={classes.textCell}>
+                        <TextField
+                          placeholder="10"
+                          margin="dense"
+                          variant="outlined"
+                          type="number"
+                          // helperText={'cbdContent_error_text'}
+                          value={quantity.stock || ''}
+                          className={classes.textSmallField}
+                          onChange={e => this.handleQuantityChange(e, 'stock')}
+                          // FormHelperTextProps={{ classes: { root: classes.helperText } }}
+                          autoComplete=""
+                        />
+                    </div>
                 </div>
-              </div>
             </div>
             <div className={classes.textCell}>
                 <Button
@@ -615,17 +694,24 @@ class MenuItemCreateView extends React.Component {
 
         return (
             <div className={classes.root}>
-                <div className={classes.content}>
-                    <div className={classes.headerCell}>
-                        <div className={classes.headers}>
-                            {menuItem.active ? 'Edit MenuItem' : 'New MenuItem'}
-                        </div>
-                    </div>
-                    {NameContainer}
-                    {QuantityContainer}
-                    {quantityOpen ? CreateQuantityContainer : null}
-                    {CreateContainer}
-                </div>
+            {
+              loading
+              ? (
+                  <Loader open={loading} />
+              ) : (
+                  <div className={classes.content}>
+                  <div className={classes.headerCell}>
+                      <div className={classes.headers}>
+                          {menuItem.active ? 'Edit MenuItem' : 'New MenuItem'}
+                      </div>
+                  </div>
+                  {NameContainer}
+                  {QuantityContainer}
+                  {quantityOpen ? CreateQuantityContainer : null}
+                  {CreateContainer}
+                  </div>
+              )
+            }
             </div>
         );
     }
