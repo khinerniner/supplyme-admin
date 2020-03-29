@@ -190,7 +190,7 @@ class PublicRequestMapView extends React.Component {
                       (
                           <PublicRequestMap
                               isMarkerShown={true}
-                              googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyANETjDaQS5LATwIJSqAKAdkLhQax0DJxg"
+                              googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_API_KEY}`}
                               loadingElement={<div style={{ height: `100%` }} />}
                               containerElement={<div style={{ height: `600px` }} />}
                               mapElement={<div style={{ height: `100%` }} />}

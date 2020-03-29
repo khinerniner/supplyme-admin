@@ -20,6 +20,7 @@ import EmployeeCreateView from './containers/VeriDoc/Employee/EmployeeCreateView
 import EmployeeCodeListView from './containers/VeriDoc/Employee/EmployeeCodeListView';
 import EmployeeCodeCreateView from './containers/VeriDoc/Employee/EmployeeCodeCreateView';
 import LocationListView from './containers/VeriDoc/Location/LocationListView';
+import LocationDetailView from './containers/VeriDoc/Location/LocationDetailView';
 import LocationCreateView from './containers/VeriDoc/Location/LocationCreateView';
 import RequestListView from './containers/VeriDoc/Request/RequestListView';
 import PublicRequestListView from './containers/VeriDoc/Request/PublicRequestListView';
@@ -50,7 +51,7 @@ export default (
             <Route exact path="/accounts/:id/employees/codes/create" component={requireAuthentication(EmployeeCodeCreateView)} />
             <Route exact path="/accounts/:id/locations" component={requireAuthentication(LocationListView)} />
             <Route exact path="/accounts/:id/locations/create" component={requireAuthentication(LocationCreateView)} />
-            <Route exact path="/accounts/:id/locations/:id" component={requireAuthentication(LocationCreateView)} />
+            <Route exact path="/accounts/:id/locations/:id" component={requireAuthentication(LocationDetailView)} />
             <Route exact path="/accounts/:id/locations/:id/edit" component={requireAuthentication(LocationCreateView)} />
             <Route exact path="/accounts/:id/requests" component={requireAuthentication(RequestListView)} />
             <Route exact path="/accounts/:id/requests/create" component={requireAuthentication(RequestCreateView)} />
