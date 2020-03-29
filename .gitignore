@@ -19,7 +19,6 @@ celerybeat-schedule
 # Env Variables #
 ######################
 /veridoc-dev
-/static/.env
 
 # OS generated files #
 ######################

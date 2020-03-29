@@ -1,16 +1,17 @@
+const path = require('path');
 const webpack = require('webpack');
 const dotenv = require('dotenv');
+const fs = require('fs');
 
-// call dotenv and it will return an Object with a parsed key
-const env = dotenv.config().parsed;
-
-// reduce it to a nice object, the same as before
+const currentPath = path.join(__dirname);
+const basePath = currentPath + '/env/.env';
+const envPath = basePath + '.' + 'development';
+const finalPath = fs.existsSync(envPath) ? envPath : basePath;
+const env = dotenv.config({ path: finalPath }).parsed;
 const envKeys = Object.keys(env).reduce((prev, next) => {
   prev[`process.env.${next}`] = JSON.stringify(env[next]);
   return prev;
 }, {});
-
-console.log(envKeys)
 
 module.exports = {
 
