@@ -295,7 +295,7 @@ class LocationCreateView extends React.Component {
         }
     }
 
-    deleteActiveProperty = (e) => {
+    deleteActiveLocation = (e) => {
         const {
             actions,
             idToken,
@@ -305,8 +305,8 @@ class LocationCreateView extends React.Component {
         const { location, redirectRoute } = this.state;
         e.preventDefault();
         swal({
-            title: `Delete this Property?`,
-            text: `Doing so will permanently delete the data for this Property?.`,
+            title: `Delete this Location?`,
+            text: `Doing so will permanently delete the data for this Location?.`,
             icon: 'warning',
             buttons: {
                 cancel: 'Cancel',
@@ -319,7 +319,7 @@ class LocationCreateView extends React.Component {
             .then((value) => {
                 switch (value) {
                     case 'delete':
-                        console.log(`Delete Property`);
+                        console.log(`Delete Location`);
                         actions.deleteLocation(employeeID, accountID, location, redirectRoute);
                         break;
                     default:
@@ -415,15 +415,20 @@ class LocationCreateView extends React.Component {
                     >
                         {location.active ? 'Update Location' : 'Create Location'}
                     </Button>
-                    <Button
-                        variant="contained"
-                        disableRipple
-                        disableFocusRipple
-                        onClick={this.deleteActiveProperty}
-                        className={classes.deleteButton}
-                    >
-                        {'Delete Location'}
-                    </Button>
+                    {
+                      location.active
+                      ? (
+                        <Button
+                            variant="contained"
+                            disableRipple
+                            disableFocusRipple
+                            onClick={this.deleteActiveLocation}
+                            className={classes.deleteButton}
+                        >
+                            {'Delete Location'}
+                        </Button>
+                      ) : null
+                    }
                 </div>
             </div>
         )

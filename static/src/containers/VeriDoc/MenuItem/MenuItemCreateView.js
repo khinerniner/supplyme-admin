@@ -343,7 +343,7 @@ class MenuItemCreateView extends React.Component {
         }
     }
 
-    deleteActiveProperty = (e) => {
+    deleteActiveItem = (e) => {
         const {
             actions,
             idToken,
@@ -353,8 +353,8 @@ class MenuItemCreateView extends React.Component {
         const { menuItem, redirectRoute } = this.state;
         e.preventDefault();
         swal({
-            title: `Delete this Property?`,
-            text: `Doing so will permanently delete the data for this Property?.`,
+            title: `Delete this Item?`,
+            text: `Doing so will permanently delete the data for this Item?.`,
             icon: 'warning',
             buttons: {
                 cancel: 'Cancel',
@@ -367,7 +367,7 @@ class MenuItemCreateView extends React.Component {
             .then((value) => {
                 switch (value) {
                     case 'delete':
-                        console.log(`Delete Property`);
+                        console.log(`Delete Item`);
                         actions.deleteMenuItem(employeeID, accountID, menuItem, redirectRoute);
                         break;
                     default:
@@ -679,15 +679,20 @@ class MenuItemCreateView extends React.Component {
                     >
                         {menuItem.active ? 'Update MenuItem' : 'Create MenuItem'}
                     </Button>
-                    <Button
-                        variant="contained"
-                        disableRipple
-                        disableFocusRipple
-                        onClick={this.deleteActiveProperty}
-                        className={classes.deleteButton}
-                    >
-                        {'Delete MenuItem'}
-                    </Button>
+                    {
+                      menuItem.active
+                      ? (
+                        <Button
+                            variant="contained"
+                            disableRipple
+                            disableFocusRipple
+                            onClick={this.deleteActiveItem}
+                            className={classes.deleteButton}
+                        >
+                            {'Delete MenuItem'}
+                        </Button>
+                      ) : null
+                    }
                 </div>
             </div>
         )
