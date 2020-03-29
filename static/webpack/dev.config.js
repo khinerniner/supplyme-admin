@@ -62,7 +62,7 @@ module.exports = {
                 NODE_ENV: '"development"',
                 FIREBASE_BROWSER_KEY: '"AIzaSyAVsdLvWCtVoyKgriUWqsJ7rXucOsAXWrs"',
                 SUPPLYME_ADMIN_KEY: '"SvaUdmV1XbLcuoqkDow8"',
-                GOOGLE_API_KEY: '"AIzaSyBnLiMcHuNiDpd8JzzORb2YDPi4u-TZ-cQ"'
+                GOOGLE_API_KEY: '"AIzaSyAwKy9HM8mOHQ4t0wOrMW09w4MGucrfShA"'
             },
             __DEVELOPMENT__: true,
         }),
