@@ -88,7 +88,7 @@ export function getMenuItemFromSnapshot(menuItem) {
         // supplies: menuItem.supplies,
         // supportingDocs: menuItem.supportingDocs,
         // isFinished: menuItem.isFinished,
-        // private: menuItem.private,
+        private: menuItem.private,
         // warningLabel: menuItem.warningLabel,
         madeInCountry: menuItem.madeInCountry,
     };
@@ -126,7 +126,7 @@ export function toNewMenuItem() {
         // supplies: [],
         // supportingDocs: [],
         // isFinished: false,
-        // private: false,
+        private: false,
         // warningLabel: null,
         madeInCountry: 'USA',
     };
@@ -135,7 +135,7 @@ export function toNewQuantity() {
     return {
         packageQuantity: 1,
         packageType: 'piece',
-        weightType: 'oz',
+        weightType: null,
         pricePerUnit: 0,
         stock: 0,
     };
