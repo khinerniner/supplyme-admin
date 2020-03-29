@@ -121,6 +121,7 @@ export const saveNewMenuItem = (token, employeeID, accountID, menuItem, redirect
 
     const accountRef = db().collection("Accounts").doc(accountID)
     const newAccountMenuItemRef = accountRef.collection("MenuItems").doc()
+    const newMenuItemRef = db().collection("MenuItems").doc(newAccountMenuItemRef.id)
 
     const menuItemInfo = menuItem;
     menuItemInfo.active = true;
@@ -145,6 +146,9 @@ export const saveNewMenuItem = (token, employeeID, accountID, menuItem, redirect
 
     return db().runTransaction((transaction) => {
         transaction.set(newAccountMenuItemRef, getMenuItemFromSnapshot(menuItemInfo));
+        if (!menuItemInfo.private) {
+            transaction.set(newMenuItemRef, getMenuItemFromSnapshot(menuItemInfo));
+        }
         return Promise.resolve(menuItemInfo);
     }).then((menuItemInfo) => {
         console.log("Transaction successfully committed!");
