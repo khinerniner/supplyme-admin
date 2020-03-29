@@ -59,7 +59,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: {},
+        actions: {
+            fetchMenuItems: bindActionCreators(fetchMenuItems, dispatch)
+        },
     };
 }
 
@@ -78,20 +80,17 @@ class MenuItemListView extends React.Component {
     componentDidMount() {
         console.log('MenuItems View Mounted');
         const { receivedAt, menuItems } = this.props;
-        if (!receivedAt) {
-            // this.loadCompData();
+        if (receivedAt === null) {
+            this.loadCompData();
         } else {
             this.receiveMenuItems(menuItems);
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.receivedAt && !this.props.receivedAt) {
+        if (nextProps.receivedAt !== null && this.props.receivedAt === null) {
             this.receiveMenuItems(nextProps.menuItems);
         }
-        // if (nextProps.menuItem.isLoaded && this.props.menuItem.isFetching) {
-        //     this.handledClose();
-        // }
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -117,21 +116,18 @@ class MenuItemListView extends React.Component {
     receiveMenuItems = (menuItems) => {
         console.warn('Received MenuItems');
         const rows = filterBy(menuItems).map(e => menuItemRowObject(e));
-
-        this.setState({
-            rows,
-        });
+        this.setState({rows});
     }
 
     loadCompData = () => {
         const { actions, employeeID, accountID } = this.props;
-        actions.fetchMenuItems(accountID);
+        actions.fetchMenuItems(employeeID, accountID);
     }
 
     dispatchNewMenuItem = (e, menuItemID) => {
-        e.prmenuItemDefault();
+        e.preventDefault();
         const { accountID } = this.props;
-        const route = `/accounts/${accountID}/menuItems/${menuItemID}/edit`
+        const route = `/accounts/${accountID}/menuItems/${menuItemID}`
         dispatchNewRoute(route);
     }
 
@@ -178,13 +174,11 @@ MenuItemListView.defaultProps = {
     accountID: '',
     employeeID: '',
     fetchMenuItems: f => f,
-    bulkUploadMenuItems: f => f,
 };
 MenuItemListView.propTypes = {
     accountID: PropTypes.string,
     employeeID: PropTypes.string,
     fetchMenuItems: PropTypes.func,
-    bulkUploadMenuItems: PropTypes.func,
     classes: PropTypes.object.isRequired,
 };
 export default withStyles(styles)(MenuItemListView);
