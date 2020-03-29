@@ -37,7 +37,7 @@ export const searchGoogleHospitals = (query) => (dispatch) => {
         })
         .catch((error) => {
             console.log(error);
-            errorAlert(error.response.data.statusText);
+            errorAlert(error.response.data.statusText || error.message);
             dispatch(googleHospitalsFailure({
                 response: {
                     status: 403,
@@ -60,7 +60,7 @@ export const geocodeGooglePlace = (token, accountID, place) => {
         })
         .catch((error) => {
             console.log(error);
-            errorAlert(error.response.data.statusText);
+            errorAlert(error.response.data.statusText || error.message);
             supplyMeAnalytic('googlePlacesFailure');
         });
 };
