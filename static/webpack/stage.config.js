@@ -94,9 +94,9 @@ module.exports = {
             'process.env': {
                 PORT: '"3001"',
                 NODE_ENV: '"production"',
-                FIREBASE_BROWSER_KEY: '"AIzaSyBw-8dt7mhh3002Pkyzgqc8hyxgwntUf1Y"',
+                FIREBASE_BROWSER_KEY: '"AIzaSyAVsdLvWCtVoyKgriUWqsJ7rXucOsAXWrs"',
                 SUPPLYME_ADMIN_KEY: '"SvaUdmV1XbLcuoqkDow8"',
-                GOOGLE_API_KEY: '"AIzaSyANETjDaQS5LATwIJSqAKAdkLhQax0DJxg"'
+                GOOGLE_API_KEY: '"AIzaSyBnLiMcHuNiDpd8JzzORb2YDPi4u-TZ-cQ"'
             },
             __DEVELOPMENT__: false,
         }),
