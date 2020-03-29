@@ -14,6 +14,8 @@ import IconButton from '@material-ui/core/IconButton';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
+import UploadMedia from '../../../components/VeriDoc/Media/UploadMedia';
+
 import { toNewMenuItem, toNewQuantity } from '../../../services/menuItem/model';
 import { saveNewMenuItem, updateMenuItem, deleteMenuItem } from '../../../services/menuItem/actions';
 import { geocodeGooglePlace } from '../../../services/google/actions';
@@ -169,6 +171,7 @@ class MenuItemCreateView extends React.Component {
             quantityOpen: false,
             name_error_text: null,
             brand_error_text: null,
+            certID_error_text: null,
             sku_error_text: null,
             notes_error_text: null,
             redirectRoute: `/accounts/${this.props.accountID}/menuItems`,
@@ -208,34 +211,17 @@ class MenuItemCreateView extends React.Component {
                     console.log('Setting MenuItem State')
                     const next_state = this.state;
                     next_state.menuItem = menuItem;
-                    this.setState(next_state, () => {
-                        this.isMenuItemDisabled();
-                    });
+                    this.setState(next_state, () => {});
                 }
             })
         }
     }
 
-    handlePhoneChange = (e, name) => {
+    handleChange = (e, name) => {
         const { value } = e.target;
         const next_state = this.state;
-        next_state.menuItem.contactInfo[name] = value;
-        this.setState(next_state, () => {
-            this.isMenuItemDisabled();
-        });
-    }
-
-    handleChange = (e, parent, name) => {
-        const { value } = e.target;
-        const next_state = this.state;
-        if (parent) {
-            next_state.menuItem[parent][name] = value;
-        } else {
-            next_state.menuItem[name] = value;
-        }
-        this.setState(next_state, () => {
-            this.isMenuItemDisabled();
-        });
+        next_state.menuItem[name] = value;
+        this.setState(next_state, () => {});
     }
 
     handleMenuItemSelected = (menuItem) => {
@@ -400,6 +386,10 @@ class MenuItemCreateView extends React.Component {
         );
     }
 
+    onFinishedMediaSelected = () => {
+        console.log('HERE')
+    }
+
     render() {
         const { classes } = this.props;
         const {
@@ -408,11 +398,14 @@ class MenuItemCreateView extends React.Component {
             quantityOpen,
             name_error_text,
             brand_error_text,
+            certID_error_text,
             sku_error_text,
             notes_error_text,
         } = this.state;
 
-        const itemTypes = renderItemType()
+        const itemTypes = renderItemType();
+
+        console.log(menuItem)
 
         const NameContainer = (
             <div className={classes.outerCell}>
@@ -447,11 +440,15 @@ class MenuItemCreateView extends React.Component {
                         margin="dense"
                         variant="outlined"
                         helperText={name_error_text}
-                        value={menuItem.itemName}
+                        value={menuItem.itemName || ''}
                         className={classes.textField}
                         onChange={e => this.handleChange(e, 'itemName')}
                         FormHelperTextProps={{ classes: { root: classes.helperText } }}
                     />
+                </div>
+                <label className={classes.inputLabel}>Item Image</label>
+                <div className={classes.textCell}>
+                    <UploadMedia media={menuItem.fullSizeItemImageURL} onFinishedSelecting={this.onFinishedMediaSelected} />
                 </div>
                 <label className={classes.inputLabel}>Brand Name</label>
                 <div className={classes.textCell}>
@@ -461,9 +458,23 @@ class MenuItemCreateView extends React.Component {
                         variant="outlined"
                         type="text"
                         helperText={brand_error_text}
-                        value={menuItem.brandName}
+                        value={menuItem.brandName || ''}
                         className={classes.textField}
                         onChange={e => this.handleChange(e, 'brandName')}
+                        FormHelperTextProps={{ classes: { root: classes.helperText } }}
+                    />
+                </div>
+                <label className={classes.inputLabel}>Certification ID</label>
+                <div className={classes.textCell}>
+                    <TextField
+                        placeholder="Ex. CRT-10463"
+                        margin="dense"
+                        variant="outlined"
+                        type="text"
+                        helperText={certID_error_text}
+                        value={menuItem.certID || ''}
+                        className={classes.textField}
+                        onChange={e => this.handleChange(e, 'certID')}
                         FormHelperTextProps={{ classes: { root: classes.helperText } }}
                     />
                 </div>
@@ -475,7 +486,7 @@ class MenuItemCreateView extends React.Component {
                         variant="outlined"
                         type="text"
                         helperText={sku_error_text}
-                        value={menuItem.skuID}
+                        value={menuItem.skuID || ''}
                         className={classes.textField}
                         onChange={e => this.handleChange(e, 'skuID')}
                         FormHelperTextProps={{ classes: { root: classes.helperText } }}
@@ -489,7 +500,7 @@ class MenuItemCreateView extends React.Component {
                         variant="outlined"
                         type="text"
                         helperText={notes_error_text}
-                        value={menuItem.notes}
+                        value={menuItem.notes || ''}
                         className={classes.textField}
                         onChange={e => this.handleChange(e, 'notes')}
                         FormHelperTextProps={{ classes: { root: classes.helperText } }}
