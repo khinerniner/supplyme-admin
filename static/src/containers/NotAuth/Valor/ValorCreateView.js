@@ -14,7 +14,7 @@ import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 
-import UploadValorMedia from '../../../components/VeriDoc/Media/UploadValorMedia';
+import UploadMedia from '../../../components/VeriDoc/Media/UploadMedia';
 
 import { toNewValor } from '../../../services/valor/model';
 import { saveNewValor } from '../../../services/valor/actions';
@@ -227,7 +227,7 @@ class ValorCreateView extends React.Component {
             </div>
             <label className={classes.inputLabel}>Avatar</label>
             <div className={classes.textCell}>
-                <UploadValorMedia media={valor.avatar} onFinishedSelecting={this.onFinishedMediaSelected} />
+                <UploadMedia media={valor.avatar} onFinishedSelecting={this.onFinishedMediaSelected} />
             </div>
             </div>
         );

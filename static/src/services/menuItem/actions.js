@@ -1,5 +1,5 @@
 import history from '../../history';
-import { db } from '../../store/firebase';
+import { db, storage } from '../../store/firebase';
 import { parseJSON, formatFirestoreDateString, validateString, validateKey } from '../../utils/misc';
 import { apiBulkUploadMenuItems } from '../../utils/http_functions';
 import { toNewMenuItem, getMenuItemFromSnapshot } from './model';
@@ -46,6 +46,55 @@ export const fetchMenuItems = (employeeID, accountID) => (dispatch) => {
         });
 };
 
+export const saveMenuItemMedia = (image, ref) => {
+    const metadata = {
+        contentType: 'text/image',
+    };
+    return new Promise((resolve, reject) => {
+        const uploadTask = ref.put(image, metadata);
+        uploadTask.on('state_changed', (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log(`Upload is ${progress}% done`);
+            switch (snapshot.state) {
+            case 'paused':
+                console.log('Upload is paused');
+                break;
+            case 'running':
+                console.log('Upload is running');
+                break;
+            default:
+                console.log('default');
+            }
+        }, (error) => {
+            switch (error.code) {
+            case 'storage/unauthorized':
+                console.log('User doesnt have permission to access the object');
+                reject('User doesnt have permission to access the object');
+                break;
+
+            case 'storage/canceled':
+                console.log('User canceled the upload');
+                reject('User canceled the upload');
+                break;
+
+            case 'storage/unknown':
+                console.log('Unknown error occurred, inspect error.serverResponse');
+                reject();
+                break;
+            default:
+                console.log('Default Error');
+
+            }
+        }, () => {
+            uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                console.log('File available at', downloadURL);
+                resolve(downloadURL);
+            });
+        });
+    });
+};
+
+
 // Save New MenuItem
 //
 // [START Save New MenuItem]
@@ -68,7 +117,7 @@ export const saveNewMenuItemFailure = error => ({
 export const saveNewMenuItem = (token, employeeID, accountID, menuItem, redirectRoute) => (dispatch) => {
     dispatch(saveNewMenuItemMenuItem());
 
-    const createdDate = new Date()
+    const createdDate = new Date();
 
     const accountRef = db().collection("Accounts").doc(accountID)
     const newAccountMenuItemRef = accountRef.collection("MenuItems").doc()
@@ -80,6 +129,26 @@ export const saveNewMenuItem = (token, employeeID, accountID, menuItem, redirect
     menuItemInfo.itemID = newAccountMenuItemRef.id;
 
     console.warn(menuItemInfo);
+
+    const storageRef = storage().ref();
+    const imgRef = storageRef.child(accountID + "/itemImage/" + menuItemInfo.itemID + ".png");
+
+    var itemImageUrl = null;
+    if (menuItem.itemImageData !== null) {
+          const menuItemImage = menuItem.itemImage;
+          if (menuItemImage !== null) {
+            console.warn('MenuItem ID Image Found!! Saving...')
+            saveMenuItemMedia(menuItemImage, imgRef).then((downloadURL) => {
+                  console.warn('MenuItem ID Image Saved!!')
+                  itemImageUrl = downloadURL
+            });
+          }
+
+          if (itemImageUrl !== null) {
+              menuItemInfo.fullSizeItemImageURL = itemImageUrl;
+              menuItemInfo.thumbItemImageURL = itemImageUrl;
+          }
+    }
 
     return db().runTransaction((transaction) => {
         transaction.set(newAccountMenuItemRef, getMenuItemFromSnapshot(menuItemInfo));
