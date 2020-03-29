@@ -296,6 +296,13 @@ class Base extends Component {
                                 The Wall
                           </div>
                         </IconButton>
+                        <IconButton
+                          onClick={e => dispatchNewRoute('/map')}
+                        >
+                            <div style={{ paddingLeft: 10, fontWeight: 500, fontSize: 16, color: '#fff' }}>
+                                Map
+                          </div>
+                        </IconButton>
                         </section>
                       )
                     }
