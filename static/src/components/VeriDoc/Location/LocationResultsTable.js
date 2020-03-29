@@ -94,7 +94,7 @@ function LocationResultsTable(props) {
                 {row.address}
               </TableCell>
               <TableCell>
-                {row.placeID}
+                {`${row.placeID.slice(0, 15)}...`}
               </TableCell>
               <TableCell>{formatDateNoTime(row.updatedDate ? row.updatedDate : row.createdDate)}</TableCell>
             </TableRow>
