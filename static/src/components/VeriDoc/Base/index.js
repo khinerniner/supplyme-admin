@@ -150,7 +150,7 @@ function mapDispatchToProps(dispatch) {
 
 
 @connect(mapStateToProps, mapDispatchToProps)
-class FinancierBase extends Component {
+class Base extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -382,11 +382,11 @@ class FinancierBase extends Component {
     }
 }
 
-FinancierBase.defaultProps = {
+Base.defaultProps = {
     displayName: '',
     email: '',
 };
-FinancierBase.propTypes = {
+Base.propTypes = {
     pathname: PropTypes.string,
     displayName: PropTypes.string,
     email: PropTypes.string,
@@ -395,4 +395,4 @@ FinancierBase.propTypes = {
     children: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(FinancierBase);
+export default withStyles(styles)(Base);
