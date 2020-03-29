@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 
-import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps";
+import { withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow } from "react-google-maps";
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
 
 import TablePaginationActions from '../../TablePaginationActions';
@@ -63,8 +63,28 @@ const styles = (theme) => ({
 });
 
 const PublicRequestMap = withScriptjs(withGoogleMap((props) => {
-  const { classes, isMarkerShown, markers, currentCoords } = props;
-  console.log(markers);
+  const { classes, isMarkerShown, markers, currentCoords, isOpen, onToggleOpen } = props;
+  console.log(props);
+  var contentString = '<div id="content">'+
+      '<div id="siteNotice">'+
+      '</div>'+
+      '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
+      '<div id="bodyContent">'+
+      '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
+      'sandstone rock formation in the southern part of the '+
+      'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
+      'south west of the nearest large town, Alice Springs; 450&#160;km '+
+      '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
+      'features of the Uluru - Kata Tjuta National Park. Uluru is '+
+      'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
+      'Aboriginal people of the area. It has many springs, waterholes, '+
+      'rock caves and ancient paintings. Uluru is listed as a World '+
+      'Heritage Site.</p>'+
+      '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
+      'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
+      '(last visited June 22, 2009).</p>'+
+      '</div>'+
+      '</div>';
   return (
     <Paper className={classes.root}>
         <GoogleMap
@@ -78,21 +98,38 @@ const PublicRequestMap = withScriptjs(withGoogleMap((props) => {
                 enableRetinaIcons
                 gridSize={60}
               >
-                {markers.map(marker => (
-                  <Marker
-                    key={marker.requestID}
-                    position={{ lat: marker.latitude, lng: marker.longitude }}
-                    icon={marker.img}
-                  />
-                ))}
+              <Marker
+                key={markers[0].id}
+                position={markers[0].location}
+                // icon={markers[0].img}
+                onClick={onToggleOpen}
+              >
+              {
+                isOpen &&
+                <InfoWindow
+                    onCloseClick={onToggleOpen}
+                >
+                  <div>
+                      <h1>
+                          {markers[0].priority}
+                      </h1>
+                      <p>
+                          <b>Requested: </b>{formatDateNoTime(markers[0].requiredBy)}
+                          <br />
+                          <b>Budget: </b>{markers[0].budget}
+                          <br />
+                          <b>Items: </b>{markers[0].items}
+                      </p>
+                  </div>
+                </InfoWindow>
+              }
+              </Marker>
               </MarkerClusterer>
             }
         </GoogleMap>
     </Paper>
   );
 }));
-
-
 
 PublicRequestMap.propTypes = {
   isMarkerShown: PropTypes.bool.isRequired,
@@ -101,8 +138,16 @@ PublicRequestMap.propTypes = {
   containerElement: PropTypes.object.isRequired,
   mapElement: PropTypes.object.isRequired,
   markers: PropTypes.array.isRequired,
-  handleLink: PropTypes.func.isRequired,
-  handleAction: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  onToggleOpen: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 };
 export default withStyles(styles)(PublicRequestMap);
+
+// {markers.map(marker => (
+//   <Marker
+//     key={marker.id}
+//     position={marker.location}
+//     icon={marker.img}
+//   />
+// ))}

@@ -17,7 +17,7 @@ import PublicRequestMap from '../../../components/VeriDoc/Request/PublicRequestM
 
 import { validateString, dispatchNewRoute, filterBy } from '../../../utils/misc';
 import { fetchPublicRequests } from '../../../services/request/actions';
-import { requestRowObject } from '../../../services/request/model';
+import { requestMarkerObject } from '../../../services/request/model';
 
 const styles = (theme) => ({
     root: {
@@ -85,6 +85,7 @@ class PublicRequestMapView extends React.Component {
               lat: 37.6,
               lng: -95.665
             },
+            isOpen: false,
         };
     }
 
@@ -165,12 +166,17 @@ class PublicRequestMapView extends React.Component {
           }
     }
 
+    onToggleOpen = () => {
+        this.setState({isOpen: !this.state.isOpen})
+    }
+
     render() {
         const { classes, accountID } = this.props;
         const {
             markers,
             currentCoords,
             loaded,
+            isOpen,
         } = this.state;
 
         let dropzoneBulkRequestRef;
@@ -191,6 +197,8 @@ class PublicRequestMapView extends React.Component {
                               mapElement={<div style={{ height: `100%` }} />}
                               markers={markers}
                               currentCoords={currentCoords}
+                              isOpen={isOpen}
+                              onToggleOpen={this.onToggleOpen}
                           />
                       ) : (
                         <Backdrop className={classes.backdrop} open={!loaded}>
