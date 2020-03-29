@@ -11,6 +11,7 @@ import LoginView from './containers/NotAuth/Register/LoginView';
 import AccountRegisterView from './containers/NotAuth/Register/AccountRegisterView';
 import ValorListView from './containers/NotAuth/Valor/ValorListView';
 import ValorCreateView from './containers/NotAuth/Valor/ValorCreateView';
+import PublicRequestMapView from './containers/VeriDoc/Request/PublicRequestMapView';
 
 /* Private Containers */
 import EmployeeListView from './containers/VeriDoc/Employee/EmployeeListView';
@@ -56,6 +57,7 @@ export default (
             <Route exact path="/accounts/:id/orders/search" component={requireAuthentication(PublicRequestListView)} />
             <Route exact path="/accounts/:id/orders/create/requests/:id" component={requireAuthentication(OrderCreateView)} />
 
+            <Route exact path="/map" component={requireNoAuthentication(PublicRequestMapView)} />
             <Route exact path="/valor" component={requireNoAuthentication(ValorListView)} />
             <Route exact path="/valor/create" component={requireNoAuthentication(ValorCreateView)} />
             <Route component={NotFoundView} />

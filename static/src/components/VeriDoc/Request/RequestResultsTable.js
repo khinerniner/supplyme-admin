@@ -75,6 +75,7 @@ function RequestResultsTable(props) {
     setRowsPerPage(parseInt(e.target.value, 10));
     setPage(0);
   };
+  console.log(rows)
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
@@ -107,7 +108,7 @@ function RequestResultsTable(props) {
               <TableCell>
                 {formatRequestStatus(row.isStatus)}
               </TableCell>
-              <TableCell>{formatDateNoTime(row.updatedDate ? row.updatedDate : row.createdDate)}</TableCell>
+              <TableCell>{formatDateNoTime(row.isStatusTime)}</TableCell>
             </TableRow>
           ))}
           {emptyRows > 0 && (

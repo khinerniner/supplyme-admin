@@ -48,7 +48,23 @@ export function requestRowObject(request) {
         priority: request.priority,
         requiredBy: request.requiredBy,
         isStatus: request.status.isStatus,
+        isStatusTime: parseFirestoreTimeStamp(request.status.isStatusTime),
         locationName: request.location.name,
+        items: request.menuItems.map(i => `${i.itemName}, `),
         numItems: request.menuItems.length,
+    };
+}
+export function requestMarkerObject(request) {
+    console.log(request)
+    return {
+        index: request.requestID,
+        id: request.requestID,
+        active: request.active,
+        budget: request.budget,
+        priority: request.priority,
+        requiredBy: request.requiredBy,
+        items: request.menuItems.map(i => `${i.item.itemName}, `),
+        location: request.location.address.location,
+        img: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/info-i_maps.png',
     };
 }
