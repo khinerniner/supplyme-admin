@@ -5,9 +5,6 @@ import PropTypes from 'prop-types';
 import history from '../history';
 import Loader from 'react-loaders';
 
-// import RetailerBase from '../components/VeriDoc/Base/RetailerBase';
-// import ManufacturerBase from '../components/VeriDoc/Base/ManufacturerBase';
-// import FinancierBase from '../components/VeriDoc/Base/FinancierBase';
 import Base from '../components/VeriDoc/Base';
 
 import { loginEmployeeWithPermissions, logoutAndRedirect } from '../services/app/actions';
@@ -103,48 +100,6 @@ export function requireAuthentication(Component) {
                     });
                 }
             }
-        }
-
-
-        renderRetailer() {
-            return (
-                <div>
-                  <RetailerBase>
-                      <Component {...this.props} />
-                  </RetailerBase>
-                </div>
-            );
-        }
-
-        renderManufacturer() {
-            return (
-                <div>
-                  <ManufacturerBase>
-                      <Component {...this.props} />
-                  </ManufacturerBase>
-                </div>
-            );
-        }
-
-        renderFinancier() {
-            return (
-                <div>
-                  <FinancierBase>
-                      <Component {...this.props} />
-                  </FinancierBase>
-                </div>
-            );
-        }
-
-        renderSwitch() {
-            const { accountType } = this.props;
-            return (
-                <section>
-                {accountType === 'hcp' ? this.renderRetailer() : null}
-                {accountType === 'manufacturer' ? this.renderManufacturer() : null}
-                {accountType === 'financier' ? this.renderFinancier() : null}
-                </section>
-            )
         }
 
         render() {
