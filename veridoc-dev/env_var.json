@@ -1,7 +1,0 @@
-{
-    "DEBUG": "False",
-    "LANG": "en_US.UTF-8",
-    "SECRET_KEY": "(^(x*$oyag02)$phrj0e9%037sjn^$i+q^$)ctj$z7(asbc(7)&",
-    "FIREBASE_SERVER_KEY": "AAAAhzHmqPM:APA91bFSjmIXWI1DbDjp2Xjx7R7Bo_na35SEzKlS3skT4ADik9QubyFZ_JK4UX1dTaPcs7JV4fNbCfbrBHHgAFLifmFlYqUFyZF0zGGoPhveGcol7-frfwzVH-zsoUMMe6MNcXgbEBw2",
-    "GOOGLE_API_KEY": "AIzaSyANETjDaQS5LATwIJSqAKAdkLhQax0DJxg"
-}
