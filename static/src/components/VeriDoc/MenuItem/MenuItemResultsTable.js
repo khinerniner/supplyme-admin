@@ -37,10 +37,11 @@ const styles = (theme) => ({
     color: theme.palette.primary.black,
   },
   linkText: {
-    color: '#2A38D8',
-    fontWeight: 500,
+    color: '#2A38D8 !important',
+    fontWeight: '600px !important',
     cursor: 'pointer',
     textAlign: 'left',
+    fontSize: '14px !important',
   },
   cancelIcon: {
     color: '#e02626',
@@ -52,6 +53,7 @@ const styles = (theme) => ({
     margin: 0,
     padding: 0,
   },
+
 });
 
 
@@ -94,7 +96,7 @@ function MenuItemResultsTable(props) {
                 {row.brandName}
               </TableCell>
               <TableCell>
-                {row.skuID || 'None'}
+                {row.upcID || 'None'}
               </TableCell>
               <TableCell>{formatDateNoTime(row.updatedDate ? row.updatedDate : row.createdDate)}</TableCell>
             </TableRow>
