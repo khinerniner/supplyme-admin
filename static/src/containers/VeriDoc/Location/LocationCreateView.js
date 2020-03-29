@@ -303,7 +303,7 @@ class LocationCreateView extends React.Component {
             accountID,
         } = this.props;
         const { location, redirectRoute } = this.state;
-        e.prlocationDefault();
+        e.preventDefault();
         swal({
             title: `Delete this Property?`,
             text: `Doing so will permanently delete the data for this Property?.`,
