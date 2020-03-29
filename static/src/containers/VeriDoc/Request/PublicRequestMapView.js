@@ -10,9 +10,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
+import Loader from '../../../components/VeriDoc/Base/Loader';
 import PublicRequestMap from '../../../components/VeriDoc/Request/PublicRequestMap';
 
 import { validateString, dispatchNewRoute, filterBy } from '../../../utils/misc';
@@ -201,9 +200,7 @@ class PublicRequestMapView extends React.Component {
                               onToggleOpen={this.onToggleOpen}
                           />
                       ) : (
-                        <Backdrop className={classes.backdrop} open={!loaded}>
-                              <CircularProgress color="inherit" />
-                        </Backdrop>
+                        <Loader open={!loaded} />
                       )
                     }
                 </div>
