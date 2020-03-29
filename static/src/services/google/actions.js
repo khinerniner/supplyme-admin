@@ -4,7 +4,7 @@ import {
 } from '../../utils/http_functions';
 
 import { errorAlert } from '../../utils/alerts';
-// import { veridocAnalytic } from '../../utils/analytics';
+import { supplyMeAnalytic } from '../../utils/analytics';
 import { parseJSON } from '../../utils/misc';
 
 // Search Google Hospitals
@@ -55,13 +55,13 @@ export const geocodeGooglePlace = (token, accountID, place) => {
     return apiGeocodeGooglePlace(token, accountID, place)
         .then(parseJSON)
         .then((response) => {
-            // generalAnalytic(employeeID, 'google', 'googlePlacesSuccess');
-            return response.data.data
+            supplyMeAnalytic('googlePlacesSuccess');
+            return response.data.data;
         })
         .catch((error) => {
             console.log(error);
-            // generalAlert(400, error.response.data.statusText);
-            // generalAnalytic(employeeID, 'google', 'googlePlacesFailure');
+            errorAlert(error.response.data.statusText);
+            supplyMeAnalytic('googlePlacesFailure');
         });
 };
 // [END Geocode Google Place]
