@@ -114,7 +114,7 @@ export const saveNewMenuItemFailure = error => ({
         statusText: error.response.statusText,
     },
 });
-export const saveNewMenuItem = (token, employeeID, accountID, menuItem, redirectRoute) => (dispatch) => {
+export const saveNewMenuItem = (token, employeeID, accountID, menuItem, redirectRoute) => async (dispatch) => {
     dispatch(saveNewMenuItemMenuItem());
 
     const createdDate = new Date();
@@ -134,20 +134,13 @@ export const saveNewMenuItem = (token, employeeID, accountID, menuItem, redirect
     const imgRef = storageRef.child(accountID + "/itemImage/" + menuItemInfo.itemID + ".png");
 
     var itemImageUrl = null;
-    if (menuItem.itemImageData !== null) {
-          const menuItemImage = menuItem.itemImage;
-          if (menuItemImage !== null) {
-            console.warn('MenuItem ID Image Found!! Saving...')
-            saveMenuItemMedia(menuItemImage, imgRef).then((downloadURL) => {
-                  console.warn('MenuItem ID Image Saved!!')
-                  itemImageUrl = downloadURL
-            });
-          }
-
-          if (itemImageUrl !== null) {
-              menuItemInfo.fullSizeItemImageURL = itemImageUrl;
-              menuItemInfo.thumbItemImageURL = itemImageUrl;
-          }
+    if (menuItem.imageData !== null) {
+      console.warn('MenuItem ID Image Found!! Saving...')
+      const downloadURL = await saveMenuItemMedia(menuItem.imageData, imgRef);
+      if (itemImageUrl !== null) {
+          menuItemInfo.fullSizeItemImageURL = itemImageUrl;
+          menuItemInfo.thumbItemImageURL = itemImageUrl;
+      }
     }
 
     return db().runTransaction((transaction) => {
