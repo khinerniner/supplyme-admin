@@ -6,7 +6,7 @@ import { supplyMeAnalytic } from '../../utils/analytics';
 import { toNewAccount } from '../account/model';
 import { getAccount } from '../../services/account/actions';
 import { toNewEmployee } from '../employee/model';
-import { apiRegisteredAccountEmail } from '../../utils/http_functions';
+import { apiSendEmailRegisteredAccount } from '../../utils/http_functions';
 
 // Register Account
 // TODO: None
@@ -132,7 +132,7 @@ export const registerAccount = (accountCode, password, redirectRoute) => (dispat
                   result.employeeInfo,
                   result.idToken,
                 ));
-                dispatch(apiRegisteredAccountEmail(result.idToken, accountCode));
+                dispatch(apiSendEmailRegisteredAccount(result.idToken, accountCode));
                 dispatch(getAccount(result.accountID));
                 supplyMeAnalytic('register_account_success', null);
                 history.push(redirectRoute);

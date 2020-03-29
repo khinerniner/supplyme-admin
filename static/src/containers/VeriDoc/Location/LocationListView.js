@@ -129,7 +129,7 @@ class LocationListView extends React.Component {
     }
 
     dispatchNewLocation = (e, locationID) => {
-        e.prlocationDefault();
+        e.preventDefault();
         const { accountID } = this.props;
         const route = `/accounts/${accountID}/locations/${locationID}/edit`
         dispatchNewRoute(route);

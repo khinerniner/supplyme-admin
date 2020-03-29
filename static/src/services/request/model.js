@@ -2,6 +2,15 @@ import { parseFirestoreTimeStamp } from '../../utils/misc';
 import { toNewLocation } from '../../services/location/model';
 import { toNewMenuItem } from '../../services/menuItem/model';
 
+
+/*
+Request Types
+
+Business To Consumer: b2c
+Business To Business: b2b
+
+*/
+
 export function getRequestFromSnapshot(request) {
     return {
         requestID: request.requestID,
@@ -9,6 +18,7 @@ export function getRequestFromSnapshot(request) {
         deleted: request.deleted,
         priority: request.priority,
         budget: request.budget,
+        requestType: request.requestType,
         requiredBy: parseFirestoreTimeStamp(request.requiredBy),
         status: request.status,
         location: request.location,
@@ -22,6 +32,8 @@ export function toNewRequest() {
         deleted: false,
         priority: 'low',
         budget: 0,
+        private: false,
+        requestType: 'b2c',
         requiredBy: null,
         status: {
             isStatus: 0,

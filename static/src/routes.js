@@ -25,6 +25,7 @@ import RequestListView from './containers/VeriDoc/Request/RequestListView';
 import PublicRequestListView from './containers/VeriDoc/Request/PublicRequestListView';
 import RequestCreateView from './containers/VeriDoc/Request/RequestCreateView';
 import MenuItemListView from './containers/VeriDoc/MenuItem/MenuItemListView';
+import MenuItemDetailView from './containers/VeriDoc/MenuItem/MenuItemDetailView';
 import MenuItemCreateView from './containers/VeriDoc/MenuItem/MenuItemCreateView';
 import OrderListView from './containers/VeriDoc/Order/OrderListView';
 import OrderCreateView from './containers/VeriDoc/Order/OrderCreateView';
@@ -49,10 +50,14 @@ export default (
             <Route exact path="/accounts/:id/employees/codes/create" component={requireAuthentication(EmployeeCodeCreateView)} />
             <Route exact path="/accounts/:id/locations" component={requireAuthentication(LocationListView)} />
             <Route exact path="/accounts/:id/locations/create" component={requireAuthentication(LocationCreateView)} />
+            <Route exact path="/accounts/:id/locations/:id" component={requireAuthentication(LocationCreateView)} />
+            <Route exact path="/accounts/:id/locations/:id/edit" component={requireAuthentication(LocationCreateView)} />
             <Route exact path="/accounts/:id/requests" component={requireAuthentication(RequestListView)} />
             <Route exact path="/accounts/:id/requests/create" component={requireAuthentication(RequestCreateView)} />
             <Route exact path="/accounts/:id/menuItems" component={requireAuthentication(MenuItemListView)} />
             <Route exact path="/accounts/:id/menuItems/create" component={requireAuthentication(MenuItemCreateView)} />
+            <Route exact path="/accounts/:id/menuItems/:id" component={requireAuthentication(MenuItemDetailView)} />
+            <Route exact path="/accounts/:id/menuItems/:id/edit" component={requireAuthentication(MenuItemCreateView)} />
             <Route exact path="/accounts/:id/orders" component={requireAuthentication(OrderListView)} />
             <Route exact path="/accounts/:id/orders/search" component={requireAuthentication(PublicRequestMapView)} />
             <Route exact path="/accounts/:id/orders/create/requests/:id" component={requireAuthentication(OrderCreateView)} />

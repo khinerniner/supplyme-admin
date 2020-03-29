@@ -126,7 +126,9 @@ export const saveNewRequest = (token, employeeID, accountID, request, redirectRo
 
     return db().runTransaction((transaction) => {
         transaction.set(newAccountRequestRef, getRequestFromSnapshot(requestInfo));
-        transaction.set(newRequestRef, getRequestFromSnapshot(requestInfo));
+        if (!requestInfo.private) {
+            transaction.set(newRequestRef, getRequestFromSnapshot(requestInfo));
+        }
         return Promise.resolve(requestInfo);
     }).then((requestInfo) => {
         console.log("Transaction successfully committed!");

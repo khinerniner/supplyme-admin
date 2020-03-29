@@ -1,5 +1,18 @@
 const path = require('path');
 const webpack = require('webpack');
+const dotenv = require('dotenv');
+const fs = require('fs');
+
+const currentPath = path.join(__dirname);
+const basePath = currentPath + '/env/.env';
+const envPath = basePath + '.' + 'stage';
+const finalPath = fs.existsSync(envPath) ? envPath : basePath;
+const env = dotenv.config({ path: finalPath }).parsed;
+const envKeys = Object.keys(env).reduce((prev, next) => {
+  prev[`process.env.${next}`] = JSON.stringify(env[next]);
+  return prev;
+}, {});
+
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -90,16 +103,7 @@ module.exports = {
 
     plugins: [
         // new BundleAnalyzerPlugin(),
-        new webpack.DefinePlugin({
-            'process.env': {
-                PORT: '"3001"',
-                NODE_ENV: '"production"',
-                FIREBASE_BROWSER_KEY: '"AIzaSyBw-8dt7mhh3002Pkyzgqc8hyxgwntUf1Y"',
-                SUPPLYME_ADMIN_KEY: '"SvaUdmV1XbLcuoqkDow8"',
-                GOOGLE_API_KEY: '"AIzaSyANETjDaQS5LATwIJSqAKAdkLhQax0DJxg"'
-            },
-            __DEVELOPMENT__: false,
-        }),
+        new webpack.DefinePlugin(envKeys),
         new webpack.NoEmitOnErrorsPlugin(),
         new MiniCssExtractPlugin({
             filename: '[name].css',
