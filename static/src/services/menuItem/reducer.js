@@ -13,7 +13,7 @@ const addMenuItem = (state, action) => {
 const menuItems = (state = [], action) => {
     switch (action.type) {
         case 'ADD_MENUITEM':
-            if (state.map(menuItem => menuItem.menuItemID).includes(action.menuItemID)) {
+            if (state.map(menuItem => menuItem.itemID).includes(action.itemID)) {
               return [
                 addMenuItem(undefined, action)
               ]
