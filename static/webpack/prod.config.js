@@ -96,6 +96,7 @@ module.exports = {
                 NODE_ENV: '"production"',
                 FIREBASE_BROWSER_KEY: '"AIzaSyBw-8dt7mhh3002Pkyzgqc8hyxgwntUf1Y"',
                 SUPPLYME_ADMIN_KEY: '"SvaUdmV1XbLcuoqkDow8"',
+                GOOGLE_API_KEY: '"AIzaSyANETjDaQS5LATwIJSqAKAdkLhQax0DJxg"'
             },
             __DEVELOPMENT__: false,
         }),
