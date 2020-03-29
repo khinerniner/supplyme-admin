@@ -16,6 +16,10 @@ aenet.log
 /static/index.html.gz
 celerybeat-schedule
 
+# Env Variables #
+######################
+/veridoc-dev
+
 # OS generated files #
 ######################
 .DS_Store
