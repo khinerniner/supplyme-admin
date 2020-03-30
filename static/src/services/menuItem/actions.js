@@ -46,6 +46,42 @@ export const fetchMenuItems = (employeeID, accountID) => (dispatch) => {
         });
 };
 
+export const addPublicMenuItem = menuItem => ({
+    type: 'ADD_PUBLIC_MENUITEM',
+    ...menuItem,
+});
+
+export const startFetchingPublicMenuItems = () => ({
+    type: 'START_FETCHING_PUBLIC_MENUITEMS',
+});
+
+export const receivedPublicMenuItems = () => ({
+    type: 'RECEIVED_PUBLIC_MENUITEMS',
+    receivedAt: Date.now(),
+});
+export const receivePublicMenuItems = querySnapshot => (dispatch) => {
+    if (querySnapshot) {
+        querySnapshot.forEach((doc) => {
+            const menuItem = doc.data();
+            menuItem.menuItemID = doc.id;
+            dispatch(addPublicMenuItem(menuItem));
+        });
+        dispatch(receivedPublicMenuItems());
+    }
+};
+
+export const fetchPublicMenuItems = (employeeID, accountID) => (dispatch) => {
+    dispatch(startFetchingPublicMenuItems());
+    db().collection('MenuItems').onSnapshot((querySnapshot) => {
+        setTimeout(() => {
+            const menuItems = querySnapshot || [];
+            dispatch(receivePublicMenuItems(menuItems));
+        }, 0);
+    }, (error) => {
+        console.log(error);
+    });
+};
+
 export const saveMenuItemMedia = (image, ref) => {
     const metadata = {
         contentType: 'text/image',

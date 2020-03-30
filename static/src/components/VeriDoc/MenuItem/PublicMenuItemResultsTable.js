@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -15,11 +16,9 @@ import CancelIcon from '@material-ui/icons/Cancel';
 
 import TablePaginationActions from '../../TablePaginationActions';
 
-import { formatDateWTime, formatAddress, formatDateNoTime } from '../../../utils/misc';
+import MenuItemCell from './MenuItemCell';
 
-import {
-  formatOrderStatus
-} from '../../../utils/events';
+import { formatDateWTime, formatAddress, formatDateNoTime } from '../../../utils/misc';
 
 const styles = (theme) => ({
   root: {
@@ -57,15 +56,21 @@ const styles = (theme) => ({
     margin: 0,
     padding: 0,
   },
+  textField: {
+      width: 150,
+  },
+  textCell: {
+      marginBottom: 15,
+  },
 });
 
 
 
-function OrderResultsTable(props) {
-  const { classes, type, rows, handleLink, handleAction } = props;
+function PublicMenuItemResultsTable(props) {
+  const { classes, menuItems, handleAction, handleChange } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, menuItems.length - page * rowsPerPage);
   const handleChangePage = (e, newPage) => {
     setPage(newPage);
   };
@@ -73,39 +78,57 @@ function OrderResultsTable(props) {
     setRowsPerPage(parseInt(e.target.value, 10));
     setPage(0);
   };
+
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell className={classes.tableHeaders} >Order ID</TableCell>
-            <TableCell className={classes.tableHeaders} >Deliver To</TableCell>
-            <TableCell className={classes.tableHeaders} >Required By</TableCell>
-            <TableCell className={classes.tableHeaders} >Total</TableCell>
-            <TableCell className={classes.tableHeaders} >Status</TableCell>
-            <TableCell className={classes.tableHeaders} >Updated Date</TableCell>
+            <TableCell className={classes.tableHeaders} >Name</TableCell>
+            <TableCell className={classes.tableHeaders} >Item Image</TableCell>
+            <TableCell className={classes.tableHeaders} >Item Type</TableCell>
+            <TableCell className={classes.tableHeaders} >Brand Name</TableCell>
+            <TableCell className={classes.tableHeaders} >UPC ID</TableCell>
+            <TableCell style={{textAlign: 'center'}} className={classes.tableHeaders} >Add</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {(rowsPerPage > 0
-            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : rows
-          ).map(row => (
-            <TableRow key={row.id}>
-              <TableCell><a onClick={e => handleLink(e, row.id)} className={classes.linkText}>{row.id || 'Unkown Name'}</a></TableCell>
+            ? menuItems.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : menuItems
+          ).map(menuItem => (
+            <TableRow key={menuItem.id}>
+              <TableCell><a onClick={e => handleLink(e, menuItem.id)} className={classes.linkText}>{menuItem.itemName}</a></TableCell>
+              <TableCell style={{width: 100}}>
+                  <MenuItemCell itemID={menuItem.itemID} itemName={menuItem.itemName} itemImage={menuItem.thumbItemImageURL} />
+                </TableCell>
               <TableCell>
-                {row.deliveryTo || 'Unknown Name'}
+                {menuItem.itemType}
               </TableCell>
               <TableCell>
-                {formatDateNoTime(row.requiredBy)}
+                {menuItem.brandName}
               </TableCell>
               <TableCell>
-                {row.total}
+                {menuItem.upcID || 'None'}
               </TableCell>
-              <TableCell>
-                {formatOrderStatus(row.isStatus)}
+              <TableCell style={{textAlign: 'center'}}>
+                  <div className={classes.textCell}>
+                      <TextField
+                        placeholder="Ex. 10"
+                        label="Quantity"
+                        margin="dense"
+                        variant="outlined"
+                        type="number"
+                        // helperText={'cbdContent_error_text'}
+                        // value={menuItemQuaa.stock || ''}
+                        className={classes.textField}
+                        onChange={e => handleChange(e, 'quantity')}
+                        // FormHelperTextProps={{ classes: { root: classes.helperText } }}
+                        autoComplete=""
+                      />
+                  </div>
+                  <div onClick={e => handleAction(e, menuItem)} style={{fontWeight: 600, color: 'blue', cursor: 'pointer'}}>Add To Cart</div>
               </TableCell>
-              <TableCell>{formatDateNoTime(row.updatedDate ? row.updatedDate : row.createdDate)}</TableCell>
             </TableRow>
           ))}
           {emptyRows > 0 && (
@@ -118,8 +141,8 @@ function OrderResultsTable(props) {
           <TableRow>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-              colSpan={6}
-              count={rows.length}
+              colSpan={5}
+              count={menuItems.length}
               rowsPerPage={rowsPerPage}
               page={page}
               selectProps={{
@@ -139,11 +162,10 @@ function OrderResultsTable(props) {
 
 
 
-OrderResultsTable.propTypes = {
-  type: PropTypes.string.isRequired,
-  rows: PropTypes.array.isRequired,
-  handleLink: PropTypes.func.isRequired,
+PublicMenuItemResultsTable.propTypes = {
+  menuItems: PropTypes.array.isRequired,
   handleAction: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(OrderResultsTable);
+export default withStyles(styles)(PublicMenuItemResultsTable);

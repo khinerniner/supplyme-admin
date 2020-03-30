@@ -9,8 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
-// import { getLocation } from '../../../services/location/actions';
-import { toNewLocation } from '../../../services/location/model';
+import { toNewRequest } from '../../../services/request/model';
 import { getKeys, formatDateWTime, dispatchNewObject } from '../../../utils/misc';
 
 import MiniDetailMap from '../../../components/VeriDoc/Misc/MiniDetailMap';
@@ -36,7 +35,7 @@ const styles = {
     detailCard: {
       padding: '2.0rem',
       boxShadow: '0 8px 64px rgba(32, 32, 32, 0.08), 0 4px 16px rgba(32, 32, 32, 0.02)',
-      blocationRadius: 16,
+      brequestRadius: 16,
     },
     detailTop: {
       marginBottom: 30,
@@ -82,7 +81,7 @@ const styles = {
       margin: 0,
     },
     detailList: {
-      blocationTop: '1px solid #e6e6e6',
+      brequestTop: '1px solid #e6e6e6',
       paddingTop: 15,
       display: 'block',
     },
@@ -92,13 +91,13 @@ const styles = {
     },
     detailListDt: {
       minWidth: '30%',
-      blocation: 0,
+      brequest: 0,
       padding: '.5rem 0',
       margin: 0,
     },
     detailListDd: {
       minWidth: '70%',
-      blocation: 0,
+      brequest: 0,
       fontWeight: 500,
       padding: '.5rem 0',
       margin: 0,
@@ -107,7 +106,7 @@ const styles = {
         display: 'flex',
     },
     img: {
-        blocationRadius: '50%',
+        brequestRadius: '50%',
         paddingRight: 10,
     }
 };
@@ -117,31 +116,29 @@ function mapStateToProps(state) {
         pathname: state.router.location.pathname,
         employeeID: state.app.employeeID,
         accountID: state.app.accountID,
-        locations: state.locationData.locations,
-        receivedAt: state.locationData.receivedAt,
+        requests: state.requestData.publicRequests,
+        receivedAt: state.requestData.receivedPublicRequestsAt,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: {
-            // getLocation: bindActionCreators(getLocation, dispatch)
-        },
+        actions: {},
     };
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
-class LocationDetailView extends React.Component {
+class RequestDetailView extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            location: toNewLocation()
+            request: toNewRequest()
         };
     }
 
     componentDidMount() {
-      console.log('Location Detail Mounted')
+      console.log('Request Detail Mounted')
       this.loadCompData();
     }
 
@@ -152,7 +149,7 @@ class LocationDetailView extends React.Component {
     }
 
     componentWillUnmount() {
-      console.log('Location Detail UnMounted')
+      console.log('Request Detail UnMounted')
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -163,13 +160,13 @@ class LocationDetailView extends React.Component {
     }
 
     loadCompData = () => {
-        const { actions, accountID, locations, pathname } = this.props;
+        const { actions, accountID, requests, pathname } = this.props;
         const keys = getKeys(pathname);
-        const locationID = keys.second;
-        if (locationID && locationID !== null) {
-            locations.forEach((location) => {
-                if (location.locationID === locationID) {
-                    this.setState({location});
+        const requestID = keys.second;
+        if (requestID && requestID !== null) {
+            requests.forEach((request) => {
+                if (request.requestID === requestID) {
+                    this.setState({request});
                 }
             })
         }
@@ -199,8 +196,8 @@ class LocationDetailView extends React.Component {
 
     render() {
         const { classes, accountID } = this.props;
-        const { location } = this.state;
-        console.error(location)
+        const { request } = this.state;
+        console.error(request)
         return (
           <div className={classes.root}>
               <div className={classes.content}>
@@ -209,7 +206,7 @@ class LocationDetailView extends React.Component {
                           <div className={classes.detailCard}>
                               <div className={classes.detailTop}>
                                   {
-                                    location.active
+                                    request.active
                                     ? (
                                       <MiniDetailMap
                                           isMarkerShown={true}
@@ -217,18 +214,18 @@ class LocationDetailView extends React.Component {
                                           loadingElement={<div style={{ height: `100%` }} />}
                                           containerElement={<div style={{ width: 400, height: 200 }} />}
                                           mapElement={<div style={{ height: `100%` }} />}
-                                          id={location.locationID}
-                                          location={location.address.location}
+                                          id={request.requestID}
+                                          location={request.location.address.location}
                                       />
                                     ) : null
                                   }
                               </div>
                               <div className={classes.detailTitle}>
-                                <span className={classes.detailTitleText}>{`${location.contactInfo.name}`}</span>
+                                <span className={classes.detailTitleText}>{`Budget:  ${request.budget || 'Not Funded Yet...'}`}</span>
                                 <br />
-                                <span>{`${location.name}`}</span>
+                                <span>{`${request.location.name}`}</span>
                                 <br />
-                                <span>{location.active ? `Lat: ${location.address.location.lat} Lng: ${location.address.location.lng}` : null}</span>
+                                <span>{request.active ? `Lat: ${request.location.address.location.lat} Lng: ${request.location.address.location.lng}` : null}</span>
                               </div>
                           </div>
                       </div>
@@ -240,7 +237,7 @@ class LocationDetailView extends React.Component {
                                     variant="contained"
                                     disableRipple
                                     disableFocusRipple
-                                    onClick={(e) => dispatchNewObject(e, accountID, 'location', location.locationID, 'edit')}
+                                    onClick={(e) => dispatchNewObject(e, accountID, 'request', request.requestID, 'edit')}
                                     className={classes.editButton}
                                   >
                                       {'Edit'}
@@ -252,7 +249,7 @@ class LocationDetailView extends React.Component {
                                       ID
                                   </dt>
                                   <dd className={classes.detailListDd}>
-                                      {location.locationID}
+                                      {request.requestID}
                                   </dd>
                                   </div>
                                   <div className={classes.detailListFlex}>
@@ -260,31 +257,31 @@ class LocationDetailView extends React.Component {
                                       Created
                                   </dt>
                                   <dd className={classes.detailListDd}>
-                                      {`${formatDateWTime(location.createdDate)}`}
+                                      {'formatDateWTime(request.status.events[0].time)'}
                                   </dd>
                                   </div>
                                   <div className={classes.detailListFlex}>
                                   <dt className={classes.detailListDt}>
-                                      Contact Name
+                                      Priority
                                   </dt>
                                   <dd className={classes.detailListDd}>
-                                      {location.contactInfo.name}
+                                      {request.priority}
                                   </dd>
                                   </div>
                                   <div className={classes.detailListFlex}>
                                   <dt className={classes.detailListDt}>
-                                      Contact Email
+                                      Request Type
                                   </dt>
                                   <dd className={classes.detailListDd}>
-                                      {location.contactInfo.email}
+                                      {request.requestType}
                                   </dd>
                                   </div>
                                   <div className={classes.detailListFlex}>
                                   <dt className={classes.detailListDt}>
-                                      Contact Phone
+                                      Required By
                                   </dt>
                                   <dd className={classes.detailListDd}>
-                                      {location.contactInfo.phoneNumber}
+                                      {formatDateWTime(request.requiredBy)}
                                   </dd>
                                   </div>
                               </dl>
@@ -297,12 +294,12 @@ class LocationDetailView extends React.Component {
     }
 }
 
-LocationDetailView.defaultProps = {
+RequestDetailView.defaultProps = {
     router: PropTypes.object,
 };
 
-LocationDetailView.propTypes = {
+RequestDetailView.propTypes = {
     router: PropTypes.object,
 };
 
-export default withStyles(styles)(LocationDetailView);
+export default withStyles(styles)(RequestDetailView);

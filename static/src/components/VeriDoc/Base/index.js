@@ -148,7 +148,6 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-
 @connect(mapStateToProps, mapDispatchToProps)
 class Base extends Component {
     constructor(props) {
@@ -157,13 +156,7 @@ class Base extends Component {
             isMobileAndTablet: isMobileAndTablet(),
             baseDomain: '/accounts/',
             breadcrumb: 'account',
-            listItems: [
-                'locations',
-                'requests',
-                'orders',
-                'menuItems',
-                'employees',
-            ],
+            listItems: [],
             showAccount: false,
         };
     }
@@ -177,7 +170,7 @@ class Base extends Component {
     componentWillUnmount() { }
 
     getBreadcrumb(props = this.props) {
-        const { pathname } = this.props;
+        const { pathname, accountType } = this.props;
         if (pathname) {
             const vars = pathname.split('/');
             let locationName = [];
@@ -186,7 +179,42 @@ class Base extends Component {
                     locationName.push(vars[i]);
                 }
             }
+            var listItems = [];
+            switch (accountType) {
+                case 'hcp':
+                    listItems = [
+                        'locations',
+                        'requests',
+                        'employees',
+                    ]
+                    break;
+                case 'manufacturer':
+                    listItems = [
+                        'locations',
+                        'requests',
+                        'orders',
+                        'menuItems',
+                        'employees',
+                    ]
+                    break;
+                case 'financier':
+                    listItems = [
+                        'requests',
+                        'employees',
+                    ]
+                    break;
+                default:
+                    listItems = [
+                        'locations',
+                        'requests',
+                        'orders',
+                        'menuItems',
+                        'employees',
+                    ]
+                    break;
+            }
             this.setState({
+                listItems: listItems,
                 breadcrumb: locationName[2],
                 childBreadcrumb: locationName[3],
                 baseDomain: `/accounts/${locationName[1]}`,

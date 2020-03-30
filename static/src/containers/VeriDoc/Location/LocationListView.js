@@ -141,8 +141,6 @@ class LocationListView extends React.Component {
             rows,
         } = this.state;
 
-        let dropzoneBulkLocationRef;
-
         const GeneralContainer = (
             <div className={classes.outerCell}>
             <Button

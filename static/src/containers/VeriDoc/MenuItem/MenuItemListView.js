@@ -136,9 +136,7 @@ class MenuItemListView extends React.Component {
         const {
             rows,
         } = this.state;
-
-        let dropzoneBulkMenuItemRef;
-
+        
         const GeneralContainer = (
             <div className={classes.outerCell}>
             <Button
