@@ -64,6 +64,7 @@ const styles = (theme) => ({
 
 const PublicRequestMap = withScriptjs(withGoogleMap((props) => {
   const { classes, isMarkerShown, markers, currentCoords, isOpen, onToggleOpen } = props;
+  console.log(markers)
   return (
     <Paper className={classes.root}>
         <GoogleMap
