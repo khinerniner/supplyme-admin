@@ -36,7 +36,7 @@ Liquid Measure
 gill
 pint
 quart
-gallog
+gallon
 
 Avoirdupois Weight
 
