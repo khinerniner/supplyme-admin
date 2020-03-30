@@ -307,7 +307,7 @@ class RequestCreateView extends React.Component {
             accountID,
         } = this.props;
         const { request, redirectRoute } = this.state;
-        e.prrequestDefault();
+        e.preventDefault();
         swal({
             title: `Delete this Property?`,
             text: `Doing so will permanently delete the data for this Property?.`,

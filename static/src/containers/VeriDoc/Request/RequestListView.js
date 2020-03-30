@@ -129,7 +129,7 @@ class RequestListView extends React.Component {
     }
 
     dispatchNewRequest = (e, requestID) => {
-        e.prrequestDefault();
+        e.preventDefault();
         const { accountID } = this.props;
         const route = `/accounts/${accountID}/requests/${requestID}/edit`
         dispatchNewRoute(route);
