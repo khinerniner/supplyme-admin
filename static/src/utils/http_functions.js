@@ -73,3 +73,21 @@ export function apiGeocodeGooglePlace(token, accountID, place) {
     });
 }
 // [END Geocode Google Place]
+
+// Get Google Directions
+// TODO: None
+// [START Get Google Directions]
+export function apiGetGoogleDirections(token, accountID, origin, destination, waypoints) {
+    return axios.get('/api/google/v1/directions', {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+        params: {
+            accountID,
+            origin,
+            destination,
+            waypoints,
+        },
+    });
+}
+// [END Get Google Directions]

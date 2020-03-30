@@ -17,7 +17,6 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 import { toNewOrder, toNewOrderItem } from '../../../services/order/model';
 import { saveNewOrder, updateOrder, deleteOrder } from '../../../services/order/actions';
-import { geocodeGooglePlace } from '../../../services/google/actions';
 import {
     getKeys,
     validateString,

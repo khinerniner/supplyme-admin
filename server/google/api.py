@@ -10,7 +10,8 @@ from flask.views import MethodView
 from server.utils.google.places.utils import (
     search_google_places,
     geocode_google_place,
-    parse_google_geocode
+    parse_google_geocode,
+    get_google_directions
 )
 from server.utils.firestore import verify_firebase_token
 from server.account.model import SupplyMeAccountCode
@@ -309,6 +310,43 @@ class GeocodeGooglePlace(MethodView):
             return make_response(jsonify(responseObject)), 403
 # [END Geocode Google Place]
 
+# Get Google Directions
+# TODO: None
+# [START Get Google Directions]
+class DirectionsGoogleGet(MethodView):
+    def get(self):
+        try:
+            id_token = request.headers.get('Authorization').split(' ').pop()
+            claims = verify_firebase_token(id_token)
+            if not claims:
+                responseObject = {
+                    'status': 'failed',
+                    'statusText': 'Invalid Token'
+                }
+                return make_response(jsonify(responseObject)), 403
+            incoming = request.args
+            print(incoming)
+            accountID = incoming['accountID']
+            origin = incoming['origin']
+            destination = incoming['destination']
+            waypoints = incoming.getlist('waypoints[]')
+            result = get_google_directions(origin, destination, waypoints)
+            responseObject = {
+                'status': 'success',
+                'statusText': 'Google Directions',
+                'data': result
+            }
+            return make_response(jsonify(responseObject)), 200
+
+        except Exception as e:
+            logger.error('Error DirectionsGoogleGet.post; Error: %s', e)
+            responseObject = {
+                'status': 'failed',
+                'statusText': str(e)
+            }
+            return make_response(jsonify(responseObject)), 403
+# [END Get Google Directions]
+
 # Define API resources
 send_account_code = AccountCodeSendEmail.as_view('send_account_code')
 send_account_registration = AccountRegistrationSendEmail.as_view('send_account_registration')
@@ -316,6 +354,7 @@ send_employee_code = EmployeeCodeSendEmail.as_view('send_employee_code')
 send_employee_registration = EmployeeRegistrationSendEmail.as_view('send_employee_registration')
 google_places_search = SearchGooglePlaces.as_view('google_places_search')
 google_place_geocode = GeocodeGooglePlace.as_view('google_place_geocode')
+google_get_directions = DirectionsGoogleGet.as_view('google_get_directions')
 # Specify API Version
 
 # Add rules for endpoints
@@ -347,5 +386,10 @@ google_blueprint.add_url_rule(
 google_blueprint.add_url_rule(
     '/api/google/v1/places/geocode',
     view_func=google_place_geocode,
+    methods=['GET']
+)
+google_blueprint.add_url_rule(
+    '/api/google/v1/directions',
+    view_func=google_get_directions,
     methods=['GET']
 )

@@ -85,3 +85,25 @@ def parse_google_geocode(data):
     address['geohash'] = geohash.encode(location['lat'], location['lng'], precision=12)
     return address
 # [END Parse Geo Code Location]
+
+# Get Google Directions
+# TODO: None
+# [START Get Google Directions]
+def get_google_directions(origin, destination, waypoints):
+    new_waypoints = ''
+    for waypoint in waypoints:
+        new_waypoints += '{}'.format(waypoint) + '|'
+    print(new_waypoints)
+    google_url = 'https://maps.googleapis.com/maps/api/directions/json?origin={}&destination={}&key={}'.format(
+    # google_url = 'https://maps.googleapis.com/maps/api/directions/json?origin={}&destination={}&waypoints=optimize:true|{}&key={}'.format(
+        origin,
+        destination,
+        # new_waypoints,
+        Config.get_env_var('GOOGLE_API_KEY'),
+    )
+    r = requests.get(url=google_url)
+    if r.status_code == 200:
+        print(r.json())
+        return r.json()
+    raise ValueError('Unknown Google Directions Error Occured: {}'.format(r.text))
+# [END Get Google Directions]

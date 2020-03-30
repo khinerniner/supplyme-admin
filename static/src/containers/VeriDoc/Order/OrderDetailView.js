@@ -10,11 +10,12 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import { toNewOrder } from '../../../services/order/model';
+import { getGoogleDirections } from '../../../services/google/actions';
 import { getKeys, formatDateWTime, dispatchNewObject } from '../../../utils/misc';
 
 import MiniDirectionsMap from '../../../components/VeriDoc/Misc/MiniDirectionsMap';
 
-import { withScriptjs } from "react-google-maps";
+import { withScriptjs, withGoogleMap } from "react-google-maps";
 
 const styles = {
     root: {
@@ -116,6 +117,7 @@ const styles = {
 function mapStateToProps(state) {
     return {
         pathname: state.router.location.pathname,
+        idToken: state.app.idToken,
         employeeID: state.app.employeeID,
         accountID: state.app.accountID,
         orders: state.orderData.orders,
@@ -135,7 +137,9 @@ class OrderDetailView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            order: toNewOrder()
+            order: toNewOrder(),
+            centerCoord: null,
+            directions: null,
         };
     }
 
@@ -168,7 +172,11 @@ class OrderDetailView extends React.Component {
         if (orderID && orderID !== null) {
             orders.forEach((order) => {
                 if (order.orderID === orderID) {
-                    this.setState({order});
+                    const next_state = this.state;
+                    next_state.order= order;
+                    this.setState(next_state, () => {
+                        this.getDirections();
+                    });
                 }
             })
         }
@@ -196,9 +204,30 @@ class OrderDetailView extends React.Component {
         );
     }
 
+    getDirections = () => {
+        const { idToken, accountID } = this.props;
+        const { order } = this.state;
+        const origin = `${order.request.location.address.location.lat},${order.request.location.address.location.lat}`;
+        const destination = origin;
+        const waypoints = []
+        if (order.menuItems.length > 0) {
+            order.menuItems.map((i) => {
+                i.item.quantities.forEach((q) => {
+                    waypoints.push(`${q.location.address.location.lat},${q.location.address.location.lng}`);
+                });
+            });
+        }
+        getGoogleDirections(idToken, accountID, origin, destination, waypoints).then((result) => {
+            this.setState({directions: result, centerCoord: order.request.location.address.location});
+        });
+    }
+
     render() {
         const { classes, accountID } = this.props;
-        const { order } = this.state;
+        const { order, directions, centerCoord } = this.state;
+        console.log(order.active)
+        console.log(centerCoord)
+        console.log(directions)
         return (
           <div className={classes.root}>
               <div className={classes.content}>
@@ -207,15 +236,15 @@ class OrderDetailView extends React.Component {
                           <div className={classes.detailCard}>
                               <div className={classes.detailTop}>
                               {
-                                order.active
+                                order.active && directions !== null && directions.status === 'OK'
                                 ? (
                                   <MiniDirectionsMap
                                       googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_API_KEY}`}
                                       loadingElement={<div style={{ height: `100%` }} />}
                                       containerElement={<div style={{ width: 400, height: 200 }} />}
                                       mapElement={<div style={{ height: `100%` }} />}
-                                      origin={null}
-                                      destination={null}
+                                      centerCoord={centerCoord}
+                                      directions={directions}
                                   />
                                 ) : null
                               }
@@ -294,9 +323,7 @@ class OrderDetailView extends React.Component {
     }
 }
 
-OrderDetailView.defaultProps = {
-    router: PropTypes.object,
-};
+OrderDetailView.defaultProps = {};
 
 OrderDetailView.propTypes = {
     router: PropTypes.object,

@@ -1,6 +1,7 @@
 import {
     apiSearchGooglePlaces,
     apiGeocodeGooglePlace,
+    apiGetGoogleDirections,
 } from '../../utils/http_functions';
 
 import { errorAlert } from '../../utils/alerts';
@@ -65,3 +66,21 @@ export const geocodeGooglePlace = (token, accountID, place) => {
         });
 };
 // [END Geocode Google Place]
+
+// Get Google Directions
+// TODO: None
+// [START Get Google Directions]
+export const getGoogleDirections = (token, accountID, origin, destination, waypoints) => {
+    return apiGetGoogleDirections(token, accountID, origin, destination, waypoints)
+        .then(parseJSON)
+        .then((response) => {
+            supplyMeAnalytic('googleDirectionsSuccess');
+            return response.data.data;
+        })
+        .catch((error) => {
+            console.log(error);
+            errorAlert(error.response.data.statusText || error.message);
+            supplyMeAnalytic('googleDirectionsSuccess');
+        });
+};
+// [END Get Google Directions]

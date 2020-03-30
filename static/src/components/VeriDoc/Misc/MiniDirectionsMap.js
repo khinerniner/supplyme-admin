@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 
-import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps";
+import { withScriptjs, withGoogleMap, GoogleMap, Marker, DirectionsRenderer } from "react-google-maps";
 
 import TablePaginationActions from '../../TablePaginationActions';
 
@@ -62,7 +62,7 @@ const styles = (theme) => ({
 });
 
 const MiniDirectionsMap = withScriptjs(withGoogleMap((props) => {
-  const { classes, origin, destination } = props;
+  const { classes, directions, centerCoord } = props;
   var myOptions = {
      mapTypeControl: false,
      draggable: false,
@@ -71,34 +71,14 @@ const MiniDirectionsMap = withScriptjs(withGoogleMap((props) => {
      navigationControl: false,
      streetViewControl: false,
      disableDefaultUI: true,
+     mapTypeId: google.maps.MapTypeId.ROADMAP,
+     center: centerCoord
   };
-  console.log(origin)
-  console.log(destination)
-  const DirectionsService = new google.maps.DirectionsService();
-  console.log(DirectionsService)
-  // const waypoint = google.maps.DirectionsWaypoint({lat: 40.8507300, lng: -86.6512600})
-  var directions = null;
-  var waypoints = null;
-  DirectionsService.route({
-      origin: new google.maps.LatLng(41.8507300, -87.6512600),
-      destination: new google.maps.LatLng(41.8525800, -87.6514100),
-      // waypoints: [waypoint],
-      travelMode: google.maps.TravelMode.DRIVING,
-      optimizeWaypoints: true
-  }, (result, status) => {
-      if (status === google.maps.DirectionsStatus.OK) {
-          directions = result;
-      } else {
-          console.error(`Error fetching directions ${result}`);
-      }
-  });
-  console.log(waypoints)
   console.log(directions)
   return (
     <Paper className={classes.root}>
         <GoogleMap
-            defaultZoom={8}
-            defaultCenter={new google.maps.LatLng(41.8507300, -87.6512600)}
+            defaultZoom={6}
             defaultOptions={myOptions}
         >
             {directions && <DirectionsRenderer directions={directions} />}
@@ -112,8 +92,8 @@ MiniDirectionsMap.propTypes = {
   loadingElement: PropTypes.object.isRequired,
   containerElement: PropTypes.object.isRequired,
   mapElement: PropTypes.object.isRequired,
-  origin: PropTypes.object.isRequired,
-  destination: PropTypes.object.isRequired,
+  directions: PropTypes.object.isRequired,
+  centerCoord: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
 };
 export default withStyles(styles)(MiniDirectionsMap);
