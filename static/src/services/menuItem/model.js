@@ -1,4 +1,5 @@
 import { parseFirestoreTimeStamp } from '../../utils/misc';
+import { toNewLocation } from '../location/model';
 
 
 /*
@@ -74,7 +75,6 @@ export function getMenuItemFromSnapshot(menuItem) {
         // manufacturerName: menuItem.manufacturerName,
         itemName: menuItem.itemName,
         itemType: menuItem.itemType,
-        locationID: menuItem.locationID,
         description: menuItem.description,
         oldItemRef: menuItem.oldItemRef,
         quantities: menuItem.quantities,
@@ -105,7 +105,6 @@ export function toNewMenuItem() {
         // tagLiacturerName: null,
         itemName: null,
         itemType: 'ppe',
-        locationID: null,
         description: null,
         oldItemRef: null,
         quantities: [],
@@ -129,10 +128,12 @@ export function toNewMenuItem() {
         private: false,
         // warningLabel: null,
         madeInCountry: 'USA',
+        imageData: null,
     };
 }
 export function toNewQuantity() {
     return {
+        location: toNewLocation(),
         packageQuantity: 1,
         packageType: 'piece',
         weightType: null,
@@ -151,6 +152,7 @@ export function menuItemRowObject(menuItem) {
         itemName: menuItem.itemName,
         itemType: menuItem.itemType,
         madeInCountry: menuItem.madeInCountry,
+        thumbnail: menuItem.thumbnail,
         updatedDate: menuItem.updatedDate,
         createdDate: menuItem.createdDate,
     };
