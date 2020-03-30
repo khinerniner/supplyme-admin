@@ -350,7 +350,7 @@ class OrderCreateView extends React.Component {
             accountID,
         } = this.props;
         const { order, redirectRoute } = this.state;
-        e.prorderDefault();
+        e.preventDefault();
         swal({
             title: `Delete this Property?`,
             text: `Doing so will permanently delete the data for this Property?.`,
