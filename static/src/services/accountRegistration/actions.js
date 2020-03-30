@@ -74,6 +74,8 @@ export const registerAccount = (accountCode, password, redirectRoute) => (dispat
 
         const accountInfo = toNewAccount()
         accountInfo.name = accountCode.ownerName;
+        accountInfo.accountType = accountCode.accountType;
+        accountInfo.accountID = accountRef.id;
         return auth().createUserWithEmailAndPassword(accountCode.email, password).then((user) => {
             return db().runTransaction((transaction) => {
                 return auth().currentUser.getIdToken().then((idToken) => {
