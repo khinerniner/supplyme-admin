@@ -72,7 +72,7 @@ class PublicRequestListView extends React.Component {
         super(props);
         this.state = {
             request: {},
-            showRequestDialog: false,
+            showRequest: false,
             rows: [],
         };
     }
@@ -133,8 +133,9 @@ class PublicRequestListView extends React.Component {
     dispatchNewRequest = (e, requestID) => {
         e.preventDefault();
         const { accountID } = this.props;
-        const route = `/accounts/${accountID}/orders/create/requests/${requestID}`;
+        const route = `/accounts/${accountID}/requests/${requestID}`;
         dispatchNewRoute(route);
+        // this.setState({showRequest: true})
     }
 
     render() {
@@ -143,11 +144,28 @@ class PublicRequestListView extends React.Component {
             rows,
         } = this.state;
 
-        let dropzoneBulkRequestRef;
+        const GeneralContainer = (
+            <div className={classes.outerCell}><h1>Search Requests</h1>
+
+            <Button
+              variant="contained"
+              disableRipple
+              disableFocusRipple
+              className={classes.firstButton}
+              classes={{ label: classes.buttonLabel }}
+              onClick={e => handleItemsSelected(e, requestItems)}
+            >
+                {'Back to Order'}
+            </Button>
+            </div>
+        );
 
         return (
             <div className={classes.root}>
                 <div className={classes.content}>
+                    <div className={classes.headerCell}>
+                        {GeneralContainer}
+                    </div>
                     <PublicRequestResultsTable
                         type={'request'}
                         rows={rows}
@@ -171,3 +189,15 @@ PublicRequestListView.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 export default withStyles(styles)(PublicRequestListView);
+
+// {requestItems.length > 0
+//   ? (
+//     <div className={classes.block}>
+//         <dl className={classes.detailList}>
+//             <div className={classes.detailListFlex}>
+//                 {orderItems.map(this.renderRequestMenuItems, this)}
+//             </div>
+//         </dl>
+//     </div>
+//   ) : null
+// }
