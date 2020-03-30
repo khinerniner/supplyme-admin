@@ -13,6 +13,7 @@ import { toNewRequest } from '../../../services/request/model';
 import { getKeys, dispatchNewRoute, formatDateWTime, dispatchNewObject } from '../../../utils/misc';
 
 import MiniDetailMap from '../../../components/VeriDoc/Misc/MiniDetailMap';
+import RequestMenuItemsTable from '../../../components/VeriDoc/Request/RequestMenuItemsTable';
 
 const styles = (theme) => ({
     root: {
@@ -289,6 +290,12 @@ class RequestDetailView extends React.Component {
                                   </dd>
                                   </div>
                               </dl>
+                          </div>
+                          <div className={classes.block}>
+                              <div className={classes.section}>
+                                  <span className={classes.detailTitleText}>{'Requested Menu Items'}</span>
+                              </div>
+                              <RequestMenuItemsTable menuItems={request.menuItems} />
                           </div>
                       </div>
                   </div>
