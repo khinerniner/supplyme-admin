@@ -13,7 +13,7 @@ import Button from '@material-ui/core/Button';
 import { toNewLocation } from '../../../services/location/model';
 import { getKeys, formatDateWTime, dispatchNewObject } from '../../../utils/misc';
 
-import LocationDetailMap from '../../../components/VeriDoc/Location/LocationDetailMap';
+import MiniDetailMap from '../../../components/VeriDoc/Misc/MiniDetailMap';
 
 const styles = {
     root: {
@@ -211,13 +211,13 @@ class LocationDetailView extends React.Component {
                                   {
                                     location.active
                                     ? (
-                                      <LocationDetailMap
+                                      <MiniDetailMap
                                           isMarkerShown={true}
                                           googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_API_KEY}`}
                                           loadingElement={<div style={{ height: `100%` }} />}
                                           containerElement={<div style={{ width: 400, height: 200 }} />}
                                           mapElement={<div style={{ height: `100%` }} />}
-                                          locationID={location.locationID}
+                                          id={location.locationID}
                                           location={location.address.location}
                                       />
                                     ) : null
