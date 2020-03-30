@@ -93,6 +93,26 @@ export function getMenuItemFromSnapshot(menuItem) {
         madeInCountry: menuItem.madeInCountry,
     };
 }
+export function getPublicMenuItemFromSnapshot(menuItem) {
+    return {
+        itemID: menuItem.itemID,
+        fullSizeItemImageURL: menuItem.fullSizeItemImageURL,
+        active: menuItem.active,
+        deleted: menuItem.deleted,
+        itemID: menuItem.itemID,
+        upcID: menuItem.upcID,
+        brandName: menuItem.brandName,
+        itemName: menuItem.itemName,
+        itemType: menuItem.itemType,
+        description: menuItem.description,
+        oldItemRef: menuItem.oldItemRef,
+        thumbItemImageURL: menuItem.thumbItemImageURL,
+        updatedDate: parseFirestoreTimeStamp(menuItem.updatedDate),
+        createdDate: parseFirestoreTimeStamp(menuItem.createdDate),
+        private: menuItem.private,
+        madeInCountry: menuItem.madeInCountry,
+    };
+}
 export function toNewMenuItem() {
     return {
         itemID: null,

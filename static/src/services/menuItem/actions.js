@@ -2,7 +2,7 @@ import history from '../../history';
 import { db, storage } from '../../store/firebase';
 import { parseJSON, formatFirestoreDateString, validateString, validateKey } from '../../utils/misc';
 import { apiBulkUploadMenuItems } from '../../utils/http_functions';
-import { toNewMenuItem, getMenuItemFromSnapshot } from './model';
+import { toNewMenuItem, getMenuItemFromSnapshot, getPublicMenuItemFromSnapshot } from './model';
 import { errorAlert, successAlert } from '../../utils/alerts';
 import { supplyMeAnalytic } from '../../utils/analytics';
 
@@ -183,7 +183,7 @@ export const saveNewMenuItem = (token, employeeID, accountID, menuItem, redirect
     return db().runTransaction((transaction) => {
         transaction.set(newAccountMenuItemRef, getMenuItemFromSnapshot(menuItemInfo));
         if (!menuItemInfo.private) {
-            transaction.set(newMenuItemRef, getMenuItemFromSnapshot(menuItemInfo));
+            transaction.set(newMenuItemRef, getPublicMenuItemFromSnapshot(menuItemInfo));
         }
         return Promise.resolve(menuItemInfo);
     }).then((menuItemInfo) => {
