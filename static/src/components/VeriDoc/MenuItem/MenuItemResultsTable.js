@@ -15,6 +15,8 @@ import CancelIcon from '@material-ui/icons/Cancel';
 
 import TablePaginationActions from '../../TablePaginationActions';
 
+import MenuItemCell from './MenuItemCell';
+
 import { formatDateWTime, formatAddress, formatDateNoTime } from '../../../utils/misc';
 
 const styles = (theme) => ({
@@ -76,6 +78,7 @@ function MenuItemResultsTable(props) {
         <TableHead>
           <TableRow>
             <TableCell className={classes.tableHeaders} >Name</TableCell>
+            <TableCell className={classes.tableHeaders} >Item Image</TableCell>
             <TableCell className={classes.tableHeaders} >Item Type</TableCell>
             <TableCell className={classes.tableHeaders} >Brand Name</TableCell>
             <TableCell className={classes.tableHeaders} >Sku ID</TableCell>
@@ -89,6 +92,9 @@ function MenuItemResultsTable(props) {
           ).map(row => (
             <TableRow key={row.id}>
               <TableCell><a onClick={e => handleLink(e, row.id)} className={classes.linkText}>{row.itemName}</a></TableCell>
+              <TableCell style={{width: 100}}>
+                  <MenuItemCell itemID={row.id} itemImage={row.thumbnail} />
+              </TableCell>
               <TableCell>
                 {row.itemType}
               </TableCell>
