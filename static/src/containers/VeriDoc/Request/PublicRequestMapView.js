@@ -169,6 +169,12 @@ class PublicRequestMapView extends React.Component {
         this.setState({isOpen: !this.state.isOpen})
     }
 
+    onMarkerClustererClick = (markerClusterer) => {
+        const clickedMarkers = markerClusterer.getMarkers()
+        console.log(`Current clicked markers length: ${clickedMarkers.length}`)
+        console.log(clickedMarkers)
+    }
+
     render() {
         const { classes, accountID } = this.props;
         const {
@@ -196,6 +202,7 @@ class PublicRequestMapView extends React.Component {
                               currentCoords={currentCoords}
                               isOpen={isOpen}
                               onToggleOpen={this.onToggleOpen}
+                              onMarkerClustererClick={this.onMarkerClustererClick}
                           />
                       ) : (
                         <Loader open={!loaded} />

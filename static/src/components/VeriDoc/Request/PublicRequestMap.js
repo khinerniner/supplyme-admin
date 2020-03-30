@@ -63,7 +63,7 @@ const styles = (theme) => ({
 });
 
 const PublicRequestMap = withScriptjs(withGoogleMap((props) => {
-  const { classes, isMarkerShown, markers, currentCoords, isOpen, onToggleOpen } = props;
+  const { classes, isMarkerShown, markers, currentCoords, isOpen, onToggleOpen, onMarkerClustererClick } = props;
   console.log(markers)
   return (
     <Paper className={classes.root}>
@@ -73,7 +73,7 @@ const PublicRequestMap = withScriptjs(withGoogleMap((props) => {
         >
             {
               <MarkerClusterer
-                // onClick={props.onMarkerClustererClick}
+                onClick={onMarkerClustererClick}
                 averageCenter
                 enableRetinaIcons
                 gridSize={60}
@@ -122,6 +122,7 @@ PublicRequestMap.propTypes = {
   markers: PropTypes.array.isRequired,
   isOpen: PropTypes.bool.isRequired,
   onToggleOpen: PropTypes.func.isRequired,
+  onMarkerClustererClick: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 };
 export default withStyles(styles)(PublicRequestMap);
