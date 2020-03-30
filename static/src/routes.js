@@ -31,6 +31,7 @@ import MenuItemDetailView from './containers/VeriDoc/MenuItem/MenuItemDetailView
 import MenuItemCreateView from './containers/VeriDoc/MenuItem/MenuItemCreateView';
 import OrderListView from './containers/VeriDoc/Order/OrderListView';
 import OrderCreateView from './containers/VeriDoc/Order/OrderCreateView';
+import OrderDetailView from './containers/VeriDoc/Order/OrderDetailView';
 
 /* Public Components */
 import { requireNoAuthentication } from './components/NotAuthenticatedComponent';
@@ -64,6 +65,7 @@ export default (
             <Route exact path="/accounts/:id/orders" component={requireAuthentication(OrderListView)} />
             <Route exact path="/accounts/:id/orders/search" component={requireAuthentication(PublicRequestListView)} />
             <Route exact path="/accounts/:id/orders/create/requests/:id" component={requireAuthentication(OrderCreateView)} />
+            <Route exact path="/accounts/:id/orders/:id" component={requireAuthentication(OrderDetailView)} />
 
             <Route exact path="/map" component={requireNoAuthentication(PublicRequestMapView)} />
             <Route exact path="/valor" component={requireNoAuthentication(ValorListView)} />

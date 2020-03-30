@@ -9,12 +9,12 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
-import { toNewRequest } from '../../../services/request/model';
-import { getKeys, dispatchNewRoute, formatDateWTime, dispatchNewObject } from '../../../utils/misc';
+import { toNewOrder } from '../../../services/order/model';
+import { getKeys, formatDateWTime, dispatchNewObject } from '../../../utils/misc';
 
 import MiniDetailMap from '../../../components/VeriDoc/Misc/MiniDetailMap';
 
-const styles = (theme) => ({
+const styles = {
     root: {
         flex: 1,
     },
@@ -35,7 +35,7 @@ const styles = (theme) => ({
     detailCard: {
       padding: '2.0rem',
       boxShadow: '0 8px 64px rgba(32, 32, 32, 0.08), 0 4px 16px rgba(32, 32, 32, 0.02)',
-      brequestRadius: 16,
+      borderRadius: 16,
     },
     detailTop: {
       marginBottom: 30,
@@ -58,10 +58,12 @@ const styles = (theme) => ({
         display: 'flex',
     },
     button: {
-        color: 'fff',
         marginRight: 10,
         textTransform: 'none',
-        backgroundColor: theme.palette.primary.main,
+    },
+    deleteButton: {
+        backgroundColor: '#e02626',
+        textTransform: 'none',
     },
     rightDetail: {
       flexGrow: 2,
@@ -79,19 +81,23 @@ const styles = (theme) => ({
       margin: 0,
     },
     detailList: {
-      brequestTop: '1px solid #e6e6e6',
+      borderTop: '1px solid #e6e6e6',
       paddingTop: 15,
       display: 'block',
     },
+    editButton: {
+        float: 'right',
+        textTransform: 'none',
+    },
     detailListDt: {
       minWidth: '30%',
-      brequest: 0,
+      border: 0,
       padding: '.5rem 0',
       margin: 0,
     },
     detailListDd: {
       minWidth: '70%',
-      brequest: 0,
+      border: 0,
       fontWeight: 500,
       padding: '.5rem 0',
       margin: 0,
@@ -100,18 +106,18 @@ const styles = (theme) => ({
         display: 'flex',
     },
     img: {
-        brequestRadius: '50%',
+        borderRadius: '50%',
         paddingRight: 10,
     }
-});
+};
 
 function mapStateToProps(state) {
     return {
         pathname: state.router.location.pathname,
         employeeID: state.app.employeeID,
         accountID: state.app.accountID,
-        requests: state.requestData.publicRequests,
-        receivedAt: state.requestData.receivedPublicRequestsAt,
+        orders: state.orderData.orders,
+        receivedAt: state.orderData.receivedAt,
     };
 }
 
@@ -122,17 +128,17 @@ function mapDispatchToProps(dispatch) {
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
-class RequestDetailView extends React.Component {
+class OrderDetailView extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            request: toNewRequest()
+            order: toNewOrder()
         };
     }
 
     componentDidMount() {
-      console.log('Request Detail Mounted')
+      console.log('Order Detail Mounted')
       this.loadCompData();
     }
 
@@ -143,7 +149,7 @@ class RequestDetailView extends React.Component {
     }
 
     componentWillUnmount() {
-      console.log('Request Detail UnMounted')
+      console.log('Order Detail UnMounted')
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -154,13 +160,13 @@ class RequestDetailView extends React.Component {
     }
 
     loadCompData = () => {
-        const { actions, accountID, requests, pathname } = this.props;
+        const { actions, accountID, orders, pathname } = this.props;
         const keys = getKeys(pathname);
-        const requestID = keys.second;
-        if (requestID && requestID !== null) {
-            requests.forEach((request) => {
-                if (request.requestID === requestID) {
-                    this.setState({request});
+        const orderID = keys.second;
+        if (orderID && orderID !== null) {
+            orders.forEach((order) => {
+                if (order.orderID === orderID) {
+                    this.setState({order});
                 }
             })
         }
@@ -188,17 +194,9 @@ class RequestDetailView extends React.Component {
         );
     }
 
-    dispatchNewRequest = (e, requestID) => {
-        e.preventDefault();
-        const { accountID } = this.props;
-        const route = `/accounts/${accountID}/orders/create/requests/${requestID}`;
-        dispatchNewRoute(route);
-    }
-
     render() {
         const { classes, accountID } = this.props;
-        const { request } = this.state;
-        console.error(request)
+        const { order } = this.state;
         return (
           <div className={classes.root}>
               <div className={classes.content}>
@@ -206,38 +204,14 @@ class RequestDetailView extends React.Component {
                       <div className={classes.leftDetail}>
                           <div className={classes.detailCard}>
                               <div className={classes.detailTop}>
-                                  {
-                                    request.active
-                                    ? (
-                                      <MiniDetailMap
-                                          isMarkerShown={true}
-                                          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_API_KEY}`}
-                                          loadingElement={<div style={{ height: `100%` }} />}
-                                          containerElement={<div style={{ width: 400, height: 200 }} />}
-                                          mapElement={<div style={{ height: `100%` }} />}
-                                          id={request.requestID}
-                                          location={request.location.address.location}
-                                      />
-                                    ) : null
-                                  }
+
                               </div>
                               <div className={classes.detailTitle}>
-                                <span className={classes.detailTitleText}>{`Budget:  ${request.budget || 'Not Funded Yet...'}`}</span>
+                                <span className={classes.detailTitleText}>{`${'order.contactInfo.name'}`}</span>
                                 <br />
-                                <span>{`${request.location.name}`}</span>
+                                <span>{`${'order.name'}`}</span>
                                 <br />
-                                <span>{request.active ? `Lat: ${request.location.address.location.lat} Lng: ${request.location.address.location.lng}` : null}</span>
-                              </div>
-                              <div className={classes.detailActions}>
-                                  <Button
-                                    variant="contained"
-                                    disableRipple
-                                    disableFocusRipple
-                                    className={classes.button}
-                                    onClick={e => this.dispatchNewRequest(e, request.requestID)}
-                                  >
-                                      {'Order From Request'}
-                                  </Button>
+                                <span>{'order.active ? `Lat: ${order.address.order.lat} Lng: ${order.address.order.lng}` : null'}</span>
                               </div>
                           </div>
                       </div>
@@ -245,7 +219,15 @@ class RequestDetailView extends React.Component {
                           <div className={classes.block}>
                               <div className={classes.section}>
                                   <span className={classes.detailTitleText}>Details</span>
-
+                                  <Button
+                                    variant="contained"
+                                    disableRipple
+                                    disableFocusRipple
+                                    onClick={(e) => dispatchNewObject(e, accountID, 'order', order.orderID, 'edit')}
+                                    className={classes.editButton}
+                                  >
+                                      {'Edit'}
+                                  </Button>
                               </div>
                               <dl className={classes.detailList}>
                                   <div className={classes.detailListFlex}>
@@ -253,7 +235,7 @@ class RequestDetailView extends React.Component {
                                       ID
                                   </dt>
                                   <dd className={classes.detailListDd}>
-                                      {request.requestID}
+                                      {order.orderID}
                                   </dd>
                                   </div>
                                   <div className={classes.detailListFlex}>
@@ -261,31 +243,31 @@ class RequestDetailView extends React.Component {
                                       Created
                                   </dt>
                                   <dd className={classes.detailListDd}>
-                                      {'formatDateWTime(request.status.events[0].time)'}
+                                      {'`${formatDateWTime(order.createdDate)}`'}
                                   </dd>
                                   </div>
                                   <div className={classes.detailListFlex}>
                                   <dt className={classes.detailListDt}>
-                                      Priority
+                                      Contact Name
                                   </dt>
                                   <dd className={classes.detailListDd}>
-                                      {request.priority}
+                                      {'order.contactInfo.name'}
                                   </dd>
                                   </div>
                                   <div className={classes.detailListFlex}>
                                   <dt className={classes.detailListDt}>
-                                      Request Type
+                                      Contact Email
                                   </dt>
                                   <dd className={classes.detailListDd}>
-                                      {request.requestType}
+                                      {'order.contactInfo.email'}
                                   </dd>
                                   </div>
                                   <div className={classes.detailListFlex}>
                                   <dt className={classes.detailListDt}>
-                                      Required By
+                                      Contact Phone
                                   </dt>
                                   <dd className={classes.detailListDd}>
-                                      {formatDateWTime(request.requiredBy)}
+                                      {'order.contactInfo.phoneNumber'}
                                   </dd>
                                   </div>
                               </dl>
@@ -298,22 +280,27 @@ class RequestDetailView extends React.Component {
     }
 }
 
-RequestDetailView.defaultProps = {
+OrderDetailView.defaultProps = {
     router: PropTypes.object,
 };
 
-RequestDetailView.propTypes = {
+OrderDetailView.propTypes = {
     router: PropTypes.object,
 };
 
-export default withStyles(styles)(RequestDetailView);
+export default withStyles(styles)(OrderDetailView);
 
-// <Button
-//   variant="contained"
-//   disableRipple
-//   disableFocusRipple
-//   onClick={(e) => dispatchNewObject(e, accountID, 'request', request.requestID, 'edit')}
-//   className={classes.button}
-// >
-//     {'Edit'}
-// </Button>
+// {
+//   order.active
+//   ? (
+//     <MiniDetailMap
+//         isMarkerShown={true}
+//         googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_API_KEY}`}
+//         loadingElement={<div style={{ height: `100%` }} />}
+//         containerElement={<div style={{ width: 400, height: 200 }} />}
+//         mapElement={<div style={{ height: `100%` }} />}
+//         id={order.orderID}
+//         order={order.address.order}
+//     />
+//   ) : null
+// }

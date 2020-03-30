@@ -62,8 +62,7 @@ export function requestRowObject(request) {
         isStatus: request.status.isStatus,
         isStatusTime: parseFirestoreTimeStamp(request.status.isStatusTime),
         locationName: request.location.name,
-        items: request.menuItems.map(i => `${i.itemName}, `),
-        numItems: request.menuItems.length,
+        items: request.menuItems.map(i => `${i.item.itemName}, `),
     };
 }
 export function requestMarkerObject(request) {

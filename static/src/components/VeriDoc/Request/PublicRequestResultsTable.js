@@ -81,12 +81,13 @@ function PublicRequestResultsTable(props) {
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell className={classes.tableHeaders} >Name</TableCell>
+            <TableCell className={classes.tableHeaders} >Delivery Location</TableCell>
             <TableCell className={classes.tableHeaders} >Priority</TableCell>
             <TableCell className={classes.tableHeaders} >Items</TableCell>
             <TableCell className={classes.tableHeaders} >Required By</TableCell>
             <TableCell className={classes.tableHeaders} >Status</TableCell>
             <TableCell className={classes.tableHeaders} >Updated Date</TableCell>
+            <TableCell style={{textAlign: 'center'}} className={classes.tableHeaders} >Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -100,7 +101,7 @@ function PublicRequestResultsTable(props) {
                 {row.priority}
               </TableCell>
               <TableCell>
-                {row.numItems}
+                {row.items}
               </TableCell>
               <TableCell>
                 {formatDateNoTime(row.requiredBy)}
@@ -108,7 +109,8 @@ function PublicRequestResultsTable(props) {
               <TableCell>
                 {formatRequestStatus(row.isStatus)}
               </TableCell>
-              <TableCell>{formatDateNoTime(row.updatedDate ? row.updatedDate : row.createdDate)}</TableCell>
+              <TableCell>{formatDateNoTime(row.isStatusTime)}</TableCell>
+              <TableCell><div style={{textAlign: 'center'}} onClick={e => handleAction(e, row.id)} className={classes.linkText}>{'Create Order'}</div></TableCell>
             </TableRow>
           ))}
           {emptyRows > 0 && (
@@ -121,7 +123,7 @@ function PublicRequestResultsTable(props) {
           <TableRow>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-              colSpan={6}
+              colSpan={7}
               count={rows.length}
               rowsPerPage={rowsPerPage}
               page={page}
