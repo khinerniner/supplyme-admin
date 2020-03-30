@@ -141,8 +141,6 @@ class RequestListView extends React.Component {
             rows,
         } = this.state;
 
-        let dropzoneBulkRequestRef;
-
         const GeneralContainer = (
             <div className={classes.outerCell}>
             <Button

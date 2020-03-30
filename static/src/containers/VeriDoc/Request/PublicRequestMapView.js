@@ -178,8 +178,6 @@ class PublicRequestMapView extends React.Component {
             isOpen,
         } = this.state;
 
-        let dropzoneBulkRequestRef;
-
         console.log(currentCoords);
 
         return (
