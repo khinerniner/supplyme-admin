@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
-import { LOGOUT_USER } from '../constants/index';
+import { LOGOUT_EMPLOYEE_SUCCESS } from '../constants/index';
 
 /* App Reducer Files */
 import app from './app/reducer';
@@ -33,7 +33,7 @@ const appReducer = history => {
 }
 
 const rootReducer = history => (state, action) => {
-    if (action.type === LOGOUT_USER) {
+    if (action.type === LOGOUT_EMPLOYEE_SUCCESS) {
         state = undefined;
     }
     return appReducer(history)(state, action);
