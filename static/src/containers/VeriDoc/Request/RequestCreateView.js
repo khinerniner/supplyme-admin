@@ -30,6 +30,8 @@ import {
 import AutoCompleteLocations from '../../../components/VeriDoc/AutoCompletes/AutoCompleteLocations';
 import AutoCompleteMenuItems from '../../../components/VeriDoc/AutoCompletes/AutoCompleteMenuItems';
 
+import MenuItemSearchView from '../../../containers/VeriDoc/MenuItem/MenuItemSearchView';
+
 function renderPriorityType() {
     const array = [];
     array.push(<MenuItem key={'high'} value={'high'}>High</MenuItem>);
@@ -239,31 +241,10 @@ class RequestCreateView extends React.Component {
         this.setState(next_state, () => {});
     }
 
-    handleMenuItemChange = (e, name) => {
-        const { value } = e.target;
+    handleItemsSelected = (e, items) => {
         const next_state = this.state;
-        next_state.menuItem[name] = value;
-        this.setState(next_state, () => {});
-    }
-
-    handleMenuItemAdd = () => {
-        const next_state = this.state;
-        let next_items = this.state.request.menuItems;
-        if (this.state.request.menuItems.map(i => i).includes(this.state.menuItem.item.itemID)) {
-            next_items = next_items.filter(e => e !== this.state.menuItem.item.itemID);
-        } else {
-            next_items.push(this.state.menuItem);
-        }
-        next_state.request.menuItems = next_items;
+        next_state.request.menuItems = items;
         next_state.menuItemOpen = false;
-        next_state.menuItem = toNewRequestItem();
-        this.setState(next_state, () => {});
-    }
-
-    handleMenuItemSelected = (item) => {
-        console.log(item)
-        const next_state = this.state;
-        next_state.menuItem.item = item;
         this.setState(next_state, () => {});
     }
 
@@ -364,16 +345,6 @@ class RequestCreateView extends React.Component {
 
     }
 
-    deleteMenuItem(e, item){
-        let next_state = this.state.request.menuItems
-        for(let i = 0; i < next_state.length; i++){
-            if(next_state[i] === item){
-                next_state.splice(i,1)
-            }
-        }
-        this.setState(next_state, () => { })
-    }
-
     toggleAddMenuItem = (e, menuItemOpen) => {
         this.setState({menuItemOpen: menuItemOpen})
     }
@@ -467,15 +438,20 @@ class RequestCreateView extends React.Component {
                     >
                         {request.active ? 'Update Request' : 'Create Request'}
                     </Button>
-                    <Button
-                        variant="contained"
-                        disableRipple
-                        disableFocusRipple
-                        onClick={this.deleteActiveProperty}
-                        className={classes.deleteButton}
-                    >
-                        {'Delete Request'}
-                    </Button>
+                    {
+                      request.active
+                      ? (
+                        <Button
+                            variant="contained"
+                            disableRipple
+                            disableFocusRipple
+                            onClick={this.deleteActiveProperty}
+                            className={classes.deleteButton}
+                        >
+                            {'Delete Request'}
+                        </Button>
+                      ) : null
+                    }
                 </div>
             </div>
         );
@@ -487,13 +463,18 @@ class RequestCreateView extends React.Component {
                         Request Menu Items
                     </div>
                 </div>
-                <div className={classes.block}>
-                    <dl className={classes.detailList}>
-                        <div className={classes.detailListFlex}>
-                            {request.menuItems.map(this.renderRequestMenuItems, this)}
-                        </div>
-                    </dl>
-                </div>
+
+                {request.menuItems.length > 0
+                  ? (
+                    <div className={classes.block}>
+                        <dl className={classes.detailList}>
+                            <div className={classes.detailListFlex}>
+                                {request.menuItems.map(this.renderRequestMenuItems, this)}
+                            </div>
+                        </dl>
+                    </div>
+                  ) : null
+                }
                 <IconButton onClick={(e) => this.toggleAddMenuItem(e, !menuItemOpen)}>
                     <AddCircleOutlineIcon className={classes.iconButton} />
                     <span style={{ fontSize: 16, paddingLeft: 10 }}>Add New Menu Item</span>
@@ -501,59 +482,31 @@ class RequestCreateView extends React.Component {
             </div>
         );
 
-        const AddMenuItemContainer = (
-          <div className={classes.outerCell}>
-              <div className={classes.subHeaderCell}>
-                  <div className={classes.subHeaders}>
-                      Add Menu Item & Quantity
-                  </div>
-              </div>
-              <div>
-                  <AutoCompleteMenuItems onFinishedSelecting={this.handleMenuItemSelected} />
-              </div>
-              <div className={classes.textCell}>
-                  <TextField
-                    placeholder="Ex. 10"
-                    label="Quantity"
-                    margin="dense"
-                    variant="outlined"
-                    type="number"
-                    // helperText={'cbdContent_error_text'}
-                    // value={menuItemQuaa.stock || ''}
-                    className={classes.textFieldSmall}
-                    onChange={e => this.handleMenuItemChange(e, 'quantity')}
-                    // FormHelperTextProps={{ classes: { root: classes.helperText } }}
-                    autoComplete=""
-                  />
-              </div>
-              <div className={classes.textCell}>
-                  <Button
-                    variant="contained"
-                    disableRipple
-                    disableFocusRipple
-                    onClick={this.handleMenuItemAdd}
-                    className={classes.createButton}
-                  >
-                      {'Add Menu Item'}
-                  </Button>
-              </div>
-          </div>
-        );
-
         return (
-            <div className={classes.root}>
-                <div className={classes.content}>
-                    <div className={classes.headerCell}>
-                        <div className={classes.headers}>
-                            {request.active ? 'Edit Request' : 'New Request'}
+            <section>
+            {
+              menuItemOpen
+              ? (
+                <MenuItemSearchView
+                    request={request}
+                    handleItemsSelected={this.handleItemsSelected}
+                />
+              )
+              : (
+                <div className={classes.root}>
+                    <div className={classes.content}>
+                        <div className={classes.headerCell}>
+                            <div className={classes.headers}>
+                                {request.active ? 'Edit Request' : 'New Request'}
+                            </div>
                         </div>
+                        {NameContainer}
+                        {MenuItemsContainer}
+                        {CreateContainer}
                     </div>
-                    {NameContainer}
-                    {MenuItemsContainer}
-                    {menuItemOpen ? AddMenuItemContainer : null}
-                    {CreateContainer}
                 </div>
-            </div>
+              )}
+            </section>
         );
     }
 }
