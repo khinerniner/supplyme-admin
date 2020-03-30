@@ -46,7 +46,6 @@ export function orderRowObject(order) {
         isStatus: order.status.isStatus,
         deliveryTo: 'Null',
         requiredBy: parseFirestoreTimeStamp(order.request.requiredBy),
-        total: order.location.total,
         updatedDate: parseFirestoreTimeStamp(order.status.isStatusTime),
     };
 }

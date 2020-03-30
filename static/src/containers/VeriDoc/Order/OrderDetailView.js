@@ -11,9 +11,11 @@ import Button from '@material-ui/core/Button';
 
 import { toNewOrder } from '../../../services/order/model';
 import { getGoogleDirections } from '../../../services/google/actions';
+import { formatOrderStatus } from '../../../utils/events';
 import { getKeys, formatDateWTime, dispatchNewObject } from '../../../utils/misc';
 
 import MiniDirectionsMap from '../../../components/VeriDoc/Misc/MiniDirectionsMap';
+import OrderMenuItemsTable from '../../../components/VeriDoc/Order/OrderMenuItemsTable';
 
 import { withScriptjs, withGoogleMap } from "react-google-maps";
 
@@ -250,11 +252,11 @@ class OrderDetailView extends React.Component {
                               }
                               </div>
                               <div className={classes.detailTitle}>
-                                <span className={classes.detailTitleText}>{`${'order.contactInfo.name'}`}</span>
+                                <span className={classes.detailTitleText}>{`${formatOrderStatus(order.status.isStatus)}`}</span>
                                 <br />
-                                <span>{`${'order.name'}`}</span>
+                                <span>{`Priority: ${order.request.priority}`}</span>
                                 <br />
-                                <span>{'order.active ? `Lat: ${order.address.order.lat} Lng: ${order.address.order.lng}` : null'}</span>
+                                <span>{`Deliver By: ${formatDateWTime(order.request.requiredBy)}`}</span>
                               </div>
                           </div>
                       </div>
@@ -291,29 +293,35 @@ class OrderDetailView extends React.Component {
                                   </div>
                                   <div className={classes.detailListFlex}>
                                   <dt className={classes.detailListDt}>
-                                      Contact Name
+                                      Request Contact Name
                                   </dt>
                                   <dd className={classes.detailListDd}>
-                                      {'order.contactInfo.name'}
+                                      {order.request.location.contactInfo.name}
                                   </dd>
                                   </div>
                                   <div className={classes.detailListFlex}>
                                   <dt className={classes.detailListDt}>
-                                      Contact Email
+                                      Request Contact Email
                                   </dt>
                                   <dd className={classes.detailListDd}>
-                                      {'order.contactInfo.email'}
+                                      {order.request.location.contactInfo.email}
                                   </dd>
                                   </div>
                                   <div className={classes.detailListFlex}>
                                   <dt className={classes.detailListDt}>
-                                      Contact Phone
+                                      Request Contact Phone
                                   </dt>
                                   <dd className={classes.detailListDd}>
-                                      {'order.contactInfo.phoneNumber'}
+                                      {order.request.location.contactInfo.phoneNumber}
                                   </dd>
                                   </div>
                               </dl>
+                          </div>
+                          <div className={classes.block}>
+                              <div className={classes.section}>
+                                  <span className={classes.detailTitleText}>{'Order Menu Items'}</span>
+                              </div>
+                              <OrderMenuItemsTable menuItems={order.menuItems} />
                           </div>
                       </div>
                   </div>
