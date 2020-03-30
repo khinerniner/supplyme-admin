@@ -15,26 +15,28 @@ import orderData from './order/reducer';
 /* Public Reducer Files */
 import valorData from './valor/reducer';
 
-const appReducer = history => combineReducers({
-    router: connectRouter(history),
-    app,
-    accountData,
-    employeeData,
-    locationData,
-    googleData,
-    requestData,
-    menuItemData,
-    orderData,
+const appReducer = history => {
+    return combineReducers({
+        router: connectRouter(history),
+        app,
+        accountData,
+        employeeData,
+        locationData,
+        googleData,
+        requestData,
+        menuItemData,
+        orderData,
 
-    // Public
-    valorData,
-});
+        // Public
+        valorData,
+    });
+}
 
-export const rootReducer = history => (state, action) => {
+const rootReducer = history => (state, action) => {
     if (action.type === LOGOUT_USER) {
         state = undefined;
     }
-    return appReducer(history, state, action);
+    return appReducer(history)(state, action);
 };
 
-export default appReducer;
+export default rootReducer;
