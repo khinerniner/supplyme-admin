@@ -61,17 +61,18 @@ const styles = (theme) => ({
   },
 });
 
-const LocationDetailMap = withScriptjs(withGoogleMap((props) => {
-  const { classes, isMarkerShown, locationID, location } = props;
+const MiniDetailMap = withScriptjs(withGoogleMap((props) => {
+  const { classes, isMarkerShown, id, location } = props;
   var myOptions = {
-   mapTypeControl: false,
-   draggable: false,
-   scaleControl: false,
-   scrollwheel: false,
-   navigationControl: false,
-   streetViewControl: false,
-   disableDefaultUI: true,
-};
+     mapTypeControl: false,
+     draggable: false,
+     scaleControl: false,
+     scrollwheel: false,
+     navigationControl: false,
+     streetViewControl: false,
+     disableDefaultUI: true,
+  };
+  console.log(location)
   return (
     <Paper className={classes.root}>
         <GoogleMap
@@ -83,7 +84,7 @@ const LocationDetailMap = withScriptjs(withGoogleMap((props) => {
               isMarkerShown
               ? (
                 <Marker
-                  key={locationID}
+                  key={id}
                   position={location}
                 />
               ) : null
@@ -93,7 +94,7 @@ const LocationDetailMap = withScriptjs(withGoogleMap((props) => {
   );
 }));
 
-LocationDetailMap.propTypes = {
+MiniDetailMap.propTypes = {
   isMarkerShown: PropTypes.bool.isRequired,
   googleMapURL: PropTypes.string.isRequired,
   loadingElement: PropTypes.object.isRequired,
@@ -103,4 +104,4 @@ LocationDetailMap.propTypes = {
   location: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(LocationDetailMap);
+export default withStyles(styles)(MiniDetailMap);
