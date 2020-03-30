@@ -61,8 +61,8 @@ const styles = (theme) => ({
   },
 });
 
-const MiniDetailMap = withScriptjs(withGoogleMap((props) => {
-  const { classes, isMarkerShown, id, location } = props;
+const MiniDirectionsMap = withScriptjs(withGoogleMap((props) => {
+  const { classes, origin, destination } = props;
   var myOptions = {
      mapTypeControl: false,
      draggable: false,
@@ -72,36 +72,48 @@ const MiniDetailMap = withScriptjs(withGoogleMap((props) => {
      streetViewControl: false,
      disableDefaultUI: true,
   };
-  console.log(location)
+  console.log(origin)
+  console.log(destination)
+  const DirectionsService = new google.maps.DirectionsService();
+  console.log(DirectionsService)
+  // const waypoint = google.maps.DirectionsWaypoint({lat: 40.8507300, lng: -86.6512600})
+  var directions = null;
+  var waypoints = null;
+  DirectionsService.route({
+      origin: new google.maps.LatLng(41.8507300, -87.6512600),
+      destination: new google.maps.LatLng(41.8525800, -87.6514100),
+      // waypoints: [waypoint],
+      travelMode: google.maps.TravelMode.DRIVING,
+      optimizeWaypoints: true
+  }, (result, status) => {
+      if (status === google.maps.DirectionsStatus.OK) {
+          directions = result;
+      } else {
+          console.error(`Error fetching directions ${result}`);
+      }
+  });
+  console.log(waypoints)
+  console.log(directions)
   return (
     <Paper className={classes.root}>
         <GoogleMap
             defaultZoom={8}
-            defaultCenter={location}
+            defaultCenter={new google.maps.LatLng(41.8507300, -87.6512600)}
             defaultOptions={myOptions}
         >
-            {
-              isMarkerShown
-              ? (
-                <Marker
-                  key={id}
-                  position={location}
-                />
-              ) : null
-            }
+            {directions && <DirectionsRenderer directions={directions} />}
         </GoogleMap>
     </Paper>
   );
 }));
 
-MiniDetailMap.propTypes = {
-  isMarkerShown: PropTypes.bool.isRequired,
+MiniDirectionsMap.propTypes = {
   googleMapURL: PropTypes.string.isRequired,
   loadingElement: PropTypes.object.isRequired,
   containerElement: PropTypes.object.isRequired,
   mapElement: PropTypes.object.isRequired,
-  id: PropTypes.string.isRequired,
-  location: PropTypes.object.isRequired,
+  origin: PropTypes.object.isRequired,
+  destination: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(MiniDetailMap);
+export default withStyles(styles)(MiniDirectionsMap);

@@ -12,7 +12,9 @@ import Button from '@material-ui/core/Button';
 import { toNewOrder } from '../../../services/order/model';
 import { getKeys, formatDateWTime, dispatchNewObject } from '../../../utils/misc';
 
-import MiniDetailMap from '../../../components/VeriDoc/Misc/MiniDetailMap';
+import MiniDirectionsMap from '../../../components/VeriDoc/Misc/MiniDirectionsMap';
+
+import { withScriptjs } from "react-google-maps";
 
 const styles = {
     root: {
@@ -204,7 +206,19 @@ class OrderDetailView extends React.Component {
                       <div className={classes.leftDetail}>
                           <div className={classes.detailCard}>
                               <div className={classes.detailTop}>
-
+                              {
+                                order.active
+                                ? (
+                                  <MiniDirectionsMap
+                                      googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_API_KEY}`}
+                                      loadingElement={<div style={{ height: `100%` }} />}
+                                      containerElement={<div style={{ width: 400, height: 200 }} />}
+                                      mapElement={<div style={{ height: `100%` }} />}
+                                      origin={null}
+                                      destination={null}
+                                  />
+                                ) : null
+                              }
                               </div>
                               <div className={classes.detailTitle}>
                                 <span className={classes.detailTitleText}>{`${'order.contactInfo.name'}`}</span>
@@ -289,18 +303,3 @@ OrderDetailView.propTypes = {
 };
 
 export default withStyles(styles)(OrderDetailView);
-
-// {
-//   order.active
-//   ? (
-//     <MiniDetailMap
-//         isMarkerShown={true}
-//         googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_API_KEY}`}
-//         loadingElement={<div style={{ height: `100%` }} />}
-//         containerElement={<div style={{ width: 400, height: 200 }} />}
-//         mapElement={<div style={{ height: `100%` }} />}
-//         id={order.orderID}
-//         order={order.address.order}
-//     />
-//   ) : null
-// }
