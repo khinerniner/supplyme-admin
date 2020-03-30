@@ -17,6 +17,8 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import Loader from '../../../components/VeriDoc/Base/Loader';
 import UploadMedia from '../../../components/VeriDoc/Media/UploadMedia';
 
+import AutoCompleteLocations from '../../../components/VeriDoc/AutoCompletes/AutoCompleteLocations';
+
 import { toNewMenuItem, toNewQuantity } from '../../../services/menuItem/model';
 import { saveNewMenuItem, updateMenuItem, deleteMenuItem } from '../../../services/menuItem/actions';
 import { geocodeGooglePlace } from '../../../services/google/actions';
@@ -132,6 +134,10 @@ const styles = (theme) => ({
         display: 'flex',
         flexWrap: 'wrap',
         marginBottom: 40,
+    },
+    flexCell: {
+        display: 'flex',
+        flexWrap: 'wrap',
     },
     innerFlexCell: {
         paddingRight: 10,
@@ -295,6 +301,12 @@ class MenuItemCreateView extends React.Component {
         this.setState(next_state, () => {})
     }
 
+    handleLocationSelected = (location) => {
+        const next_state = this.state;
+        next_state.quantity.location = location;
+        this.setState(next_state, () => {});
+    }
+
     isMenuItemDisabled() {
         let name_is_valid = false;
         let email_is_valid = false;
@@ -407,7 +419,7 @@ class MenuItemCreateView extends React.Component {
                     <RemoveCircleOutlineIcon className={classes.iconButton} />
                 </IconButton>
                 <span className={classes.detailListDt}>
-                    On Hand: {quantity.stock} - Price: $ {quantity.pricePerUnit} - {quantity.packageQuantity} / {quantity.packageType}
+                    On Hand: {quantity.stock} In: {quantity.location.address.locality} - Price: $ {quantity.pricePerUnit} - {quantity.packageQuantity} / {quantity.packageType}
                 </span>
             </div>
         );
@@ -558,7 +570,7 @@ class MenuItemCreateView extends React.Component {
                       Create Quantity
                   </div>
               </div>
-              <div className={classes.outerFlexCell}>
+              <div className={classes.flexCell}>
                 <div className={classes.innerFlexCell}>
                     <label className={classes.inputLabel}>* Package Type</label>
                     <div className={classes.textCell}>
@@ -616,7 +628,7 @@ class MenuItemCreateView extends React.Component {
                     </div>
                 </div>
             </div>
-            <div className={classes.outerFlexCell}>
+            <div className={classes.flexCell}>
                 <div className={classes.innerFlexCell}>
                     <label className={classes.inputLabel}>* Est. Price</label>
                     <div className={classes.textCell}>
@@ -649,6 +661,14 @@ class MenuItemCreateView extends React.Component {
                           // FormHelperTextProps={{ classes: { root: classes.helperText } }}
                           autoComplete=""
                         />
+                    </div>
+                </div>
+            </div>
+            <div className={classes.outerFlexCell}>
+                <div className={classes.innerFlexCell}>
+                    <label className={classes.inputLabel}>* Location</label>
+                    <div className={classes.textField}>
+                        <AutoCompleteLocations name={quantity.location.name} onFinishedSelecting={this.handleLocationSelected}/>
                     </div>
                 </div>
             </div>
