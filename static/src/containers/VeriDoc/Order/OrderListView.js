@@ -129,9 +129,9 @@ class OrderListView extends React.Component {
     }
 
     dispatchNewOrder = (e, orderID) => {
-        e.prorderDefault();
+        e.preventDefault();
         const { accountID } = this.props;
-        const route = `/accounts/${accountID}/orders/${orderID}/edit`
+        const route = `/accounts/${accountID}/orders/${orderID}`
         dispatchNewRoute(route);
     }
 
