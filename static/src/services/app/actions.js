@@ -3,6 +3,7 @@ import history from '../../history';
 import { auth, db } from '../../store/firebase';
 import { parseJSON } from '../../utils/misc';
 import { errorAlert, successAlert } from '../../utils/alerts';
+import { supplyMeAnalytic } from '../../utils/analytics';
 import { getAccount } from '../../services/account/actions';
 
 // For AppItems in Swift
@@ -60,6 +61,7 @@ export const loginEmployeeWithPermissions = (employeeID, redirectRoute) => (disp
                         const permissionLevel = empDoc.data().permissionLevel;
                         if (permissionLevel === 'deleted') {
                           console.log('Employee document deleted!');
+                          supplyMeAnalytic('employee_deleted', null);
                           dispatch(loginEmployeeFailure({
                               response: {
                                   status: 999,
@@ -77,6 +79,7 @@ export const loginEmployeeWithPermissions = (employeeID, redirectRoute) => (disp
                         dispatch(fetchOrders(employeeID, accountID));
                         dispatch(loginEmployeeSuccess(employeeID, accountID, accountType, empDoc.data(), idToken));
                         // NO "/" because of redirect starting with "/"
+                        supplyMeAnalytic('login_employee_success', null);
                         history.push(redirectRoute);
                     } else {
                         console.log('No such Employee document!');
@@ -90,6 +93,7 @@ export const loginEmployeeWithPermissions = (employeeID, redirectRoute) => (disp
                 })
                 .catch((error) => {
                   console.log('Employee Ref Error: ' + error.message);
+                  supplyMeAnalytic('employee_ref_error', null);
                   dispatch(loginEmployeeFailure({
                       response: {
                           status: 999,
@@ -99,6 +103,7 @@ export const loginEmployeeWithPermissions = (employeeID, redirectRoute) => (disp
                 })
             } else {
                 console.log('No such User document');
+                supplyMeAnalytic('user_doc_error', null);
                 dispatch(logoutAndRedirect());
                 dispatch(loginEmployeeFailure({
                     response: {
@@ -110,6 +115,7 @@ export const loginEmployeeWithPermissions = (employeeID, redirectRoute) => (disp
         })
         .catch((error) => {
           console.log('User Ref Error: ' + error.message);
+          supplyMeAnalytic('user_ref_error', null);
           dispatch(loginEmployeeFailure({
               response: {
                   status: 999,
@@ -120,6 +126,7 @@ export const loginEmployeeWithPermissions = (employeeID, redirectRoute) => (disp
     });
   } catch (error) {
       console.log('Auth Ref Error: ' + error);
+      supplyMeAnalytic('auth_ref_error', null);
       dispatch(logoutEmployeeFailure({
           response: {
               status: 999,
@@ -137,6 +144,7 @@ export const loginEmployee = (email, password, redirectRoute) => (dispatch) => {
                 try {
                     dispatch(loginEmployeeWithPermissions(user.user.uid, redirectRoute))
                 } catch (error) {
+                    supplyMeAnalytic('login_employee_error', null);
                     dispatch(loginEmployeeFailure({
                         response: {
                             status: 999,
@@ -150,6 +158,7 @@ export const loginEmployee = (email, password, redirectRoute) => (dispatch) => {
         .catch((error) => {
             console.log(error)
             errorAlert(error.message);
+            supplyMeAnalytic('login_employee_error', null);
             dispatch(loginEmployeeFailure({
                 response: {
                     status: 999,
@@ -181,12 +190,11 @@ export const logoutAndRedirect = () => (dispatch) => {
         auth().signOut();
         localStorage.removeItem('idToken');
         dispatch(logoutEmployeeSuccess());
-        gtag('event', 'logout', {
-            event_category: 'registration',
-        });
+        supplyMeAnalytic('logout_employee_success', null);
         history.push('/login');
     } catch (error) {
         console.log(error);
+        supplyMeAnalytic('logout_employee_error', null);
         dispatch(logoutEmployeeFailure({
             response: {
                 status: 400,

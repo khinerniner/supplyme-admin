@@ -41,11 +41,12 @@ export const validateActivationCode = (code) => {
       if (doc.exists && doc.data().valid) {
         return true;
       } else {
+        supplyMeAnalytic('activation_code_failure', null);
         return false;
       }
     }).catch((error) => {
       console.log(error);
-      supplyMeAnalytic('activation_code_ref_failure');
+      supplyMeAnalytic('activation_code_ref_failure', null);
       return false;
     })
 }
@@ -59,7 +60,7 @@ export const registerAccount = (accountCode, password, redirectRoute) => (dispat
         if (!response) {
           console.log('Error Validating Auth Code');
           errorAlert('Error Validating Auth Code')
-          supplyMeAnalytic('register_account_failure');
+          supplyMeAnalytic('register_account_failure', null);
           dispatch(registerAccountFailure({
               response: {
                   status: 403,

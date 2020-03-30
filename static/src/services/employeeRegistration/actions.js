@@ -3,6 +3,7 @@ import history from '../../history';
 import { auth, db } from '../../store/firebase';
 import { parseJSON } from '../../utils/misc';
 import { toNewEmployee } from '../employee/model';
+import { supplyMeAnalytic } from '../utils/analytics';
 
 // Register Employee
 //
@@ -39,11 +40,13 @@ export const validateEmployeeActivationCode = (code) => {
         return doc.data();
       } else {
         console.log('Invalid Employee Activation Code');
+        supplyMeAnalytic('employee_activation_code_failure', null);
         return false;
       }
     })
     .catch((error) => {
       console.log('Employee Activation Code Ref Error: ' + error.message);
+      supplyMeAnalytic('employee_activation_code_ref_failure', null);
       return false;
     })
 }
@@ -55,7 +58,6 @@ export const registerEmployee = (employeeCode, password, redirectRoute) => (disp
     dispatch(registerEmployeeRequest());
     return validateEmployeeActivationCode(employeeCode.activationCode).then((newEmployeeCode) => {
       if (!employeeCode) {
-        console.log('Error Validating Auth Code')
         return;
       }
       const employeeActivationCodeRef = db().collection('EmployeeActivationCodes').doc(newEmployeeCode.activationCode);
@@ -102,7 +104,7 @@ export const registerEmployee = (employeeCode, password, redirectRoute) => (disp
                   .catch((error) => {
                     console.log(error)
                     errorAlert(error.message);
-                    tabsAnalytic('register_employee_failure', null);
+                    supplyMeAnalytic('register_employee_failure', null);
                     return null
                     dispatch(registerEmployeeFailure({
                         response: {
@@ -114,7 +116,7 @@ export const registerEmployee = (employeeCode, password, redirectRoute) => (disp
               } catch (error) {
                   console.log(error)
                   errorAlert(error.message);
-                  tabsAnalytic('register_employee_failure', null);
+                  supplyMeAnalytic('register_employee_failure', null);
                   dispatch(registerEmployeeFailure({
                       response: {
                           status: 999,
@@ -126,7 +128,7 @@ export const registerEmployee = (employeeCode, password, redirectRoute) => (disp
           .catch((error) => {
               console.log(error)
               errorAlert(error.message);
-              tabsAnalytic('register_employee_failure', null);
+              supplyMeAnalytic('register_employee_failure', null);
               dispatch(registerEmployeeFailure({
                   response: {
                       status: 999,
@@ -148,12 +150,12 @@ export const registerEmployee = (employeeCode, password, redirectRoute) => (disp
               result.idToken,
           ));
           dispatch(getAccount(result.accountID));
-          tabsAnalytic('register_employee_success', null);
+          supplyMeAnalytic('register_employee_success', null);
           history.push(redirectRoute);
       }).catch((error) => {
           console.log("Transaction failed: ", error);
           errorAlert(error.message);
-          tabsAnalytic('register_employee_failure', null);
+          supplyMeAnalytic('register_employee_failure', null);
           dispatch(registerEmployeeFailure({
               response: {
                   status: 999,

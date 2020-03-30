@@ -290,13 +290,13 @@ export const updateAccount = (employeeID, accountID, account, redirectRoute) => 
             console.log('Transaction successfully committed!');
             dispatch(updateAccountSuccess());
             successAlert('update Account Success!');
-            // supplyMeAnalytic('update_account_success', null);
+            supplyMeAnalytic('update_account_success', null);
             history.push(redirectRoute)
         }).catch((error) => {
             console.log('Transaction failed: ', error.message || error);
             console.log(error.message || error);
             errorAlert(error.message || error);
-            // supplyMeAnalytic('update_account_failure', null);
+            supplyMeAnalytic('update_account_failure', null);
             dispatch(updateAccountFailure({
                 response: {
                     status: 403,

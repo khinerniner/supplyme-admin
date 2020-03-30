@@ -1,3 +1,5 @@
+
+// Event is (action_model_result)
 export function generalAnalytic(userId, event, eventCategory) {
     console.log(eventCategory);
     return gtag(

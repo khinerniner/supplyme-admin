@@ -3,6 +3,7 @@ import { db, storage } from '../../store/firebase';
 import { parseJSON } from '../../utils/misc';
 import { apiActivateValorCode } from '../../utils/http_functions';
 import { toNewValor } from './model';
+import { supplyMeAnalytic } from '../../utils/analytics';
 
 export const addValor = valor => ({
     type: 'ADD_VALOR',
@@ -134,10 +135,11 @@ export const saveNewValor = (valorInfo, redirectRoute) => (dispatch) => {
           }).then((valorID) => {
               console.log("Transaction successfully committed!");
               dispatch(saveNewValorSuccess());
-              // Analytics
+              supplyMeAnalytic('save_valor_success', null);
               history.push(redirectRoute);
           }).catch((error) => {
               console.log("Transaction failed: ", error);
+              supplyMeAnalytic('save_valor_failure', null);
               dispatch(saveNewValorFailure({
                   response: {
                       status: 999,

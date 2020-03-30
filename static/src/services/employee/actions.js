@@ -104,11 +104,12 @@ export const saveNewEmployee = (token, employeeCodeInfo, redirectRoute) => (disp
     }).then((employeeID, accountID) => {
         console.log("Transaction successfully committed!");
         dispatch(saveNewEmployeeSuccess());
-        dispatch(apiSendEmailEmployeeCode(token, employeeCodeInfo))
-        // Analytics
+        dispatch(apiSendEmailEmployeeCode(token, employeeCodeInfo));
+        supplyMeAnalytic('update_employee_success', null);
         history.back();
     }).catch((error) => {
         console.log("Transaction failed: ", error);
+        supplyMeAnalytic('update_employee_failure', null);
         dispatch(saveNewEmployeeFailure({
             response: {
                 status: 999,
@@ -185,12 +186,11 @@ export const sendEmployeeCodeEmail = (token, employeeCode) => (dispatch) => {
           .then(parseJSON)
               .then((response) => {
                   dispatch(sendEmployeeCodeEmailSuccess());
-                  // Add Analytics
-                  // Add Swal Alert
+                  supplyMeAnalytic('send_employee_code_success', null);
               })
               .catch((error) => {
-                  // Add Analytics
                   console.error(error)
+                  supplyMeAnalytic('send_employee_code_failure', null);
                   dispatch(sendEmployeeCodeEmailFailure({
                       response: {
                           status: error.response.status,
@@ -199,8 +199,8 @@ export const sendEmployeeCodeEmail = (token, employeeCode) => (dispatch) => {
                   }));
               });
         }).catch((error) => {
-            // Add Analytics
             console.error(error)
+            supplyMeAnalytic('send_employee_code_failure', null);
             dispatch(sendEmployeeCodeEmailFailure({
                 response: {
                     status: error.response.status,
@@ -250,11 +250,11 @@ export const deleteEmployeeCode = (employeeID, accountID, employeeCode) => (disp
     const updatedDate = Date.now();
     docRef.update({"active": false, "deleted": true, "updatedDate": updatedDate}).then(() => {
         dispatch(deleteEmployeeCodeSuccess());
-        successAlert('Delete Employee Code Success');
-        supplyMeAnalytic(employeeID, 'employee', 'deleteEmployeeCodeSuccess');
+        successAlert('Delete Employee Code Success', null);
+        supplyMeAnalytic('delete_employee_code_success');
     }).catch((error) => {
         errorAlert(error.message || error);
-        supplyMeAnalytic(employeeID, 'employee', 'deleteEmployeeCodeFailure');
+        supplyMeAnalytic('delete_employee_code_failure', null);
         dispatch(deleteEmployeeCodeFailure({
             response: {
                 status: 400,
@@ -305,10 +305,10 @@ export const deleteEmployee = (employeeID, accountID, employee) => (dispatch) =>
     docRef.update({"active": false, "deleted": true, "updatedDate": updatedDate}).then(() => {
         dispatch(deleteEmployeeSuccess());
         successAlert('Delete Employee Success');
-        supplyMeAnalytic(employeeID, 'employee', 'deleteEmployeeSuccess');
+        supplyMeAnalytic('delete_employee_success', null);
     }).catch((error) => {
         errorAlert(error.message || error);
-        supplyMeAnalytic(employeeID, 'employee', 'deleteEmployeeFailure');
+        supplyMeAnalytic('delete_employee_failure', null);
         dispatch(deleteEmployeeFailure({
             response: {
                 status: 400,

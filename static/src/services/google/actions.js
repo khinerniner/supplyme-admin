@@ -33,12 +33,13 @@ export const searchGoogleHospitals = (query) => (dispatch) => {
         .then(parseJSON)
         .then((response) => {
             console.log(response)
-            // veridocAnalytic('google_places_success', null);
+            supplyMeAnalytic('google_places_success', null);
             dispatch(googleHospitalsSuccess(response.data.data));
         })
         .catch((error) => {
             console.log(error);
             errorAlert(error.response.data.statusText || error.message);
+            supplyMeAnalytic('google_places_failure', null);
             dispatch(googleHospitalsFailure({
                 response: {
                     status: 403,
@@ -56,13 +57,13 @@ export const geocodeGooglePlace = (token, accountID, place) => {
     return apiGeocodeGooglePlace(token, accountID, place)
         .then(parseJSON)
         .then((response) => {
-            supplyMeAnalytic('googlePlacesSuccess');
+            supplyMeAnalytic('google_geocode_success', null);
             return response.data.data;
         })
         .catch((error) => {
             console.log(error);
             errorAlert(error.response.data.statusText || error.message);
-            supplyMeAnalytic('googlePlacesFailure');
+            supplyMeAnalytic('google_geocode_failure', null);
         });
 };
 // [END Geocode Google Place]
@@ -74,13 +75,13 @@ export const getGoogleDirections = (token, accountID, origin, destination, waypo
     return apiGetGoogleDirections(token, accountID, origin, destination, waypoints)
         .then(parseJSON)
         .then((response) => {
-            supplyMeAnalytic('googleDirectionsSuccess');
+            supplyMeAnalytic('google_directions_success', null);
             return response.data.data;
         })
         .catch((error) => {
             console.log(error);
             errorAlert(error.response.data.statusText || error.message);
-            supplyMeAnalytic('googleDirectionsSuccess');
+            supplyMeAnalytic('google_directions_failure', null);
         });
 };
 // [END Get Google Directions]

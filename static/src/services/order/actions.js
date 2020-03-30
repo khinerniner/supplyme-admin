@@ -93,11 +93,12 @@ export const saveNewOrder = (token, employeeID, accountID, order, redirectRoute)
     }).then((orderInfo) => {
         console.log("Transaction successfully committed!");
         dispatch(saveNewOrderSuccess());
+        supplyMeAnalytic('save_order_success');
         // dispatch(addOrder(order))
-        // Analytics
         history.push(redirectRoute)
     }).catch((error) => {
         console.log("Transaction failed: ", error);
+        supplyMeAnalytic('save_order_failure');
         dispatch(saveNewOrderFailure({
             response: {
                 status: 999,
@@ -177,7 +178,7 @@ export const updateOrder = (employeeID, accountID, order, redirectRoute) => (dis
 
     })).then((result) => {
         console.log('Transaction successfully committed!');
-        // supplyMeAnalytic('update_order_success', null);
+        supplyMeAnalytic('update_order_success', null);
         dispatch(updateOrderSuccess(result.currentOrderInfo));
         successAlert('Update Order Success!');
         history.push(`/accounts/${accountID}/orders`)
@@ -185,7 +186,7 @@ export const updateOrder = (employeeID, accountID, order, redirectRoute) => (dis
         console.log('Transaction failed: ', error.message || error);
         console.log(error.message || error);
         errorAlert(error.message || error);
-        // supplyMeAnalytic('update_order_failure', null);
+        supplyMeAnalytic('update_order_failure', null);
         dispatch(updateOrderFailure({
             response: {
                 status: 403,
@@ -247,11 +248,11 @@ export const deleteOrder = (employeeID, accountID, order, redirectRoute) => (dis
     docRef.update({ "active": false, "deleted": true, "updatedDate": updatedDate }).then(() => {
         dispatch(deleteOrderSuccess());
         history.push(`/accounts/${accountID}/orders`)
-        // errorAlert(200, 'Delete Menu Item Success');
-        // supplyMeAnalytic(employeeID, 'order', 'deleteOrderSuccess');
+        errorAlert('Delete Menu Item Success');
+        supplyMeAnalytic('delete_order_success', null);
     }).catch((error) => {
-        // errorAlert(400, error.message || error);
-        // supplyMeAnalytic(employeeID, 'order', 'deleteOrderFailure');
+        errorAlert(error.message || error);
+        supplyMeAnalytic('delete_order_failure', null);
         dispatch(deleteOrderFailure({
             response: {
                 status: 400,

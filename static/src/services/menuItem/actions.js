@@ -190,10 +190,11 @@ export const saveNewMenuItem = (token, employeeID, accountID, menuItem, redirect
         console.log("Transaction successfully committed!");
         dispatch(saveNewMenuItemSuccess());
         // dispatch(addMenuItem(menuItem))
-        // Analytics
+        supplyMeAnalytic('save_menu_item_success');
         history.push(redirectRoute)
     }).catch((error) => {
         console.log("Transaction failed: ", error);
+        supplyMeAnalytic('save_menu_item_failure');
         dispatch(saveNewMenuItemFailure({
             response: {
                 status: 999,
@@ -273,7 +274,7 @@ export const updateMenuItem = (employeeID, accountID, menuItem, redirectRoute) =
 
     })).then((result) => {
         console.log('Transaction successfully committed!');
-        // supplyMeAnalytic('update_menuItem_success', null);
+        supplyMeAnalytic('update_menu_item_success', null);
         dispatch(updateMenuItemSuccess(result.currentMenuItemInfo));
         successAlert('Update MenuItem Success!');
         history.push(`/accounts/${accountID}/menuItems`)
@@ -281,7 +282,7 @@ export const updateMenuItem = (employeeID, accountID, menuItem, redirectRoute) =
         console.log('Transaction failed: ', error.message || error);
         console.log(error.message || error);
         errorAlert(error.message || error);
-        // supplyMeAnalytic('update_menuItem_failure', null);
+        supplyMeAnalytic('update_menu_item_failure', null);
         dispatch(updateMenuItemFailure({
             response: {
                 status: 403,
@@ -343,11 +344,11 @@ export const deleteMenuItem = (employeeID, accountID, menuItem, redirectRoute) =
     docRef.update({ "active": false, "deleted": true, "updatedDate": updatedDate }).then(() => {
         dispatch(deleteMenuItemSuccess());
         history.push(`/accounts/${accountID}/menuItems`)
-        // errorAlert(200, 'Delete Menu Item Success');
-        // supplyMeAnalytic(employeeID, 'menuItem', 'deleteMenuItemSuccess');
+        errorAlert('Delete Menu Item Success');
+        supplyMeAnalytic('delete_menu_item_success');
     }).catch((error) => {
-        // errorAlert(400, error.message || error);
-        // supplyMeAnalytic(employeeID, 'menuItem', 'deleteMenuItemFailure');
+        errorAlert(error.message || error);
+        supplyMeAnalytic('delete_menu_item_failure');
         dispatch(deleteMenuItemFailure({
             response: {
                 status: 400,
