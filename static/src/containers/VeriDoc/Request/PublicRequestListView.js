@@ -135,7 +135,6 @@ class PublicRequestListView extends React.Component {
         const { accountID } = this.props;
         const route = `/accounts/${accountID}/requests/${requestID}`;
         dispatchNewRoute(route);
-        // this.setState({showRequest: true})
     }
 
     render() {
@@ -146,17 +145,6 @@ class PublicRequestListView extends React.Component {
 
         const GeneralContainer = (
             <div className={classes.outerCell}><h1>Search Requests</h1>
-
-            <Button
-              variant="contained"
-              disableRipple
-              disableFocusRipple
-              className={classes.firstButton}
-              classes={{ label: classes.buttonLabel }}
-              onClick={e => handleItemsSelected(e, requestItems)}
-            >
-                {'Back to Order'}
-            </Button>
             </div>
         );
 
