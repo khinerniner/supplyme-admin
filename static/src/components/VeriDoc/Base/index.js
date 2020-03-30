@@ -181,7 +181,7 @@ class Base extends Component {
             }
             var listItems = [];
             switch (accountType) {
-                case 'hcp':
+                case 'retailer':
                     listItems = [
                         'locations',
                         'requests',
