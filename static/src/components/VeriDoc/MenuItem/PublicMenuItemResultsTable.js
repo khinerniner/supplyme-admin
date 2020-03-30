@@ -100,8 +100,8 @@ function PublicMenuItemResultsTable(props) {
             <TableRow key={menuItem.id}>
               <TableCell><a onClick={e => handleLink(e, menuItem.id)} className={classes.linkText}>{menuItem.itemName}</a></TableCell>
               <TableCell style={{width: 100}}>
-                  <MenuItemCell itemID={menuItem.itemID} itemName={menuItem.itemName} itemImage={menuItem.thumbItemImageURL} />
-                </TableCell>
+                  <MenuItemCell itemID={menuItem.itemID} itemImage={menuItem.thumbItemImageURL} />
+              </TableCell>
               <TableCell>
                 {menuItem.itemType}
               </TableCell>
