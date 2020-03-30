@@ -141,8 +141,6 @@ class OrderListView extends React.Component {
             rows,
         } = this.state;
 
-        let dropzoneBulkOrderRef;
-
         const GeneralContainer = (
             <div className={classes.outerCell}>
             <Button
