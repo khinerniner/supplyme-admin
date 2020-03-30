@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import history from '../history';
-// import Loader from 'react-loaders';
 
 import Base from '../components/VeriDoc/Base';
 import Loader from '../components/VeriDoc/Base/Loader';
@@ -15,18 +14,6 @@ const styles = (theme) => ({
     loader: {
         color: theme.palette.primary.secondary,
     },
-    overlay: {
-      position: 'fixed',
-      width: '100%',
-      height: '100%',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0,0,0,0.5)',
-      zIndex: 2,
-      cursor: 'pointer',
-    }
 });
 
 function mapStateToProps(state) {
@@ -114,9 +101,7 @@ export function requireAuthentication(Component) {
                               </Base>
                             </div>
                         )
-                        : <div style={styles.overlay}>
-                            <Loader open={true} />
-                          </div>
+                        : <Loader open={this.state.isLoaded} />
                     }
                 </div>
             );
