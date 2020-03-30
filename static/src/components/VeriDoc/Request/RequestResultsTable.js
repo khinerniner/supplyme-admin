@@ -44,10 +44,11 @@ const styles = (theme) => ({
     color: theme.palette.primary.black,
   },
   linkText: {
-    color: '#2A38D8',
-    fontWeight: 500,
+    color: '#2A38D8 !important',
+    fontWeight: '600px !important',
     cursor: 'pointer',
     textAlign: 'left',
+    fontSize: '14px !important',
   },
   cancelIcon: {
     color: '#e02626',
@@ -81,10 +82,11 @@ function RequestResultsTable(props) {
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell className={classes.tableHeaders} >Name</TableCell>
+            <TableCell className={classes.tableHeaders} >Delivery Location</TableCell>
             <TableCell className={classes.tableHeaders} >Priority</TableCell>
-            <TableCell className={classes.tableHeaders} >Items</TableCell>
             <TableCell className={classes.tableHeaders} >Required By</TableCell>
+            <TableCell className={classes.tableHeaders} >Items</TableCell>
+            <TableCell className={classes.tableHeaders} >Budget</TableCell>
             <TableCell className={classes.tableHeaders} >Status</TableCell>
             <TableCell className={classes.tableHeaders} >Updated Date</TableCell>
           </TableRow>
@@ -100,10 +102,13 @@ function RequestResultsTable(props) {
                 {row.priority}
               </TableCell>
               <TableCell>
-                {row.numItems}
+                {formatDateNoTime(row.requiredBy)}
               </TableCell>
               <TableCell>
-                {formatDateNoTime(row.requiredBy)}
+                {row.items}
+              </TableCell>
+              <TableCell>
+                {row.budget}
               </TableCell>
               <TableCell>
                 {formatRequestStatus(row.isStatus)}
