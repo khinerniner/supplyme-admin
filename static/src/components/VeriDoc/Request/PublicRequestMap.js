@@ -82,7 +82,7 @@ const PublicRequestMap = withScriptjs(withGoogleMap((props) => {
                 <Marker
                   key={marker.id}
                   position={marker.location}
-                  // icon={markers[0].img}
+                  // icon={markers.img}
                   onClick={onToggleOpen}
                 >
                 {
