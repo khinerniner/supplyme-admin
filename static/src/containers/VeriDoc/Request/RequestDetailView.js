@@ -10,11 +10,11 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import { toNewRequest } from '../../../services/request/model';
-import { getKeys, formatDateWTime, dispatchNewObject } from '../../../utils/misc';
+import { getKeys, dispatchNewRoute, formatDateWTime, dispatchNewObject } from '../../../utils/misc';
 
 import MiniDetailMap from '../../../components/VeriDoc/Misc/MiniDetailMap';
 
-const styles = {
+const styles = (theme) => ({
     root: {
         flex: 1,
     },
@@ -58,12 +58,10 @@ const styles = {
         display: 'flex',
     },
     button: {
+        color: 'fff',
         marginRight: 10,
         textTransform: 'none',
-    },
-    deleteButton: {
-        backgroundColor: '#e02626',
-        textTransform: 'none',
+        backgroundColor: theme.palette.primary.main,
     },
     rightDetail: {
       flexGrow: 2,
@@ -85,10 +83,6 @@ const styles = {
       paddingTop: 15,
       display: 'block',
     },
-    editButton: {
-        float: 'right',
-        textTransform: 'none',
-    },
     detailListDt: {
       minWidth: '30%',
       brequest: 0,
@@ -109,7 +103,7 @@ const styles = {
         brequestRadius: '50%',
         paddingRight: 10,
     }
-};
+});
 
 function mapStateToProps(state) {
     return {
@@ -194,6 +188,13 @@ class RequestDetailView extends React.Component {
         );
     }
 
+    dispatchNewRequest = (e, requestID) => {
+        e.preventDefault();
+        const { accountID } = this.props;
+        const route = `/accounts/${accountID}/orders/create/requests/${requestID}`;
+        dispatchNewRoute(route);
+    }
+
     render() {
         const { classes, accountID } = this.props;
         const { request } = this.state;
@@ -227,21 +228,24 @@ class RequestDetailView extends React.Component {
                                 <br />
                                 <span>{request.active ? `Lat: ${request.location.address.location.lat} Lng: ${request.location.address.location.lng}` : null}</span>
                               </div>
+                              <div className={classes.detailActions}>
+                                  <Button
+                                    variant="contained"
+                                    disableRipple
+                                    disableFocusRipple
+                                    className={classes.button}
+                                    onClick={e => this.dispatchNewRequest(e, request.requestID)}
+                                  >
+                                      {'Order From Request'}
+                                  </Button>
+                              </div>
                           </div>
                       </div>
                       <div className={classes.rightDetail}>
                           <div className={classes.block}>
                               <div className={classes.section}>
                                   <span className={classes.detailTitleText}>Details</span>
-                                  <Button
-                                    variant="contained"
-                                    disableRipple
-                                    disableFocusRipple
-                                    onClick={(e) => dispatchNewObject(e, accountID, 'request', request.requestID, 'edit')}
-                                    className={classes.editButton}
-                                  >
-                                      {'Edit'}
-                                  </Button>
+
                               </div>
                               <dl className={classes.detailList}>
                                   <div className={classes.detailListFlex}>
@@ -303,3 +307,13 @@ RequestDetailView.propTypes = {
 };
 
 export default withStyles(styles)(RequestDetailView);
+
+// <Button
+//   variant="contained"
+//   disableRipple
+//   disableFocusRipple
+//   onClick={(e) => dispatchNewObject(e, accountID, 'request', request.requestID, 'edit')}
+//   className={classes.button}
+// >
+//     {'Edit'}
+// </Button>
