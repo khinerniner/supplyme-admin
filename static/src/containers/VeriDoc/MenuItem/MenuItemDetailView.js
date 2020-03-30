@@ -190,6 +190,14 @@ class MenuItemDetailView extends React.Component {
                             {quantity.stock}
                         </dd>
                     </div>
+                    <div key={index} className={classes.detailListFlex}>
+                        <dt className={classes.detailListDt}>
+                            {'Location'}
+                        </dt>
+                        <dd className={classes.detailListDd}>
+                            {quantity.location.name}
+                        </dd>
+                    </div>
                 </dl>
             </div>
         );
@@ -206,7 +214,7 @@ class MenuItemDetailView extends React.Component {
                       <div className={classes.leftDetail}>
                           <div className={classes.detailCard}>
                               <div className={classes.detailTop}>
-                                <img height='200' width='200' className={classes.img} src='/src/containers/App/styles/img/temp_anon.jpg' />
+                                <img height='200' width='200' className={classes.img} src='/src/containers/App/styles/img/broken.png' />
                               </div>
                               <div className={classes.detailTitle}>
                                 <span className={classes.detailTitleText}>{`${menuItem.brandName} - ${menuItem.itemName}`}</span>
