@@ -66,16 +66,13 @@ const styles = theme => ({
     },
     footer: {
         background: 'linear-gradient(to right, #000000 0%, #79bac1 100%, #79bac1 100%, #79bac1 100%)',
-        // borderTop: 1,
-        // borderStyle: 'solid',
-        // borderfColor: '#e6e6e6',
         color: '#ffffff',
         fontSize: 12,
         lineHeight: 2,
         paddingTop: 20,
         paddingBottom: 20,
         textAlign: 'center',
-        position: 'absolute',
+        // position: 'absolute',
         bottom: 0,
         width: '100%'
     },

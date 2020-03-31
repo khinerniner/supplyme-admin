@@ -53,10 +53,8 @@ const styles = (theme) => ({
   },
 });
 
-
-
 function LocationResultsTable(props) {
-  const { classes, type, rows, handleLink, handleAction } = props;
+  const { classes, rows, handleLink, handleAction } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);

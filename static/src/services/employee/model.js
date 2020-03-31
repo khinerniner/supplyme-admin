@@ -48,6 +48,7 @@ export function employeeRowObject(employee) {
         email: employee.email,
         phoneNumber: employee.phoneNumber,
         createdDate: employee.createdDate,
+        updatedDate: employee.updatedDate,
     };
 }
 export function getEmployeeCodeFromSnapshot(employee) {

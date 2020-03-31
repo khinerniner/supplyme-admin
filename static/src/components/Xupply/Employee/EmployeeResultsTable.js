@@ -5,12 +5,16 @@ import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
+import TablePagination from '@material-ui/core/TablePagination';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableFooter from '@material-ui/core/TableFooter';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
+
+import TablePaginationActions from '../../TablePaginationActions';
 
 import { formatDateWTime, formatAddress } from '../../../utils/misc';
 
@@ -49,7 +53,17 @@ const styles = (theme) => ({
 });
 
 function EmployeeResultsTable(props) {
-  const { classes, type, rows, handleLink, handleAction } = props;
+  const { classes, rows, handleLink, handleAction } = props;
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  const handleChangePage = (e, newPage) => {
+    setPage(newPage);
+  };
+  const handleChangeRowsPerPage = e => {
+    setRowsPerPage(parseInt(e.target.value, 10));
+    setPage(0);
+  };
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
@@ -64,7 +78,10 @@ function EmployeeResultsTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map(row => (
+          {(rowsPerPage > 0
+            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : rows
+          ).map(row => (
             <TableRow key={row.id}>
               <TableCell align="right"><a onClick={e => handleLink(e, row.id)} className={classes.linkText}>{row.name}</a></TableCell>
               <TableCell component="th" scope="row">
@@ -79,10 +96,33 @@ function EmployeeResultsTable(props) {
               <TableCell component="th" scope="row">
                 {row.active ? 'True' : 'False'}
               </TableCell>
-              <TableCell component="th" scope="row">{row.updatedDate ? formatDateWTime(new Date(row.updatedDate)) : formatDateWTime(new Date(row.creationDate))}</TableCell>
+              <TableCell component="th" scope="row">{row.updatedDate ? formatDateWTime(row.updatedDate) : formatDateWTime(row.createdDate)}</TableCell>
             </TableRow>
           ))}
+          {emptyRows > 0 && (
+            <TableRow style={{ height: 53 * emptyRows }}>
+              <TableCell colSpan={6} />
+            </TableRow>
+          )}
         </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+              colSpan={6}
+              count={rows.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              selectProps={{
+                inputProps: { 'aria-label': 'rows per page' },
+                native: true,
+              }}
+              onChangePage={handleChangePage}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
+              actionsComponent={TablePaginationActions}
+            />
+          </TableRow>
+        </TableFooter>
       </Table>
     </Paper>
   );
@@ -90,7 +130,6 @@ function EmployeeResultsTable(props) {
 
 
 EmployeeResultsTable.propTypes = {
-    type: PropTypes.string.isRequired,
     rows: PropTypes.array.isRequired,
     handleLink: PropTypes.func.isRequired,
     handleAction: PropTypes.func.isRequired,

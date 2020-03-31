@@ -5,12 +5,16 @@ import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
+import TablePagination from '@material-ui/core/TablePagination';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableFooter from '@material-ui/core/TableFooter';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
+
+import TablePaginationActions from '../../TablePaginationActions';
 
 import { formatDateWTime } from '../../../utils/misc';
 
@@ -29,7 +33,7 @@ const styles = (theme) => ({
       borderBottom: '1px solid #d6d6d6',
       borderLeft: 0,
       verticalAlign: 'bottom',
-      color: '#202020',
+      color: theme.palette.primary.main,
     },
     linkText: {
       color: '#2A38D8',
@@ -49,7 +53,17 @@ const styles = (theme) => ({
 });
 
 function EmployeeCodeResultsTable(props) {
-  const { classes, type, employeeCodes, handleLink, handleEmailAction, handleDeleteAction } = props;
+  const { classes, employeeCodes, handleLink, handleEmailAction, handleDeleteAction } = props;
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, employeeCodes.length - page * rowsPerPage);
+  const handleChangePage = (e, newPage) => {
+    setPage(newPage);
+  };
+  const handleChangeRowsPerPage = e => {
+    setRowsPerPage(parseInt(e.target.value, 10));
+    setPage(0);
+  };
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
@@ -64,7 +78,10 @@ function EmployeeCodeResultsTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {employeeCodes.map(employeeCode => (
+          {(rowsPerPage > 0
+            ? employeeCodes.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : employeeCodes
+          ).map(employeeCode => (
             <TableRow key={employeeCode.id}>
               <TableCell align="right"><a onClick={e => handleLink(e, employeeCode.activationCode)} className={classes.linkText}>{employeeCode.activationCode}</a></TableCell>
               <TableCell>
@@ -86,7 +103,30 @@ function EmployeeCodeResultsTable(props) {
               </TableCell>
             </TableRow>
           ))}
+          {emptyRows > 0 && (
+            <TableRow style={{ height: 53 * emptyRows }}>
+              <TableCell colSpan={6} />
+            </TableRow>
+          )}
         </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+              colSpan={6}
+              count={employeeCodes.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              selectProps={{
+                inputProps: { 'aria-label': 'rows per page' },
+                native: true,
+              }}
+              onChangePage={handleChangePage}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
+              actionsComponent={TablePaginationActions}
+            />
+          </TableRow>
+        </TableFooter>
       </Table>
     </Paper>
   );
