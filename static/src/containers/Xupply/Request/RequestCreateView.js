@@ -376,6 +376,8 @@ class RequestCreateView extends React.Component {
             menuItemOpen,
         } = this.state;
 
+        console.error(request);
+
         const priorityTypes = renderPriorityType();
 
         const NameContainer = (

@@ -104,11 +104,13 @@ export const saveNewRequestFailure = error => ({
 export const saveNewRequest = (token, employeeID, accountID, request, redirectRoute) => (dispatch) => {
     dispatch(saveNewRequestRequest());
 
-    const createdDate = new Date()
+    const createdDate = new Date();
 
-    const accountRef = db().collection("Accounts").doc(accountID)
-    const newAccountRequestRef = accountRef.collection("Requests").doc()
-    const newRequestRef = db().collection("Requests").doc(newAccountRequestRef.id)
+    const accountRef = db().collection("Accounts").doc(accountID);
+    const newAccountRequestRef = accountRef.collection("Requests").doc();
+    const newRequestRef = db().collection("Requests").doc(newAccountRequestRef.id);
+
+    console.warn(request);
 
     const requestInfo = request;
     const newEvent = {

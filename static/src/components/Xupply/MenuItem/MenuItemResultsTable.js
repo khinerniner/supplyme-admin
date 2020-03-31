@@ -12,6 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
 import Paper from '@material-ui/core/Paper';
 import CancelIcon from '@material-ui/icons/Cancel';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import TablePaginationActions from '../../TablePaginationActions';
 
@@ -56,10 +57,38 @@ const styles = (theme) => ({
 
 });
 
+const ImageTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip);
 
+const LocationTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip);
+
+// const LocationTooltip = withStyles((theme) => ({
+//   tooltip: {
+//     backgroundColor: '#f5f5f9',
+//     color: 'rgba(0, 0, 0, 0.87)',
+//     maxWidth: 220,
+//     fontSize: theme.typography.pxToRem(12),
+//     border: '1px solid #dadde9',
+//   },
+// }))(Tooltip);
 
 function MenuItemResultsTable(props) {
-  const { classes, type, rows, handleLink, handleAction } = props;
+  const { classes, rows, handleLink, handleAction } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -76,11 +105,11 @@ function MenuItemResultsTable(props) {
         <TableHead>
           <TableRow>
             <TableCell className={classes.tableHeaders} >Name</TableCell>
-            <TableCell className={classes.tableHeaders} >Item Image</TableCell>
-            <TableCell className={classes.tableHeaders} >Item Type</TableCell>
+            <TableCell className={classes.tableHeaders} >Package Details</TableCell>
+            <TableCell className={classes.tableHeaders} >Package Price</TableCell>
             <TableCell className={classes.tableHeaders} >Brand Name</TableCell>
-            <TableCell className={classes.tableHeaders} >Sku ID</TableCell>
-            <TableCell className={classes.tableHeaders} >Updated Date</TableCell>
+            <TableCell className={classes.tableHeaders} >UPC ID</TableCell>
+            <TableCell className={classes.tableHeaders} >Finished Product</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -89,12 +118,32 @@ function MenuItemResultsTable(props) {
             : rows
           ).map(row => (
             <TableRow key={row.id}>
-              <TableCell><a onClick={e => handleLink(e, row.id)} className={classes.linkText}>{row.itemName}</a></TableCell>
-              <TableCell style={{width: 100}}>
-                  <MenuItemCell itemID={row.id} itemImage={row.thumbnail} />
+              <TableCell>
+                <ImageTooltip
+                  title={
+                    <React.Fragment>
+                      <img src={row.thumbnail ? row.thumbnail : '/src/containers/App/styles/img/broken.png'} style={{height: 50, width: 50}} />
+                    </React.Fragment>
+                  }
+                >
+                  <a onClick={e => handleLink(e, row.id)} className={classes.linkText}>{row.itemName}</a>
+                </ImageTooltip>
               </TableCell>
               <TableCell>
-                {row.itemType}
+                  <LocationTooltip
+                    title={
+                      <React.Fragment>
+                      <em>
+                          {"123 West St, Newport Beach CA"}
+                      </em>
+                      </React.Fragment>
+                    }
+                  >
+                    <span className={classes.linkText}>{'100 / case'}</span>
+                  </LocationTooltip>
+              </TableCell>
+              <TableCell>
+                {'$ 35.00'}
               </TableCell>
               <TableCell>
                 {row.brandName}
@@ -102,7 +151,7 @@ function MenuItemResultsTable(props) {
               <TableCell>
                 {row.upcID || 'None'}
               </TableCell>
-              <TableCell>{formatDateNoTime(row.updatedDate ? row.updatedDate : row.createdDate)}</TableCell>
+              <TableCell>{row.isFinished ? 'True' : 'False'}</TableCell>
             </TableRow>
           ))}
           {emptyRows > 0 && (
@@ -115,7 +164,7 @@ function MenuItemResultsTable(props) {
           <TableRow>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-              colSpan={5}
+              colSpan={6}
               count={rows.length}
               rowsPerPage={rowsPerPage}
               page={page}
@@ -137,7 +186,6 @@ function MenuItemResultsTable(props) {
 
 
 MenuItemResultsTable.propTypes = {
-  type: PropTypes.string.isRequired,
   rows: PropTypes.array.isRequired,
   handleLink: PropTypes.func.isRequired,
   handleAction: PropTypes.func.isRequired,

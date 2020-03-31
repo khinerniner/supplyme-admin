@@ -106,9 +106,12 @@ export function getPublicMenuItemFromSnapshot(menuItem) {
         itemType: menuItem.itemType,
         description: menuItem.description,
         oldItemRef: menuItem.oldItemRef,
+        quantities: [], // Removed in Public Item
         thumbItemImageURL: menuItem.thumbItemImageURL,
         updatedDate: parseFirestoreTimeStamp(menuItem.updatedDate),
         createdDate: parseFirestoreTimeStamp(menuItem.createdDate),
+        availableStockPerItem: {}, // Removed in Public Item
+        unassignedStockPerItem: {}, // Removed in Public Item
         private: menuItem.private,
         madeInCountry: menuItem.madeInCountry,
     };
@@ -172,7 +175,8 @@ export function menuItemRowObject(menuItem) {
         itemName: menuItem.itemName,
         itemType: menuItem.itemType,
         madeInCountry: menuItem.madeInCountry,
-        thumbnail: menuItem.thumbnail,
+        isFinished: menuItem.isFinished,
+        thumbnail: menuItem.thumbItemImageURL,
         updatedDate: menuItem.updatedDate,
         createdDate: menuItem.createdDate,
     };

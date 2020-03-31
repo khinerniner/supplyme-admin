@@ -160,7 +160,6 @@ class MenuItemListView extends React.Component {
                         {GeneralContainer}
                     </div>
                     <MenuItemResultsTable
-                        type={'menuItem'}
                         rows={rows}
                         handleLink={this.dispatchNewMenuItem}
                     />

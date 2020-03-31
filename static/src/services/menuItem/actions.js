@@ -84,7 +84,7 @@ export const fetchPublicMenuItems = (employeeID, accountID) => (dispatch) => {
 
 export const saveMenuItemMedia = (image, ref) => {
     const metadata = {
-        contentType: 'text/image',
+        contentType: image.type,
     };
     return new Promise((resolve, reject) => {
         const uploadTask = ref.put(image, metadata);

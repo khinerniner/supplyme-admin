@@ -13,10 +13,9 @@ import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
 import Paper from '@material-ui/core/Paper';
 import CancelIcon from '@material-ui/icons/Cancel';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import TablePaginationActions from '../../TablePaginationActions';
-
-import MenuItemCell from './MenuItemCell';
 
 import { formatDateWTime, formatAddress, formatDateNoTime } from '../../../utils/misc';
 
@@ -62,7 +61,15 @@ const styles = (theme) => ({
   },
 });
 
-
+const ImageTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip);
 
 function PublicMenuItemResultsTable(props) {
   const { classes, menuItems, handleAction, handleChange } = props;
@@ -76,15 +83,14 @@ function PublicMenuItemResultsTable(props) {
     setRowsPerPage(parseInt(e.target.value, 10));
     setPage(0);
   };
-
+  console.warn(menuItems)
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
             <TableCell className={classes.tableHeaders} >Name</TableCell>
-            <TableCell className={classes.tableHeaders} >Item Image</TableCell>
-            <TableCell className={classes.tableHeaders} >Item Type</TableCell>
+            <TableCell className={classes.tableHeaders} >Package Details</TableCell>
             <TableCell className={classes.tableHeaders} >Brand Name</TableCell>
             <TableCell className={classes.tableHeaders} >UPC ID</TableCell>
             <TableCell style={{textAlign: 'center'}} className={classes.tableHeaders} >Add</TableCell>
@@ -95,13 +101,20 @@ function PublicMenuItemResultsTable(props) {
             ? menuItems.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : menuItems
           ).map(menuItem => (
-            <TableRow key={menuItem.id}>
-              <TableCell><a onClick={e => handleLink(e, menuItem.id)} className={classes.linkText}>{menuItem.itemName}</a></TableCell>
-              <TableCell style={{width: 100}}>
-                  <MenuItemCell itemID={menuItem.itemID} itemImage={menuItem.thumbItemImageURL} />
+            <TableRow key={menuItem.itemID}>
+              <TableCell>
+                  <ImageTooltip
+                    title={
+                      <React.Fragment>
+                        <img src={menuItem.thumbItemImageURL ? menuItem.thumbItemImageURL : '/src/containers/App/styles/img/broken.png'} style={{height: 50, width: 50}} />
+                      </React.Fragment>
+                    }
+                  >
+                    <a onClick={e => handleLink(e, menuItem.itemID)} className={classes.linkText}>{menuItem.itemName}</a>
+                  </ImageTooltip>
               </TableCell>
               <TableCell>
-                {menuItem.itemType}
+                {'100 / case'}
               </TableCell>
               <TableCell>
                 {menuItem.brandName}

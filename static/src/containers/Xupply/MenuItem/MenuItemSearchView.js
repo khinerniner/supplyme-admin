@@ -78,7 +78,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
-class MenuItemListView extends React.Component {
+class MenuItemSearchView extends React.Component {
 
     constructor(props) {
         super(props);
@@ -110,7 +110,6 @@ class MenuItemListView extends React.Component {
             console.log('THis')
             return false;
         }
-        console.log('HERE')
         return true;
     }
 
@@ -155,6 +154,7 @@ class MenuItemListView extends React.Component {
 
     handleMenuItemAdd = (e, item) => {
         console.log('Item Added');
+        console.warn(item);
         const next_state = this.state;
         next_state.menuItem.item = item;
         let next_items = this.state.requestItems;
@@ -247,12 +247,12 @@ class MenuItemListView extends React.Component {
     }
 }
 
-MenuItemListView.defaultProps = {
+MenuItemSearchView.defaultProps = {
     accountID: '',
     employeeID: '',
     fetchMenuItems: f => f,
 };
-MenuItemListView.propTypes = {
+MenuItemSearchView.propTypes = {
     accountID: PropTypes.string,
     employeeID: PropTypes.string,
     fetchMenuItems: PropTypes.func,
@@ -260,4 +260,4 @@ MenuItemListView.propTypes = {
     handleItemsSelected: PropTypes.func.isRequired,
     classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(MenuItemListView);
+export default withStyles(styles)(MenuItemSearchView);
