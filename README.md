@@ -7,7 +7,7 @@
 
 
 <p align="center">
-  <img height="300px" width="auto" src="public/www/img/logo.png">
+  <img height="200px" width="auto" src="public/www/img/logo.png">
 </p>
 
 Xupply is a web application that connects those who NEED supplies with those who HAVE supplies and allows financiers to fund those who NEED supplies.
