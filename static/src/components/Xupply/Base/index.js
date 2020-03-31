@@ -37,7 +37,7 @@ const styles = theme => ({
         // zIndex: theme.zIndex.drawer + 1,
         paddingRight: 64,
         paddingLeft: 64,
-        backgroundColor: '#000000',
+        background: 'linear-gradient(to right, #000000 0%, #79bac1 100%, #79bac1 100%, #79bac1 100%)',
     },
     toolbar: theme.mixins.toolbar,
     content: {
@@ -65,11 +65,11 @@ const styles = theme => ({
         fontSize: 14,
     },
     footer: {
-        backgroundColor: '#202020',
+        background: 'linear-gradient(to right, #000000 0%, #79bac1 100%, #79bac1 100%, #79bac1 100%)',
         // borderTop: 1,
         // borderStyle: 'solid',
         // borderfColor: '#e6e6e6',
-        color: '#B3B3B3',
+        color: '#ffffff',
         fontSize: 12,
         lineHeight: 2,
         paddingTop: 20,
@@ -342,7 +342,7 @@ class Base extends Component {
                         <IconButton
                             onClick={e => this.toggleAccount(!showAccount)}
                         >
-                            <div style={{ fontSize: 14, color: '#adadad' }}>
+                            <div style={{ fontSize: 14, color: '#fff' }}>
                                 <i class="fa fa-globe"></i>
                                 <span style={{ marginLeft: 8 }}>EN</span>
                             </div>
@@ -352,7 +352,7 @@ class Base extends Component {
                         <IconButton
                             onClick={isAuthenticated ? e => this.logout(e) : e => dispatchNewRoute('/login')}
                         >
-                            <div style={{ fontSize: 14, color: '#adadad' }}>
+                            <div style={{ fontSize: 14, color: '#fff' }}>
                                 <i class="fa fa-user"></i>
                                 <span style={{ marginLeft: 8 }}>{!isAuthenticated ? 'Log In' : 'Log Out'}</span>
                             </div>

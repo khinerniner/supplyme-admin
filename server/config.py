@@ -11,11 +11,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 from server.env import APP_ENV
 
 if APP_ENV == 'server.config.ProductionConfig':
-    CREDENTIAL_DIR = os.path.join(BASE_DIR, 'veridoc-dev')
+    CREDENTIAL_DIR = os.path.join(BASE_DIR, 'xupply-dev')
 if APP_ENV == 'server.config.DevelopmentConfig':
-    CREDENTIAL_DIR = os.path.join(BASE_DIR, 'veridoc-dev')
+    CREDENTIAL_DIR = os.path.join(BASE_DIR, 'xupply-dev')
 if APP_ENV == 'server.config.StageConfig':
-    CREDENTIAL_DIR = os.path.join(BASE_DIR, 'veridoc-dev')
+    CREDENTIAL_DIR = os.path.join(BASE_DIR, 'xupply-dev')
 
 class Config(object):
     SECRET_KEY = os.environ.get('secret_KEY')

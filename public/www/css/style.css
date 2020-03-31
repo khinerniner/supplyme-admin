@@ -2,7 +2,7 @@
 ------------------------------------
   Cryptocurrency - Landing Page
   Version: 1.0
- ------------------------------------ 
+ ------------------------------------
  ====================================*/
 
 
@@ -30,7 +30,7 @@ h3,
 h4,
 h5,
 h6 {
-	color: #20509e;
+	color: #3282b8;
 	margin: 0;
 	font-weight: 500;
 	font-family: "Futura", sans-serif;
@@ -171,7 +171,7 @@ ol {
 }
 
 .site-btn.sb-gradients.sbg-line {
-	color: #20509e;
+	color: #3282b8;
 	z-index: 1;
 }
 
@@ -188,7 +188,7 @@ ol {
 }
 
 .site-btn.sb-gradients.sbg-line:hover {
-	color: #20509e;
+	color: #3282b8;
 }
 
 .gradient-bg,
@@ -199,11 +199,11 @@ ol {
 .comment-form label {
 	/* FF3.6-15 */
 	/* Chrome10-25,Safari5.1-6 */
-	background: -webkit-gradient(linear, left top, right top, from(#3e2bce), color-stop(100%, #2dd3aa), color-stop(100%, #2dd3aa), to(#2dd3aa));
-	background: -o-linear-gradient(left, #3e2bce 0%, #2dd3aa 100%, #2dd3aa 100%, #2dd3aa 100%);
-	background: linear-gradient(to right, #3e2bce 0%, #2dd3aa 100%, #2dd3aa 100%, #2dd3aa 100%);
+	background: -webkit-gradient(linear, left top, right top, from(#000000), color-stop(100%, #79bac1), color-stop(100%, #79bac1), to(#79bac1));
+	background: -o-linear-gradient(left, #000000 0%, #79bac1 100%, #79bac1 100%, #79bac1 100%);
+	background: linear-gradient(to right, #000000 0%, #79bac1 100%, #79bac1 100%, #79bac1 100%);
 	/* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3e2bce', endColorstr='#2dd3aa', GradientType=1);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#79bac1', GradientType=1);
 	/* IE6-9 */
 }
 
@@ -368,7 +368,7 @@ ol {
 }
 
 .hero-text h2 span {
-	color: #16d0c5;
+	color: #79BAC1;
 }
 
 .hero-text h4 {
@@ -510,7 +510,7 @@ ol {
 
 .fact h2 {
 	float: left;
-	color: #16d0c5;
+	color: #79BAC1;
 	font-size: 60px;
 	margin-right: 20px;
 }
@@ -782,7 +782,7 @@ ol {
 	border-radius: 0px 50px 50px 0px;
 	min-width: 140px;
 	background: #fff;
-	color: #20509e;
+	color: #3282b8;
 	font-size: 14px;
 	font-weight: 600;
 	cursor: pointer;
@@ -826,7 +826,7 @@ ol {
 .blog-text .post-date {
 	font-size: 14px;
 	font-family: "Futura", sans-serif;
-	color: #16d0c5;
+	color: #79BAC1;
 	text-transform: uppercase;
 	margin-bottom: 15px;
 	display: block;
@@ -839,7 +839,7 @@ ol {
 }
 
 .blog-text .blog-title a {
-	color: #20509e;
+	color: #3282b8;
 }
 
 .blog-text .post-meta a {
@@ -857,7 +857,7 @@ ol {
 }
 
 .blog-text .post-meta a i {
-	color: #16d0c5;
+	color: #79BAC1;
 }
 
 .post-loadmore {
@@ -918,19 +918,19 @@ ol {
 }
 
 .social .facebook {
-	background: #4b6cd0;
+	background: #000000;
 }
 
 .social .google {
-	background: #f03b3b;
+	background: #000000;
 }
 
 .social .instagram {
-	background: #bb8950;
+	background: #000000;
 }
 
 .social .twitter {
-	background: #49a7f3;
+	background: #000000;
 }
 
 .footer-bottom {
@@ -979,7 +979,7 @@ ol {
 }
 
 .site-beradcamb a {
-	color: #20509e;
+	color: #3282b8;
 	font-size: 16px;
 }
 
@@ -1001,11 +1001,11 @@ ol {
 }
 
 .blog-page .readmore {
-	color: #20509e;
+	color: #3282b8;
 }
 
 .blog-page .readmore i {
-	color: #16d0c5;
+	color: #79BAC1;
 }
 
 .bi-feature .post-meta {
@@ -1045,16 +1045,16 @@ ol {
 .widget-area .widget ul a {
 	display: inline-block;
 	font-size: 16px;
-	color: #20509e;
+	color: #3282b8;
 	margin-bottom: 20px;
 }
 
 .widget-area .widget ul a:hover {
-	color: #16d0c5;
+	color: #79BAC1;
 }
 
 .widget-area .widget .popular-posts span {
-	color: #16d0c5;
+	color: #79BAC1;
 	font-size: 12px;
 	display: block;
 	margin-bottom: 7px;
@@ -1063,11 +1063,11 @@ ol {
 
 .widget-area .widget .popular-posts h5 a {
 	font-size: 18px;
-	color: #20509e;
+	color: #3282b8;
 }
 
 .widget-area .widget .popular-posts h5 a:hover {
-	color: #20509e;
+	color: #3282b8;
 }
 
 .widget-area .widget .twitter-widget li {
@@ -1075,7 +1075,7 @@ ol {
 }
 
 .widget-area .widget .twitter-widget span {
-	color: #16d0c5;
+	color: #79BAC1;
 	font-size: 12px;
 	display: block;
 	text-transform: uppercase;
@@ -1083,7 +1083,7 @@ ol {
 
 .widget-area .widget .twitter-widget h5 {
 	font-size: 18px;
-	color: #20509e;
+	color: #3282b8;
 	margin-bottom: 5px;
 }
 
@@ -1115,9 +1115,9 @@ ol {
 
 .single-blog-page blockquote {
 	font-size: 24px;
-	color: #20509e;
+	color: #3282b8;
 	padding-left: 25px;
-	border-left: 2px solid #16d0c5;
+	border-left: 2px solid #79BAC1;
 	line-height: normal;
 	margin: 40px 0;
 	display: block;
@@ -1126,7 +1126,7 @@ ol {
 .single-blog-page blockquote span {
 	display: block;
 	font-size: 16px;
-	color: #16d0c5;
+	color: #79BAC1;
 	padding-top: 10px;
 }
 
@@ -1253,7 +1253,7 @@ ol {
 	font-size: 14px;
 	border: 1px solid #ebebeb;
 	background: #f3f7f9;
-	color: #20509e;
+	color: #3282b8;
 	padding: 4px 25px;
 	border-radius: 2px;
 	margin-right: 5px;
@@ -1326,7 +1326,7 @@ ol {
 }
 
 .contact-form h5 span {
-	color: #16d0c5;
+	color: #79BAC1;
 }
 
 .contact-form .form-group {
@@ -1362,12 +1362,12 @@ ol {
 	border-bottom: 1px solid #ebebeb;
 	font-size: 16px;
 	padding-bottom: 10px;
-	color: #20509e;
+	color: #3282b8;
 }
 
 .contact-form input:focus,
 .contact-form textarea:focus {
-	border-color: #20509e;
+	border-color: #3282b8;
 }
 
 .contact-form textarea {
@@ -1399,7 +1399,7 @@ ol {
 
 .contact-form .contact-type .ct-label input:checked~.checkmark:after {
 	content: '\f111';
-	color: #16d0c5;
+	color: #79BAC1;
 }
 
 .contact-form .contact-type .ct-label .checkmark {
@@ -1676,7 +1676,7 @@ ol {
 		display: block;
 		padding: 10px 5px;
 		margin-right: 0;
-		color: #20509e;
+		color: #3282b8;
 	}
 	.hero-text h2 {
 		font-size: 40px;

@@ -141,6 +141,7 @@ class OpportunityListView extends React.Component {
                     <OpportunityResultsTable
                         rows={rows}
                         handleLink={this.dispatchNewRequest}
+                        handleAction={this.dispatchNewRequest}
                     />
                 </div>
             </div>

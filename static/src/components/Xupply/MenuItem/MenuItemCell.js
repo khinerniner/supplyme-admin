@@ -35,11 +35,11 @@ const imageStyle = {
 }
 const headerStyle = {
   fontSize: 22,
-  fontFamily: 'Montserrat-BoldItalic',
+  fontFamily: 'Poppins-BoldItalic',
 }
 const textStyle = {
   fontSize: 22,
-  fontFamily: 'Montserrat-BoldItalic',
+  fontFamily: 'Poppins-BoldItalic',
   marginBottom: -8,
 }
 const smallTextStyle = {
@@ -47,7 +47,7 @@ const smallTextStyle = {
   paddingTop: 3,
   color: '#d2d2d2',
   textAlign: 'center',
-  fontFamily: 'Montserrat-BoldItalic',
+  fontFamily: 'Poppins-BoldItalic',
 }
 function selectBackgroundOpacity(isActive, canDrop) {
   if (isActive) {

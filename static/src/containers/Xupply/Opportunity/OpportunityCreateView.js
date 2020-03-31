@@ -15,8 +15,8 @@ import { KeyboardDatePicker } from '@material-ui/pickers';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
-import { toNewOrder, toNewOrderItem } from '../../../services/order/model';
-import { saveNewOrder, updateOrder, deleteOrder } from '../../../services/order/actions';
+import { toNewOpportunity, toNewOpportunityItem } from '../../../services/opportunity/model';
+import { saveNewOpportunity, updateOpportunity, deleteOpportunity } from '../../../services/opportunity/actions';
 import {
     getKeys,
     validateString,
@@ -158,9 +158,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         actions: {
-            saveNewOrder: bindActionCreators(saveNewOrder, dispatch),
-            deleteOrder: bindActionCreators(deleteOrder, dispatch),
-            updateOrder: bindActionCreators(updateOrder, dispatch),
+            saveNewOpportunity: bindActionCreators(saveNewOpportunity, dispatch),
+            deleteOpportunity: bindActionCreators(deleteOpportunity, dispatch),
+            updateOpportunity: bindActionCreators(updateOpportunity, dispatch),
         },
     };
 }
@@ -171,7 +171,7 @@ class OpportunityCreateView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            order: toNewOrder(),
+            order: toNewOpportunity(),
             menuItemOpen: false,
             requiredBy_error_text: null,
             // phoneNumber_error_text: null,
@@ -180,7 +180,7 @@ class OpportunityCreateView extends React.Component {
     }
 
     componentDidMount() {
-        console.log('Order Create Mounted')
+        console.log('Opportunity Create Mounted')
         this.loadRequestData();
     }
 
@@ -191,7 +191,7 @@ class OpportunityCreateView extends React.Component {
     }
 
     componentWillUnmount() {
-        console.log('Order Create UnMounted')
+        console.log('Opportunity Create UnMounted')
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -212,7 +212,7 @@ class OpportunityCreateView extends React.Component {
                     const next_state = this.state;
                     next_state.order.request = request;
                     request.menuItems.forEach((item) => {
-                        const newItem = toNewOrderItem();
+                        const newItem = toNewOpportunityItem();
                         newItem.item = item.item;
                         next_state.order.menuItems.push(newItem)
                     })
@@ -259,7 +259,7 @@ class OpportunityCreateView extends React.Component {
         }
         next_state.order.menuItems = next_items;
         next_state.menuItemOpen = false;
-        next_state.menuItem = toNewOrderItem();
+        next_state.menuItem = toNewOpportunityItem();
         this.setState(next_state, () => {});
     }
 
@@ -270,14 +270,14 @@ class OpportunityCreateView extends React.Component {
         this.setState(next_state, () => {});
     }
 
-    isOrderDisabled() {
+    isOpportunityDisabled() {
         this.setState({
             disabled: true,
         });
         let name_is_valid = false;
         let email_is_valid = false;
 
-        // Validate Order Name
+        // Validate Opportunity Name
         if (this.state.order.contactInfo.name === null || this.state.order.contactInfo.name === '') {
             this.setState({
                 name_error_text: null,
@@ -293,7 +293,7 @@ class OpportunityCreateView extends React.Component {
             });
         }
 
-        // Validate Order Email
+        // Validate Opportunity Email
         if (this.state.order.contactInfo.email === null || this.state.order.contactInfo.email === '') {
             this.setState({
                 email_error_text: null,
@@ -346,7 +346,7 @@ class OpportunityCreateView extends React.Component {
                 switch (value) {
                     case 'delete':
                         console.log(`Delete Property`);
-                        actions.deleteOrder(employeeID, accountID, order, redirectRoute);
+                        actions.deleteOpportunity(employeeID, accountID, order, redirectRoute);
                         break;
                     default:
                         break;
@@ -354,16 +354,16 @@ class OpportunityCreateView extends React.Component {
             });
     }
 
-    createNewOrder = () => {
+    createNewOpportunity = () => {
         const { actions, idToken, employeeID, accountID } = this.props;
         const { order, redirectRoute } = this.state;
-        actions.saveNewOrder(idToken, employeeID, accountID, order, redirectRoute);
+        actions.saveNewOpportunity(idToken, employeeID, accountID, order, redirectRoute);
     }
 
-    updateThisOrder = () => {
+    updateThisOpportunity = () => {
         const { actions, idToken, employeeID, accountID } = this.props;
         const { order, redirectRoute } = this.state;
-        actions.updateOrder(employeeID, accountID, order, redirectRoute);
+        actions.updateOpportunity(employeeID, accountID, order, redirectRoute);
 
     }
 
@@ -381,7 +381,7 @@ class OpportunityCreateView extends React.Component {
         this.setState({menuItemOpen: menuItemOpen})
     }
 
-    renderOrderMenuItems = (item, index) => {
+    renderOpportunityMenuItems = (item, index) => {
         console.log(item)
         console.log(index)
         const { classes } = this.props;
@@ -466,11 +466,11 @@ class OpportunityCreateView extends React.Component {
                         variant="contained"
                         disableRipple
                         disableFocusRipple
-                        onClick={order.active ? this.updateThisOrder : this.createNewOrder}
+                        onClick={order.active ? this.updateThisOpportunity : this.createNewOpportunity}
                         className={classes.createButton}
                         style={{ marginRight: 10 }}
                     >
-                        {order.active ? 'Update Order' : 'Create Order'}
+                        {order.active ? 'Update Opportunity' : 'Create Opportunity'}
                     </Button>
                     <Button
                         variant="contained"
@@ -479,7 +479,7 @@ class OpportunityCreateView extends React.Component {
                         onClick={this.deleteActiveProperty}
                         className={classes.deleteButton}
                     >
-                        {'Delete Order'}
+                        {'Delete Opportunity'}
                     </Button>
                 </div>
             </div>
@@ -495,7 +495,7 @@ class OpportunityCreateView extends React.Component {
                 <div className={classes.block}>
                     <dl className={classes.detailList}>
                         <div className={classes.detailListFlex}>
-                            {order.request.menuItems.map(this.renderOrderMenuItems, this)}
+                            {order.request.menuItems.map(this.renderOpportunityMenuItems, this)}
                         </div>
                     </dl>
                 </div>
@@ -507,7 +507,7 @@ class OpportunityCreateView extends React.Component {
                 <div className={classes.content}>
                     <div className={classes.headerCell}>
                         <div className={classes.headers}>
-                            {order.active ? 'Edit Order' : 'New Order'}
+                            {order.active ? 'Edit Opportunity' : 'New Opportunity'}
                         </div>
                     </div>
                     {NameContainer}
@@ -520,14 +520,14 @@ class OpportunityCreateView extends React.Component {
 }
 
 OpportunityCreateView.defaultProps = {
-    saveNewOrder: f => f,
-    deleteOrder: f => f,
-    updateOrder: f => f,
+    saveNewOpportunity: f => f,
+    deleteOpportunity: f => f,
+    updateOpportunity: f => f,
 };
 OpportunityCreateView.propTypes = {
-    saveNewOrder: PropTypes.func,
-    updateOrder: PropTypes.func,
-    deleteOrder: PropTypes.func,
+    saveNewOpportunity: PropTypes.func,
+    updateOpportunity: PropTypes.func,
+    deleteOpportunity: PropTypes.func,
     classes: PropTypes.object.isRequired,
 };
 

@@ -65,7 +65,7 @@ const styles = (theme) => ({
 
 
 function PublicRequestResultsTable(props) {
-  const { classes, type, rows, handleLink, handleAction } = props;
+  const { classes, rows, handleLink } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -110,7 +110,7 @@ function PublicRequestResultsTable(props) {
                 {formatRequestStatus(row.isStatus)}
               </TableCell>
               <TableCell>{formatDateNoTime(row.isStatusTime)}</TableCell>
-              <TableCell><div style={{textAlign: 'center'}} onClick={e => handleAction(e, row.id)} className={classes.linkText}>{'Create Order'}</div></TableCell>
+              <TableCell><div style={{textAlign: 'center'}} onClick={e => handleLink(e, row.id)} className={classes.linkText}>{'Create Order'}</div></TableCell>
             </TableRow>
           ))}
           {emptyRows > 0 && (
@@ -145,10 +145,8 @@ function PublicRequestResultsTable(props) {
 
 
 PublicRequestResultsTable.propTypes = {
-  type: PropTypes.string.isRequired,
   rows: PropTypes.array.isRequired,
   handleLink: PropTypes.func.isRequired,
-  handleAction: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 };
 export default withStyles(styles)(PublicRequestResultsTable);
