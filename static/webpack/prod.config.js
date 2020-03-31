@@ -112,7 +112,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             title: 'caching',
             inject: true,
-            template: './xupply.html',
+            template: './prod.html',
             filename: '../index.html',
         }),
         new webpack.HashedModuleIdsPlugin(),
