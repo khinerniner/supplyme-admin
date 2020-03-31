@@ -181,14 +181,10 @@ class OpportunityCreateView extends React.Component {
 
     componentDidMount() {
         console.log('Order Create Mounted')
-        this.loadCompData();
         this.loadRequestData();
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.receivedAt !== null && this.props.receivedAt === null) {
-            this.loadCompData(nextProps);
-        }
         if (nextProps.receivedPublicRequestsAt !== null && this.props.receivedPublicRequestsAt === null) {
             this.loadRequestData(nextProps);
         }
@@ -203,22 +199,6 @@ class OpportunityCreateView extends React.Component {
             return false;
         }
         return true;
-    }
-
-    loadCompData = (props = this.props) => {
-        const { orders, pathname } = props;
-        const keys = getKeys(pathname);
-        const orderID = keys.second;
-        if (orderID && orderID !== null) {
-            orders.forEach((order) => {
-                if (order.orderID === orderID) {
-                    console.log('Setting Order State')
-                    const next_state = this.state;
-                    next_state.order = order;
-                    this.setState(next_state, () => {});
-                }
-            })
-        }
     }
 
     loadRequestData = (props = this.props) => {
