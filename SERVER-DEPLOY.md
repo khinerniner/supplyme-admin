@@ -56,10 +56,10 @@ exit
 addgroup deploy
 adduser dorian deploy
 mkdir /srv/www/
-chown -vR :deploy /srv/www/xupply-admin
-chmod -vR g+w /srv/www/xupply-admin
-ls -ld /srv/www/xupply-admin
-ln -s /srv/www/xupply-admin  ~/
+chown -vR :deploy /srv/www/supplyme-admin
+chmod -vR g+w /srv/www/supplyme-admin
+ls -ld /srv/www/supplyme-admin
+ln -s /srv/www/supplyme-admin  ~/
 ```
 
 * Paste key from 1.0 here
@@ -242,7 +242,7 @@ sudo nano ~/.bashrc
 Add the following to end of bashrc:
 
 ```
-export PRIVALGO_CONFIG="/srv/www/xupply-admin/env_var.json"
+export PRIVALGO_CONFIG="/srv/www/supplyme-admin/env_var.json"
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.6
 export WORKON_HOME=$HOME/.virtualenvs
 source $HOME/.local/bin/virtualenvwrapper.sh
@@ -274,9 +274,9 @@ sudo apt autoremove
 
 ```
 cd /srv/www
-git clone https://Harpangell@bitbucket.org/xupply/xupply-admin.git
+git clone https://Harpangell@bitbucket.org/xupply/supplyme-admin.git
 mkvirtualenv xupplynet
-cd xupply-admin
+cd supplyme-admin
 pip3 install -U -r requirements.txt
 ```
 
@@ -284,7 +284,7 @@ pip3 install -U -r requirements.txt
 #### Step 1: Install packages
 
 ```
-cd /srv/www/xupply-admin/static && npm install
+cd /srv/www/supplyme-admin/static && npm install
 npm run build:production
 ```
 

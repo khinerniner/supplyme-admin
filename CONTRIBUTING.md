@@ -8,13 +8,13 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## Clone Project Repo
 ```
-git clone https://github.com/CASL-AE/xupply-admin.git
+git clone https://github.com/CASL-AE/supplyme-admin.git
 ```
 
 ### Launch Development API Python
 
 ```
-cd xupply-admin
+cd supplyme-admin
 workon xupplynet
 pip3 install -U -r requirements.txt
 python3 wsgi.py
@@ -23,7 +23,7 @@ python3 wsgi.py
 ### Launch Development Node Server
 
 ```
-cd xupply-admin/static
+cd supplyme-admin/static
 npm i
 npm run dev
 ```
@@ -73,9 +73,9 @@ source ~/.local/bin/virtualenvwrapper.sh
 ```
 ### Clone
 ```
-git clone https://bitbucket.org/ae/xupply-admin/src/master/
+git clone https://bitbucket.org/ae/supplyme-admin/src/master/
 && mkvirtualenv xupply \
-&& cd xupply-admin \
+&& cd supplyme-admin \
 && pip3 uninstall -r requirements.txt -y \
 && pip3 install -U -r requirements.txt \
 ```
@@ -111,7 +111,7 @@ sudo nano /usr/local/etc/nginx/nginx.conf
 server {
         listen 80;
         server_name localhost;
-        root [path-to-repo]/xupply-admin/public;
+        root [path-to-repo]/supplyme-admin/public;
         index index.html index.htm;
         location / {
                 try_files $uri $uri/ =404;
@@ -139,7 +139,7 @@ server {
 
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload";
 
-    root [path-to-repo]/xupply-admin/static;
+    root [path-to-repo]/supplyme-admin/static;
     index index.html index.htm;
     location / {
                     proxy_pass http://127.0.0.1:3001;

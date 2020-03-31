@@ -30,7 +30,7 @@ There are 3 users. “Retailers”, “Manufacturers” & “Financiers”.
 
 
 # Project Status
-Right now we’re in the very early stages of project development, but moving very rapidly! We’re currently assembling [teams](https://github.com/CASL-AE/xupply-admin/blob/master/TEAM.md), speaking to organizations to assess needs, designing app workflows, and building the initial MVP.
+Right now we’re in the very early stages of project development, but moving very rapidly! We’re currently assembling [teams](https://github.com/CASL-AE/supplyme-admin/blob/master/TEAM.md), speaking to organizations to assess needs, designing app workflows, and building the initial MVP.
 
 # Tech Stack
 
@@ -46,12 +46,12 @@ Right now we’re in the very early stages of project development, but moving ve
 
 # Contributing
 
-Please read [CONTRIBUTING](CONTRIBUTING.md) and [CODE_OF_CONDUCT](https://github.com/CASL-AE/xupply-admin/blob/master/CODE_OF_CONDUCT.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING](CONTRIBUTING.md) and [CODE_OF_CONDUCT](https://github.com/CASL-AE/supplyme-admin/blob/master/CODE_OF_CONDUCT.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 Thank you to all the users who have contributed to this library!
 
-<a href="https://github.com/CASL-AE/xupply-admin/graphs/contributors">
-  <img src="https://contributors-img.firebaseapp.com/image?repo=CASL-AE/xupply-admin" />
+<a href="https://github.com/CASL-AE/supplyme-admin/graphs/contributors">
+  <img src="https://contributors-img.firebaseapp.com/image?repo=CASL-AE/supplyme-admin" />
 </a>
 
 # License
