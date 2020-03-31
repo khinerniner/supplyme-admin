@@ -30,7 +30,7 @@ import PhoneTextInput from '../../../components/Xupply/Misc/PhoneTextInput';
 const styles = (theme) => ({
     root: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: theme.palette.primary.background,
     },
     content: {
         paddingTop: 42,

@@ -33,7 +33,7 @@ const styles = theme => ({
     root: {
         flex: 1,
         height: '100vh',
-        backgroundColor: '#fff',
+        backgroundColor: theme.palette.primary.background,
     },
     content: {
         paddingTop: 42,
@@ -63,7 +63,7 @@ const styles = theme => ({
       marginRight: '3%',
     },
     gridItemBox: {
-      backgroundColor: '#fff',
+      backgroundColor: theme.palette.primary.background,
       borderRadius: '1rem',
       boxShadow: '0 0.5rem 4rem 0.5rem rgba(0,0,0,0.08)',
     },

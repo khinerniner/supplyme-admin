@@ -38,7 +38,7 @@ const styles = (theme) => ({
     color: theme.palette.primary.black,
   },
   linkText: {
-    color: '#2A38D8 !important',
+    color: '#82a4bc !important',
     fontWeight: '600px !important',
     cursor: 'pointer',
     textAlign: 'left',

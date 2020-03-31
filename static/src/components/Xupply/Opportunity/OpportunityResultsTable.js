@@ -28,13 +28,11 @@ const styles = (theme) => ({
   root: {
     width: '100%',
     marginTop: 40,
-    overflowX: 'auto',
     boxShadow: 'none',
+    borderRadius: 8,
+    padding: 30,
   },
-  table: {
-    minWidth: 650,
-    overflow: 'hidden',
-  },
+  table: {},
   tableHeaders: {
     fontSize: 12,
     fontWeight: 500,
@@ -44,7 +42,7 @@ const styles = (theme) => ({
     color: theme.palette.primary.black,
   },
   linkText: {
-    color: '#2A38D8 !important',
+    color: '#82a4bc !important',
     fontWeight: '600px !important',
     cursor: 'pointer',
     textAlign: 'left',

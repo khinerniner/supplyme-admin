@@ -23,11 +23,11 @@ import {
   roundUp,
 } from '../../../utils/misc';
 
-const styles = {
+const styles = (theme) => ({
     root: {
         color: '#000',
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: theme.palette.primary.background,
     },
     content: {
         paddingTop: 42,
@@ -89,7 +89,7 @@ const styles = {
         backgroundColor: '#202020',
         textTransform: 'none',
     },
-};
+});
 
 function mapStateToProps(state) {
     return {};

@@ -39,7 +39,7 @@ function mapDispatchToProps(dispatch) {
 const styles = theme => ({
     root: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: theme.palette.primary.background,
         height: '100vh',
     },
     loginStyle: {

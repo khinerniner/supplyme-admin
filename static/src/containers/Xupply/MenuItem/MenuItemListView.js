@@ -20,7 +20,7 @@ import { menuItemRowObject } from '../../../services/menuItem/model';
 const styles = (theme) => ({
     root: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: theme.palette.primary.background,
     },
     content: {
         paddingTop: 42,

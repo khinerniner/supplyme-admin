@@ -24,7 +24,7 @@ const styles = theme => ({
     root: {
         flexGrow: 1,
         height: '100%',
-        backgroundColor: 'white'
+        backgroundColor: theme.palette.primary.background,
     },
     appFrame: {
         zIndex: 1,
@@ -43,7 +43,7 @@ const styles = theme => ({
     content: {
         height: '100%',
         flexGrow: 1,
-        backgroundColor: '#fff',
+        backgroundColor: theme.palette.primary.background,
     },
     sectionDesktop: {
         display: 'none',
@@ -60,7 +60,7 @@ const styles = theme => ({
     signUpButton: {
         color: '#202020',
         fontWeight: 600,
-        backgroundColor: '#fff',
+        backgroundColor: theme.palette.primary.background,
         textTransform: 'none',
         fontSize: 14,
     },
@@ -99,11 +99,11 @@ const styles = theme => ({
     selectedItem: {
         fontSize: 16,
         zIndex: 5,
-        color: theme.palette.primary.lightBlue,
+        color: theme.palette.primary.secondary,
         paddingRight: 10,
         borderBottom: 2,
         borderStyle: 'solid',
-        borderfColor: theme.palette.primary.lightBlue,
+        borderfColor: theme.palette.primary.secondary,
         // backgroundColor: theme.palette.primary.appBar,
     },
     accountBox: {
@@ -114,7 +114,7 @@ const styles = theme => ({
         border: 1,
         width: 325,
         height: 'auto',
-        borderRadius: 4,
+        borderRadius: 8,
         zIndex: 999999,
     },
     accountBoxHeading: {
@@ -302,7 +302,7 @@ class Base extends Component {
                 elevation={0}
             >
                 <Toolbar>
-                    <a href="/"><img alt="ae_logo" height="40px" width="40px" src="/src/containers/App/styles/img/logo-light.png" /></a>
+                    <a href="https://caslnpo.org"><img alt="ae_logo" height="40px" width="40px" src="/src/containers/App/styles/img/logo-light.png" /></a>
                     <div className={classes.sectionDesktop}>
                     {
                       isAuthenticated ?
@@ -386,8 +386,8 @@ class Base extends Component {
                         <div style={{ display: 'inline-block' }}>
                             <div style={{ paddingLeft: 10, color: '#000000', fontSize: '1.0em' }}><strong><em>{displayName} - {accountType}</em></strong></div>
                             <div style={{ paddingLeft: 10, color: 'gray', fontSize: '1.0em' }}><em>{email}</em></div>
-                            <div style={{ paddingLeft: 10, color: '#5ba244', fontSize: '1.0em' }}><a onClick={e => this.dispatchNewRoute('/privacy')}><strong><em>Privacy</em></strong></a></div>
-                            <div style={{ paddingLeft: 10, color: '#33b739', fontSize: '1.0em' }}><strong><em><span>{version}</span></em></strong></div>
+                            <div style={{ paddingLeft: 10, color: '#82a4bc', fontSize: '1.0em' }}><a onClick={e => this.dispatchNewRoute('/privacy')}><strong><em>Privacy</em></strong></a></div>
+                            <div style={{ paddingLeft: 10, color: '#82a4bc', fontSize: '1.0em' }}><strong><em><span>{version}</span></em></strong></div>
                         </div>
                     </div>
                 </div>
