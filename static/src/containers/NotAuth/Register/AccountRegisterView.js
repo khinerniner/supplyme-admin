@@ -25,7 +25,7 @@ function renderAccountType() {
     const array = [];
     array.push(<MenuItem key={'retailer'} value={'retailer'}>Retailer</MenuItem>);
     array.push(<MenuItem key={'manufacturer'} value={'manufacturer'}>Manufacturer</MenuItem>);
-    array.push(<MenuItem key={'financiar'} value={'financiar'}>Financiar</MenuItem>);
+    array.push(<MenuItem key={'financier'} value={'financier'}>Financier</MenuItem>);
     return array;
 }
 
