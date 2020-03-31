@@ -60,8 +60,6 @@ const styles = (theme) => ({
   },
 });
 
-
-
 function RequestResultsTable(props) {
   const { classes, type, rows, handleLink, handleAction } = props;
   const [page, setPage] = React.useState(0);
@@ -74,10 +72,10 @@ function RequestResultsTable(props) {
     setRowsPerPage(parseInt(e.target.value, 10));
     setPage(0);
   };
-  console.log(rows)
+  
   return (
     <Paper className={classes.root}>
-      <Table className={classes.table}>
+      <Table size="small" className={classes.table}>
         <TableHead>
           <TableRow>
             <TableCell className={classes.tableHeaders} >Delivery Location</TableCell>

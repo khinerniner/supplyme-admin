@@ -18,6 +18,7 @@ import MiniDetailMap from '../../../components/Xupply/Misc/MiniDetailMap';
 const styles = {
     root: {
         flex: 1,
+        height: '100vh'
     },
     content: {
         paddingTop: 42,

@@ -41,7 +41,7 @@ function renderPriorityType() {
 const styles = (theme) => ({
     root: {
         flex: 1,
-        backgroundColor: theme.palette.primary.background,
+        height: '100vh',
     },
     content: {
         paddingTop: 42,

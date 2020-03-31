@@ -18,6 +18,7 @@ import RequestMenuItemsTable from '../../../components/Xupply/Request/RequestMen
 const styles = (theme) => ({
     root: {
         flex: 1,
+        height: '100vh'
     },
     content: {
         paddingTop: 42,
@@ -314,13 +315,3 @@ RequestDetailView.propTypes = {
 };
 
 export default withStyles(styles)(RequestDetailView);
-
-// <Button
-//   variant="contained"
-//   disableRipple
-//   disableFocusRipple
-//   onClick={(e) => dispatchNewObject(e, accountID, 'request', request.requestID, 'edit')}
-//   className={classes.button}
-// >
-//     {'Edit'}
-// </Button>

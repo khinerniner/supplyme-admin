@@ -130,12 +130,12 @@ function PublicMenuItemResultsTable(props) {
                     title={
                       <React.Fragment>
                       <em>
-                          {"123 West St, Newport Beach CA"}
+                          {`${menuItem.quantities[0].location.address.street1} ${menuItem.quantities[0].location.address.locality} ${menuItem.quantities[0].location.address.region}`}
                       </em>
                       </React.Fragment>
                     }
                   >
-                    <span className={classes.linkText}>{'100 / case'}</span>
+                    <span className={classes.linkText}>{`${menuItem.quantities[0].packageQuantity} / ${menuItem.quantities[0].packageType}`}</span>
                   </LocationTooltip>
               </TableCell>
               <TableCell>

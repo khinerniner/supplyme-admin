@@ -66,7 +66,7 @@ function EmployeeResultsTable(props) {
   };
   return (
     <Paper className={classes.root}>
-      <Table className={classes.table}>
+      <Table size="small" className={classes.table}>
         <TableHead>
           <TableRow>
             <TableCell className={classes.tableHeaders} align="right">Employee Name</TableCell>

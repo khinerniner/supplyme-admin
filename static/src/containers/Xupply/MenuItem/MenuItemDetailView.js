@@ -16,6 +16,7 @@ import { getKeys, formatDateWTime, dispatchNewObject } from '../../../utils/misc
 const styles = {
     root: {
         flex: 1,
+        height: '100vh'
     },
     content: {
         paddingTop: 42,

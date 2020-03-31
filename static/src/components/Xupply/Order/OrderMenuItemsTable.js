@@ -61,7 +61,7 @@ function OrderMenuItemsTable(props) {
   console.log(menuItems)
   return (
     <Paper className={classes.root}>
-      <Table className={classes.table}>
+      <Table size="small" className={classes.table}>
         <TableHead>
           <TableRow>
             <TableCell className={classes.tableHeaders} >Location</TableCell>

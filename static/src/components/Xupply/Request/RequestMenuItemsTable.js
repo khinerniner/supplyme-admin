@@ -11,8 +11,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
 import Paper from '@material-ui/core/Paper';
-
-import MenuItemCell from '../MenuItem/MenuItemCell';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import {
   formatDateNoTime
@@ -54,31 +53,45 @@ const styles = (theme) => ({
   },
 });
 
-
+const ImageTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip);
 
 function RequestMenuItemsTable(props) {
   const { classes, menuItems } = props;
   console.log(menuItems)
   return (
     <Paper className={classes.root}>
-      <Table className={classes.table}>
+      <Table size="small" className={classes.table}>
         <TableHead>
           <TableRow>
             <TableCell className={classes.tableHeaders} >Name</TableCell>
-            <TableCell className={classes.tableHeaders} >Image</TableCell>
-            <TableCell className={classes.tableHeaders} >Type</TableCell>
+            <TableCell className={classes.tableHeaders} >Brand</TableCell>
             <TableCell className={classes.tableHeaders} >Quantity</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {menuItems.map(menuItem => (
             <TableRow key={menuItem.item.itemID}>
-              <TableCell><a onClick={e => handleLink(e, menuItem.item.itemID)} className={classes.linkText}>{menuItem.item.itemName || 'Unkown Name'}</a></TableCell>
-              <TableCell style={{width: 100}}>
-                  <MenuItemCell itemID={menuItem.item.itemID} itemImage={menuItem.item.thumbItemImageURL} />
-              </TableCell>
+            <TableCell>
+                <ImageTooltip
+                  title={
+                    <React.Fragment>
+                      <img src={menuItem.item.thumbItemImageURL ? menuItem.item.thumbItemImageURL : '/src/containers/App/styles/img/broken.png'} style={{height: 50, width: 50}} />
+                    </React.Fragment>
+                  }
+                >
+                  <a onClick={e => handleLink(e, menuItem.item.itemID)} className={classes.linkText}>{menuItem.item.itemName}</a>
+                </ImageTooltip>
+            </TableCell>
               <TableCell>
-                {menuItem.item.itemType}
+                {menuItem.item.brandName}
               </TableCell>
               <TableCell>
                 {menuItem.quantity}
