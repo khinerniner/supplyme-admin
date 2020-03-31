@@ -1,15 +1,15 @@
-# supplyme/server/employee/api.py
+# xupply/server/employee/api.py
 
 import logging
 import json
 import time
 
-logger = logging.getLogger('supplyme.employee.api.py')
+logger = logging.getLogger('xupply.employee.api.py')
 
-# SupplyMe Employee
+# Xupply Employee
 # TODO: None
-# [START SupplyMe Employee]
-class SupplyMeEmployee(object):
+# [START Xupply Employee]
+class XupplyEmployee(object):
     # Init
     # TODO: None
     # [START Init]
@@ -106,12 +106,12 @@ class SupplyMeEmployee(object):
 
         }
     # [END To Any Object]
-# [END SupplyMe Employee Object]
+# [END Xupply Employee Object]
 
-# SupplyMe Employee Code Object
+# Xupply Employee Code Object
 # TODO
-# [START SupplyMe Employee Code Object]
-class SupplyMeEmployeeCode(object):
+# [START Xupply Employee Code Object]
+class XupplyEmployeeCode(object):
     # Init
     # TODO
     # [START Init]
@@ -190,4 +190,4 @@ class SupplyMeEmployeeCode(object):
             "createdDate": self.createdDate,
         }
     # [END To Any Object]
-# [END SupplyMe Employee Code Object]
+# [END Xupply Employee Code Object]

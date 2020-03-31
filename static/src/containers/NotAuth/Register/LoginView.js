@@ -322,7 +322,7 @@ class LoginView extends Component {
                     <div onKeyPress={e => this._handleKeyPress(e)}>
                         <div className={classes.loginBoxStyle}>
                             <div className={classes.loginHeader}>
-                                Log into SupplyME
+                                Log into Xupply
                             </div>
                             <div style={{margin: 10}}>
                                 {

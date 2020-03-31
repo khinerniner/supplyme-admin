@@ -1,4 +1,4 @@
-# SupplyMe
+# Xupply
 
 Decentralized Article Credibility Rating Application
 
@@ -24,7 +24,7 @@ A step by step guide to install on fresh version of Ubuntu 16.04
 
 ```
 cd ~/.ssh
-ssh-keygen -f supplymenet
+ssh-keygen -f xupplynet
 cat ~/.ssh/aenet.pub
 ?? mkdir ~/.ssh
 ?? chmod 400 ~/.ssh
@@ -56,10 +56,10 @@ exit
 addgroup deploy
 adduser dorian deploy
 mkdir /srv/www/
-chown -vR :deploy /srv/www/supplyme-admin
-chmod -vR g+w /srv/www/supplyme-admin
-ls -ld /srv/www/supplyme-admin
-ln -s /srv/www/supplyme-admin  ~/
+chown -vR :deploy /srv/www/xupply-admin
+chmod -vR g+w /srv/www/xupply-admin
+ls -ld /srv/www/xupply-admin
+ln -s /srv/www/xupply-admin  ~/
 ```
 
 * Paste key from 1.0 here
@@ -86,7 +86,7 @@ sudo ufw allow 22
 Test Will Fail without firewall:
 
 ```
-ssh -p 22 -i ~/.ssh/supplymenet dorian@IP-Address
+ssh -p 22 -i ~/.ssh/xupplynet dorian@IP-Address
 ```
 
 #### Step 1.3: Set up ufw (Firewall) rules and delete root password
@@ -155,7 +155,7 @@ sudo apt-get install python3-pip python3-dev libpq-dev nginx
 #### Step 2.3: Make project directory tree
 
 ```
-mkdir ~/supplyme && cd ~/supplyme
+mkdir ~/xupply && cd ~/xupply
 ```
 
 #### Step Create Key files and add keys
@@ -242,7 +242,7 @@ sudo nano ~/.bashrc
 Add the following to end of bashrc:
 
 ```
-export PRIVALGO_CONFIG="/srv/www/supplyme-admin/env_var.json"
+export PRIVALGO_CONFIG="/srv/www/xupply-admin/env_var.json"
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.6
 export WORKON_HOME=$HOME/.virtualenvs
 source $HOME/.local/bin/virtualenvwrapper.sh
@@ -274,9 +274,9 @@ sudo apt autoremove
 
 ```
 cd /srv/www
-git clone https://Harpangell@bitbucket.org/supplyme/supplyme-admin.git
-mkvirtualenv supplymenet
-cd supplyme-admin
+git clone https://Harpangell@bitbucket.org/xupply/xupply-admin.git
+mkvirtualenv xupplynet
+cd xupply-admin
 pip3 install -U -r requirements.txt
 ```
 
@@ -284,7 +284,7 @@ pip3 install -U -r requirements.txt
 #### Step 1: Install packages
 
 ```
-cd /srv/www/supplyme-admin/static && npm install
+cd /srv/www/xupply-admin/static && npm install
 npm run build:production
 ```
 
@@ -392,13 +392,13 @@ service supervisor restart
 ```
 
 ```
-sudo nano /etc/supervisor/conf.d/supplymenet.conf
+sudo nano /etc/supervisor/conf.d/xupplynet.conf
 ```
 
 ```
 [program:server]
-directory=/srv/www/supplyme
-command=/home/dorian/.virtualenvs/supplymenet/bin/gunicorn -b 0.0.0.0:8085 --workers=5 wsgi:app
+directory=/srv/www/xupply
+command=/home/dorian/.virtualenvs/xupplynet/bin/gunicorn -b 0.0.0.0:8085 --workers=5 wsgi:app
 startsecs=10
 autostart=false
 autorestart=false
@@ -421,8 +421,8 @@ user=dorian
 stopasgroup=true
 
 [program:celery]
-directory=/srv/www/supplyme
-command=/home/dorian/.virtualenvs/supplymenet/bin/celery --app=server.celery worker -B -l info
+directory=/srv/www/xupply
+command=/home/dorian/.virtualenvs/xupplynet/bin/celery --app=server.celery worker -B -l info
 startsecs=10
 autostart=false
 autorestart=false
@@ -439,8 +439,8 @@ Create Logs
 ```
 cd /var/log \
 && mkdir server \
-&& sudo touch /var/log/server/supplyme-server.out.log \
-&& sudo touch /var/log/server/supplyme-server.err.log \
+&& sudo touch /var/log/server/xupply-server.out.log \
+&& sudo touch /var/log/server/xupply-server.err.log \
 && mkdir celery \
 && sudo touch /var/log/celery/celery.out.log \
 && sudo touch /var/log/celery/celery.err.log \
@@ -485,25 +485,25 @@ Download SSL from CA (Go-daddy)
 On Local
 
 ```
-scp -P 88 ~/PycharmProjects/supplyme.python.backup/certs/supplyme.io.zip dorian@159.89.154.157:
-scp -P 88 ~/PycharmProjects/supplyme.python.backup/certs/supplyme.io.key dorian@159.89.154.157:
+scp -P 88 ~/PycharmProjects/xupply.python.backup/certs/xupply.io.zip dorian@159.89.154.157:
+scp -P 88 ~/PycharmProjects/xupply.python.backup/certs/xupply.io.key dorian@159.89.154.157:
 ssh -p 88 dorian@159.89.154.157
 sudo apt install unzip
-unzip supplyme.io.zip
-rm supplyme.io.zip
+unzip xupply.io.zip
+rm xupply.io.zip
 mv gd_bundle-g2-g1.crt intermediate.crt
-mv d3cb591fbee74b64.crt supplyme.io.crt
+mv d3cb591fbee74b64.crt xupply.io.crt
 ```
 
 
 
 ```
 cd ~
-cat supplyme.io.crt intermediate.crt > supplyme.io.chained.crt
-sudo mv supplyme.io.chained.crt /etc/ssl/supplyme.io.chained.crt
-sudo mv supplyme.io.key /etc/ssl/supplyme.io.key
+cat xupply.io.crt intermediate.crt > xupply.io.chained.crt
+sudo mv xupply.io.chained.crt /etc/ssl/xupply.io.chained.crt
+sudo mv xupply.io.key /etc/ssl/xupply.io.key
 rm intermediate.crt
-rm supplyme.io.crt
+rm xupply.io.crt
 sudo mkdir /etc/nginx/ssl \
 && sudo openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048
 ```
@@ -528,33 +528,33 @@ add_header Referrer-Policy "no-referrer";
 # Redirect all www to non-www
 #
 server {
-    server_name www.iamsupplyme.com;
-    ssl_certificate /etc/ssl/iamsupplyme.com.chained.crt;
-    ssl_certificate_key /etc/ssl/iamsupplyme.com.key;
+    server_name www.iamxupply.com;
+    ssl_certificate /etc/ssl/iamxupply.com.chained.crt;
+    ssl_certificate_key /etc/ssl/iamxupply.com.key;
     listen *:80;
     listen *:443 ssl;
     listen [::]:80 ipv6only=on;
     listen [::]:443 ssl ipv6only=on;
 
-    return 301 https://iamsupplyme.com$request_uri;
+    return 301 https://iamxupply.com$request_uri;
 }
 
 #
 # Redirect all non-encrypted to encrypted
 #
 server {
-    server_name iamsupplyme.com;
+    server_name iamxupply.com;
     listen *:80;
     listen [::]:80;
 
-    return 301 https://iamsupplyme.com$request_uri;
+    return 301 https://iamxupply.com$request_uri;
 }
 
 #
 # Main
 #
 server {
-    server_name iamsupplyme.com;
+    server_name iamxupply.com;
 
     ### SSL
     listen 443 ssl;
@@ -562,12 +562,12 @@ server {
     ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
     ssl_prefer_server_ciphers on;
     ssl_dhparam /etc/nginx/ssl/dhparam.pem;
-    ssl_certificate /etc/ssl/iamsupplyme.com.chained.crt;
-    ssl_certificate_key /etc/ssl/iamsupplyme.com.key;
+    ssl_certificate /etc/ssl/iamxupply.com.chained.crt;
+    ssl_certificate_key /etc/ssl/iamxupply.com.key;
 
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload";
 
-    root /srv/www/supplyme/public;
+    root /srv/www/xupply/public;
     index index.html index.htm;
 
     location / {
@@ -579,16 +579,16 @@ server {
 }
 
 server {
-    server_name app.iamsupplyme.com;
+    server_name app.iamxupply.com;
     listen 443 ssl;
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
     ssl_prefer_server_ciphers on;
     ssl_dhparam /etc/nginx/ssl/dhparam.pem;
-    ssl_certificate /etc/ssl/iamsupplyme.com.chained.crt;
-    ssl_certificate_key /etc/ssl/iamsupplyme.com.key;
+    ssl_certificate /etc/ssl/iamxupply.com.chained.crt;
+    ssl_certificate_key /etc/ssl/iamxupply.com.key;
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload";
-    root /srv/www/supplyme/static;
+    root /srv/www/xupply/static;
     index index.html index.htm;
 
     location / {
@@ -604,7 +604,7 @@ server {
 ```
 
 ```
-sudo ln -s /etc/nginx/sites-available/supplyme.io /etc/nginx/sites-enabled
+sudo ln -s /etc/nginx/sites-available/xupply.io /etc/nginx/sites-enabled
 ```
 
 Test Nginx

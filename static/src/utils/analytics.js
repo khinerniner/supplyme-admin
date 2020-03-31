@@ -9,7 +9,7 @@ export function generalAnalytic(userId, event, eventCategory) {
     );
 }
 
-export function supplyMeAnalytic(event, parameters) {
+export function xupplyAnalytic(event, parameters) {
     return gtag(
         'event', event, {
             parameters: parameters,

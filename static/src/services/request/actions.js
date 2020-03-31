@@ -4,7 +4,7 @@ import { parseJSON, formatFirestoreDateString, validateString, validateKey } fro
 import { apiBulkUploadRequests } from '../../utils/http_functions';
 import { toNewRequest, getRequestFromSnapshot } from './model';
 import { errorAlert, successAlert } from '../../utils/alerts';
-import { supplyMeAnalytic } from '../../utils/analytics';
+import { xupplyAnalytic } from '../../utils/analytics';
 
 export const addRequest = request => ({
     type: 'ADD_REQUEST',
@@ -133,12 +133,12 @@ export const saveNewRequest = (token, employeeID, accountID, request, redirectRo
     }).then((requestInfo) => {
         console.log("Transaction successfully committed!");
         dispatch(saveNewRequestSuccess());
-        supplyMeAnalytic('save_request_success', null);
+        xupplyAnalytic('save_request_success', null);
         // dispatch(addRequest(request))
         history.push(redirectRoute)
     }).catch((error) => {
         console.log("Transaction failed: ", error);
-        supplyMeAnalytic('save_request_failure', null);
+        xupplyAnalytic('save_request_failure', null);
         dispatch(saveNewRequestFailure({
             response: {
                 status: 999,
@@ -218,7 +218,7 @@ export const updateRequest = (employeeID, accountID, request, redirectRoute) => 
 
     })).then((result) => {
         console.log('Transaction successfully committed!');
-        supplyMeAnalytic('update_request_success', null);
+        xupplyAnalytic('update_request_success', null);
         dispatch(updateRequestSuccess(result.currentRequestInfo));
         successAlert('Update Request Success!');
         history.push(`/accounts/${accountID}/requests`)
@@ -226,7 +226,7 @@ export const updateRequest = (employeeID, accountID, request, redirectRoute) => 
         console.log('Transaction failed: ', error.message || error);
         console.log(error.message || error);
         errorAlert(error.message || error);
-        supplyMeAnalytic('update_request_failure', null);
+        xupplyAnalytic('update_request_failure', null);
         dispatch(updateRequestFailure({
             response: {
                 status: 403,
@@ -289,10 +289,10 @@ export const deleteRequest = (employeeID, accountID, request, redirectRoute) => 
         dispatch(deleteRequestSuccess());
         history.push(`/accounts/${accountID}/requests`)
         errorAlert('Delete Menu Item Success');
-        supplyMeAnalytic('delete_request_failure', null);
+        xupplyAnalytic('delete_request_failure', null);
     }).catch((error) => {
         errorAlert(error.message || error);
-        supplyMeAnalytic('delete_request_failure', null);
+        xupplyAnalytic('delete_request_failure', null);
         dispatch(deleteRequestFailure({
             response: {
                 status: 400,

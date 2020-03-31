@@ -5,7 +5,7 @@ import {
 } from '../../utils/http_functions';
 
 import { errorAlert } from '../../utils/alerts';
-import { supplyMeAnalytic } from '../../utils/analytics';
+import { xupplyAnalytic } from '../../utils/analytics';
 import { parseJSON } from '../../utils/misc';
 
 // Search Google Hospitals
@@ -33,13 +33,13 @@ export const searchGoogleHospitals = (query) => (dispatch) => {
         .then(parseJSON)
         .then((response) => {
             console.log(response)
-            supplyMeAnalytic('google_places_success', null);
+            xupplyAnalytic('google_places_success', null);
             dispatch(googleHospitalsSuccess(response.data.data));
         })
         .catch((error) => {
             console.log(error);
             errorAlert(error.response.data.statusText || error.message);
-            supplyMeAnalytic('google_places_failure', null);
+            xupplyAnalytic('google_places_failure', null);
             dispatch(googleHospitalsFailure({
                 response: {
                     status: 403,
@@ -57,13 +57,13 @@ export const geocodeGooglePlace = (token, accountID, place) => {
     return apiGeocodeGooglePlace(token, accountID, place)
         .then(parseJSON)
         .then((response) => {
-            supplyMeAnalytic('google_geocode_success', null);
+            xupplyAnalytic('google_geocode_success', null);
             return response.data.data;
         })
         .catch((error) => {
             console.log(error);
             errorAlert(error.response.data.statusText || error.message);
-            supplyMeAnalytic('google_geocode_failure', null);
+            xupplyAnalytic('google_geocode_failure', null);
         });
 };
 // [END Geocode Google Place]
@@ -75,13 +75,13 @@ export const getGoogleDirections = (token, accountID, origin, destination, waypo
     return apiGetGoogleDirections(token, accountID, origin, destination, waypoints)
         .then(parseJSON)
         .then((response) => {
-            supplyMeAnalytic('google_directions_success', null);
+            xupplyAnalytic('google_directions_success', null);
             return response.data.data;
         })
         .catch((error) => {
             console.log(error);
             errorAlert(error.response.data.statusText || error.message);
-            supplyMeAnalytic('google_directions_failure', null);
+            xupplyAnalytic('google_directions_failure', null);
         });
 };
 // [END Get Google Directions]

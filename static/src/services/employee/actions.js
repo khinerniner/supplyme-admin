@@ -3,7 +3,7 @@ import { db } from '../../store/firebase';
 import { parseJSON, validateKey } from '../../utils/misc';
 import { apiSendEmailEmployeeCode } from '../../utils/http_functions';
 import { toNewEmployee } from './model';
-import { supplyMeAnalytic } from '../../utils/analytics';
+import { xupplyAnalytic } from '../../utils/analytics';
 import { successAlert, errorAlert } from '../../utils/alerts';
 
 export const addEmployee = employee => ({
@@ -105,11 +105,11 @@ export const saveNewEmployee = (token, employeeCodeInfo, redirectRoute) => (disp
         console.log("Transaction successfully committed!");
         dispatch(saveNewEmployeeSuccess());
         dispatch(apiSendEmailEmployeeCode(token, employeeCodeInfo));
-        supplyMeAnalytic('update_employee_success', null);
+        xupplyAnalytic('update_employee_success', null);
         history.back();
     }).catch((error) => {
         console.log("Transaction failed: ", error);
-        supplyMeAnalytic('update_employee_failure', null);
+        xupplyAnalytic('update_employee_failure', null);
         dispatch(saveNewEmployeeFailure({
             response: {
                 status: 999,
@@ -186,11 +186,11 @@ export const sendEmployeeCodeEmail = (token, employeeCode) => (dispatch) => {
           .then(parseJSON)
               .then((response) => {
                   dispatch(sendEmployeeCodeEmailSuccess());
-                  supplyMeAnalytic('send_employee_code_success', null);
+                  xupplyAnalytic('send_employee_code_success', null);
               })
               .catch((error) => {
                   console.error(error)
-                  supplyMeAnalytic('send_employee_code_failure', null);
+                  xupplyAnalytic('send_employee_code_failure', null);
                   dispatch(sendEmployeeCodeEmailFailure({
                       response: {
                           status: error.response.status,
@@ -200,7 +200,7 @@ export const sendEmployeeCodeEmail = (token, employeeCode) => (dispatch) => {
               });
         }).catch((error) => {
             console.error(error)
-            supplyMeAnalytic('send_employee_code_failure', null);
+            xupplyAnalytic('send_employee_code_failure', null);
             dispatch(sendEmployeeCodeEmailFailure({
                 response: {
                     status: error.response.status,
@@ -251,10 +251,10 @@ export const deleteEmployeeCode = (employeeID, accountID, employeeCode) => (disp
     docRef.update({"active": false, "deleted": true, "updatedDate": updatedDate}).then(() => {
         dispatch(deleteEmployeeCodeSuccess());
         successAlert('Delete Employee Code Success', null);
-        supplyMeAnalytic('delete_employee_code_success');
+        xupplyAnalytic('delete_employee_code_success');
     }).catch((error) => {
         errorAlert(error.message || error);
-        supplyMeAnalytic('delete_employee_code_failure', null);
+        xupplyAnalytic('delete_employee_code_failure', null);
         dispatch(deleteEmployeeCodeFailure({
             response: {
                 status: 400,
@@ -305,10 +305,10 @@ export const deleteEmployee = (employeeID, accountID, employee) => (dispatch) =>
     docRef.update({"active": false, "deleted": true, "updatedDate": updatedDate}).then(() => {
         dispatch(deleteEmployeeSuccess());
         successAlert('Delete Employee Success');
-        supplyMeAnalytic('delete_employee_success', null);
+        xupplyAnalytic('delete_employee_success', null);
     }).catch((error) => {
         errorAlert(error.message || error);
-        supplyMeAnalytic('delete_employee_failure', null);
+        xupplyAnalytic('delete_employee_failure', null);
         dispatch(deleteEmployeeFailure({
             response: {
                 status: 400,

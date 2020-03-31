@@ -5,10 +5,10 @@ import json
 
 logger = logging.getLogger('privalgo.account.api.py')
 
-# SupplyMe Account
+# Xupply Account
 # TODO: None
-# [START SupplyMe Account]
-class SupplyMeAccount(object):
+# [START Xupply Account]
+class XupplyAccount(object):
     # Init
     # TODO: None
     # [START Init]
@@ -57,12 +57,12 @@ class SupplyMeAccount(object):
             "accountType": self.accountType,
         }
     # [END To Any Object]
-# [END SupplyMe Account Object]
+# [END Xupply Account Object]
 
-# SupplyMe Account Code Object
+# Xupply Account Code Object
 # TODO
-# [START SupplyMe Account Code Object]
-class SupplyMeAccountCode(object):
+# [START Xupply Account Code Object]
+class XupplyAccountCode(object):
     # Init
     # TODO: None
     # [START Init]
@@ -136,4 +136,4 @@ class SupplyMeAccountCode(object):
             "updatedDate": self.updatedDate,
         }
     # [END To Any Object]
-# [END SupplyMe Account Code Object]
+# [END Xupply Account Code Object]

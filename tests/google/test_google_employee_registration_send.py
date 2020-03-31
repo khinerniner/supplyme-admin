@@ -2,18 +2,18 @@
 import logging
 
 # Create Logger
-logger = logging.getLogger('supplyme.test.employee.test_employee_activation_send')
+logger = logging.getLogger('xupply.test.employee.test_employee_activation_send')
 
 from testing_config import BaseTestConfig
 import json
 import pytest
 
-from server.employee.model import SupplyMeEmployeeCode
+from server.employee.model import XupplyEmployeeCode
 
 @pytest.mark.skip(reason="Using Prod Cert")
 class TestEmployeeEmailActivationSend(BaseTestConfig):
 
-    # emailEmployeeCode = SupplyMeEmployeeCode(
+    # emailEmployeeCode = XupplyEmployeeCode(
     #     activationCode='O4LBaoJ7edRvBL3GxOHH',
     #     employeeID=None,
     #     valid=True,

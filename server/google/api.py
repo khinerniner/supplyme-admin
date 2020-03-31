@@ -14,8 +14,8 @@ from server.utils.google.places.utils import (
     get_google_directions
 )
 from server.utils.firestore import verify_firebase_token
-from server.account.model import SupplyMeAccountCode
-from server.employee.model import SupplyMeEmployeeCode
+from server.account.model import XupplyAccountCode
+from server.employee.model import XupplyEmployeeCode
 from server.google import notifications
 
 import time
@@ -46,11 +46,11 @@ class AccountCodeSendEmail(MethodView):
                 }
                 return make_response(jsonify(responseObject)), 400
 
-            accountCode = SupplyMeAccountCode().dict_snapshot(snapshot=activation_code)
+            accountCode = XupplyAccountCode().dict_snapshot(snapshot=activation_code)
             data = {
                 'to_name': accountCode.ownerName,
                 'to_account_name': accountCode.accountName,
-                'from_name': 'The SupplyMe Team',
+                'from_name': 'The Xupply Team',
                 'activation_code': accountCode.activationCode,
             }
             clean_email = accountCode.email
@@ -103,11 +103,11 @@ class AccountRegistrationSendEmail(MethodView):
                 }
                 return make_response(jsonify(responseObject)), 400
 
-            accountCode = SupplyMeAccountCode().dict_snapshot(snapshot=activation_code)
+            accountCode = XupplyAccountCode().dict_snapshot(snapshot=activation_code)
             data = {
                 'to_name': accountCode.ownerName,
                 'to_account_name': accountCode.accountName,
-                'from_name': 'The SupplyMe Team',
+                'from_name': 'The Xupply Team',
                 'activation_code': accountCode.activationCode,
             }
             clean_email = accountCode.email
@@ -159,11 +159,11 @@ class EmployeeCodeSendEmail(MethodView):
                 }
                 return make_response(jsonify(responseObject)), 400
 
-            employeeCode = SupplyMeEmployeeCode().dict_snapshot(snapshot=activation_code)
+            employeeCode = XupplyEmployeeCode().dict_snapshot(snapshot=activation_code)
             data = {
                 'to_name': employeeCode.ownerName,
                 'to_account_name': employeeCode.accountName,
-                'from_name': 'The SupplyMe Team',
+                'from_name': 'The Xupply Team',
                 'activation_code': employeeCode.activationCode,
             }
             data['user_email'] = employeeCode.email
@@ -215,11 +215,11 @@ class EmployeeRegistrationSendEmail(MethodView):
                 }
                 return make_response(jsonify(responseObject)), 400
 
-            employeeCode = SupplyMeEmployeeCode().dict_snapshot(snapshot=activation_code)
+            employeeCode = XupplyEmployeeCode().dict_snapshot(snapshot=activation_code)
             data = {
                 'to_name': employeeCode.ownerName,
                 'to_account_name': employeeCode.accountName,
-                'from_name': 'The SupplyMe Team',
+                'from_name': 'The Xupply Team',
                 'activation_code': employeeCode.activationCode,
             }
             data['user_email'] = employeeCode.email

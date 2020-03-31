@@ -3,7 +3,7 @@ import history from '../../history';
 import { auth, db } from '../../store/firebase';
 import { parseJSON } from '../../utils/misc';
 import { toNewEmployee } from '../employee/model';
-import { supplyMeAnalytic } from '../utils/analytics';
+import { xupplyAnalytic } from '../utils/analytics';
 
 // Register Employee
 //
@@ -40,13 +40,13 @@ export const validateEmployeeActivationCode = (code) => {
         return doc.data();
       } else {
         console.log('Invalid Employee Activation Code');
-        supplyMeAnalytic('employee_activation_code_failure', null);
+        xupplyAnalytic('employee_activation_code_failure', null);
         return false;
       }
     })
     .catch((error) => {
       console.log('Employee Activation Code Ref Error: ' + error.message);
-      supplyMeAnalytic('employee_activation_code_ref_failure', null);
+      xupplyAnalytic('employee_activation_code_ref_failure', null);
       return false;
     })
 }
@@ -104,7 +104,7 @@ export const registerEmployee = (employeeCode, password, redirectRoute) => (disp
                   .catch((error) => {
                     console.log(error)
                     errorAlert(error.message);
-                    supplyMeAnalytic('register_employee_failure', null);
+                    xupplyAnalytic('register_employee_failure', null);
                     return null
                     dispatch(registerEmployeeFailure({
                         response: {
@@ -116,7 +116,7 @@ export const registerEmployee = (employeeCode, password, redirectRoute) => (disp
               } catch (error) {
                   console.log(error)
                   errorAlert(error.message);
-                  supplyMeAnalytic('register_employee_failure', null);
+                  xupplyAnalytic('register_employee_failure', null);
                   dispatch(registerEmployeeFailure({
                       response: {
                           status: 999,
@@ -128,7 +128,7 @@ export const registerEmployee = (employeeCode, password, redirectRoute) => (disp
           .catch((error) => {
               console.log(error)
               errorAlert(error.message);
-              supplyMeAnalytic('register_employee_failure', null);
+              xupplyAnalytic('register_employee_failure', null);
               dispatch(registerEmployeeFailure({
                   response: {
                       status: 999,
@@ -150,12 +150,12 @@ export const registerEmployee = (employeeCode, password, redirectRoute) => (disp
               result.idToken,
           ));
           dispatch(getAccount(result.accountID));
-          supplyMeAnalytic('register_employee_success', null);
+          xupplyAnalytic('register_employee_success', null);
           history.push(redirectRoute);
       }).catch((error) => {
           console.log("Transaction failed: ", error);
           errorAlert(error.message);
-          supplyMeAnalytic('register_employee_failure', null);
+          xupplyAnalytic('register_employee_failure', null);
           dispatch(registerEmployeeFailure({
               response: {
                   status: 999,

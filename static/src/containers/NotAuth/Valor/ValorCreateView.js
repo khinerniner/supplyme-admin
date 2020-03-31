@@ -14,7 +14,7 @@ import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 
-import UploadMedia from '../../../components/VeriDoc/Media/UploadMedia';
+import UploadMedia from '../../../components/Xupply/Media/UploadMedia';
 
 import { toNewValor } from '../../../services/valor/model';
 import { saveNewValor } from '../../../services/valor/actions';

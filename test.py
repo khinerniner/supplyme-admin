@@ -6,7 +6,7 @@ import pytest
 import logging
 
 # Create Logger
-logger = logging.getLogger('supplyme.test')
+logger = logging.getLogger('xupply.test')
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 def main():

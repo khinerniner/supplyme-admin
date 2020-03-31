@@ -2,7 +2,7 @@
 import logging
 
 # Create Logger
-logger = logging.getLogger('supplyme.test.employee.test_utils')
+logger = logging.getLogger('xupply.test.employee.test_utils')
 
 from testing_config import BaseTestConfig
 import json

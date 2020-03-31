@@ -4,7 +4,7 @@ import { parseJSON, formatFirestoreDateString, validateString, validateKey } fro
 import { apiBulkUploadLocations } from '../../utils/http_functions';
 import { toNewLocation, getLocationFromSnapshot } from './model';
 import { errorAlert, successAlert } from '../../utils/alerts';
-import { supplyMeAnalytic } from '../../utils/analytics';
+import { xupplyAnalytic } from '../../utils/analytics';
 
 export const addLocation = location => ({
     type: 'ADD_LOCATION',
@@ -87,13 +87,13 @@ export const saveNewLocation = (token, employeeID, accountID, location, redirect
     }).then((locationInfo) => {
         console.log("Transaction successfully committed!");
         dispatch(saveNewLocationSuccess());
-        supplyMeAnalytic('save_location_success', null);
+        xupplyAnalytic('save_location_success', null);
         // dispatch(addLocation(location))
         // Analytics
         history.push(redirectRoute)
     }).catch((error) => {
         console.log("Transaction failed: ", error);
-        supplyMeAnalytic('save_location_failure', null);
+        xupplyAnalytic('save_location_failure', null);
         dispatch(saveNewLocationFailure({
             response: {
                 status: 999,
@@ -173,7 +173,7 @@ export const updateLocation = (employeeID, accountID, location, redirectRoute) =
 
     })).then((result) => {
         console.log('Transaction successfully committed!');
-        supplyMeAnalytic('update_location_success', null);
+        xupplyAnalytic('update_location_success', null);
         dispatch(updateLocationSuccess(result.currentLocationInfo));
         successAlert('Update Location Success!');
         history.push(`/accounts/${accountID}/locations`)
@@ -181,7 +181,7 @@ export const updateLocation = (employeeID, accountID, location, redirectRoute) =
         console.log('Transaction failed: ', error.message || error);
         console.log(error.message || error);
         errorAlert(error.message || error);
-        supplyMeAnalytic('update_location_failure', null);
+        xupplyAnalytic('update_location_failure', null);
         dispatch(updateLocationFailure({
             response: {
                 status: 403,
@@ -244,10 +244,10 @@ export const deleteLocation = (employeeID, accountID, location, redirectRoute) =
         dispatch(deleteLocationSuccess());
         history.push(`/accounts/${accountID}/locations`)
         errorAlert('Delete Location Success');
-        supplyMeAnalytic('delete_location_success');
+        xupplyAnalytic('delete_location_success');
     }).catch((error) => {
         errorAlert(error.message);
-        supplyMeAnalytic('delete_location_failure');
+        xupplyAnalytic('delete_location_failure');
         dispatch(deleteLocationFailure({
             response: {
                 status: 400,
