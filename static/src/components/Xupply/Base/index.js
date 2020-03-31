@@ -299,7 +299,7 @@ class Base extends Component {
                 elevation={0}
             >
                 <Toolbar>
-                    <a href="https://caslnpo.org"><img alt="ae_logo" height="40px" width="40px" src="/src/containers/App/styles/img/logo-light.png" /></a>
+                    <a href="https://caslnpo.org"><img alt="ae_logo" height="40px" width="auto" src="/src/containers/App/styles/img/logo-light-named.png" /></a>
                     <div className={classes.sectionDesktop}>
                     {
                       isAuthenticated ?
@@ -309,13 +309,6 @@ class Base extends Component {
                         : null
                       ) : (
                         <section>
-                        <IconButton
-                          onClick={e => dispatchNewRoute('/')}
-                        >
-                            <div style={{ paddingLeft: 10, fontWeight: 500, fontSize: 16, color: '#fff' }}>
-                                Xupply
-                          </div>
-                        </IconButton>
                         <IconButton
                           onClick={e => dispatchNewRoute('/valor')}
                         >
