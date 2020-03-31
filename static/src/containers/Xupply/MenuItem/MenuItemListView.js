@@ -20,6 +20,8 @@ import { menuItemRowObject } from '../../../services/menuItem/model';
 const styles = (theme) => ({
     root: {
         flex: 1,
+        display: 'inline-block',
+        width: '100%',
         backgroundColor: theme.palette.primary.background,
     },
     content: {
@@ -136,7 +138,7 @@ class MenuItemListView extends React.Component {
         const {
             rows,
         } = this.state;
-        
+
         const GeneralContainer = (
             <div className={classes.outerCell}>
             <Button

@@ -14,7 +14,8 @@ import PhoneIcon from '@material-ui/icons/Phone';
 const styles = theme => ({
     root: {
         flexGrow: 1,
-        height: '100%',
+        display: 'inline-block',
+        width: '100%',
         backgroundColor: '#ecf0f1',
     },
 });
