@@ -87,8 +87,7 @@ export function getMenuItemFromSnapshot(menuItem) {
         unassignedStockPerItem: menuItem.unassignedStockPerItem,
         // supplies: menuItem.supplies,
         // supportingDocs: menuItem.supportingDocs,
-        // isFinished: menuItem.isFinished,
-        private: menuItem.private,
+        isFinished: menuItem.isFinished,
         // warningLabel: menuItem.warningLabel,
         madeInCountry: menuItem.madeInCountry,
     };
@@ -106,13 +105,13 @@ export function getPublicMenuItemFromSnapshot(menuItem) {
         itemType: menuItem.itemType,
         description: menuItem.description,
         oldItemRef: menuItem.oldItemRef,
-        quantities: [], // Removed in Public Item
+        quantities: menuItem.quantities,
         thumbItemImageURL: menuItem.thumbItemImageURL,
         updatedDate: parseFirestoreTimeStamp(menuItem.updatedDate),
         createdDate: parseFirestoreTimeStamp(menuItem.createdDate),
-        availableStockPerItem: {}, // Removed in Public Item
-        unassignedStockPerItem: {}, // Removed in Public Item
-        private: menuItem.private,
+        availableStockPerItem: menuItem.availableStockPerItem,
+        unassignedStockPerItem: menuItem.unassignedStockPerItem,
+        isFinished: menuItem.isFinished,
         madeInCountry: menuItem.madeInCountry,
     };
 }
@@ -147,8 +146,7 @@ export function toNewMenuItem() {
         unassignedStockPerItem: {},
         // supplies: [],
         // supportingDocs: [],
-        // isFinished: false,
-        private: false,
+        isFinished: false,
         // warningLabel: null,
         madeInCountry: 'USA',
         imageData: null,
@@ -164,20 +162,25 @@ export function toNewQuantity() {
         stock: 0,
     };
 }
-export function menuItemRowObject(menuItem) {
+export function menuItemRowObject(m, q) {
     return {
-        index: menuItem.itemID,
-        id: menuItem.itemID,
-        active: menuItem.active,
-        deleted: menuItem.deleted,
-        brandName: menuItem.brandName,
-        upcID: menuItem.upcID,
-        itemName: menuItem.itemName,
-        itemType: menuItem.itemType,
-        madeInCountry: menuItem.madeInCountry,
-        isFinished: menuItem.isFinished,
-        thumbnail: menuItem.thumbItemImageURL,
-        updatedDate: menuItem.updatedDate,
-        createdDate: menuItem.createdDate,
+        index: m.itemID,
+        id: m.itemID,
+        active: m.active,
+        deleted: m.deleted,
+        brandName: m.brandName,
+        upcID: m.upcID,
+        itemName: m.itemName,
+        itemType: m.itemType,
+        madeInCountry: m.madeInCountry,
+        isFinished: m.isFinished,
+        thumbnail: m.thumbItemImageURL,
+        updatedDate: m.updatedDate,
+        createdDate: m.createdDate,
+        // Quantity Details
+        location: `${q.location.address.street1} ${q.location.address.locality} ${q.location.address.region}`,
+        packageQuantity: q.packageQuantity,
+        packageType: q.packageType,
+        pricePerUnit: q.pricePerUnit,
     };
 }

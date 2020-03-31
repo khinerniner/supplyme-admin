@@ -71,6 +71,17 @@ const ImageTooltip = withStyles((theme) => ({
   },
 }))(Tooltip);
 
+const LocationTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip);
+
+
 function PublicMenuItemResultsTable(props) {
   const { classes, menuItems, handleAction, handleChange } = props;
   const [page, setPage] = React.useState(0);
@@ -86,11 +97,12 @@ function PublicMenuItemResultsTable(props) {
   console.warn(menuItems)
   return (
     <Paper className={classes.root}>
-      <Table className={classes.table}>
+      <Table size="small" className={classes.table}>
         <TableHead>
           <TableRow>
             <TableCell className={classes.tableHeaders} >Name</TableCell>
             <TableCell className={classes.tableHeaders} >Package Details</TableCell>
+            <TableCell className={classes.tableHeaders} >Package Price</TableCell>
             <TableCell className={classes.tableHeaders} >Brand Name</TableCell>
             <TableCell className={classes.tableHeaders} >UPC ID</TableCell>
             <TableCell style={{textAlign: 'center'}} className={classes.tableHeaders} >Add</TableCell>
@@ -114,7 +126,20 @@ function PublicMenuItemResultsTable(props) {
                   </ImageTooltip>
               </TableCell>
               <TableCell>
-                {'100 / case'}
+                  <LocationTooltip
+                    title={
+                      <React.Fragment>
+                      <em>
+                          {"123 West St, Newport Beach CA"}
+                      </em>
+                      </React.Fragment>
+                    }
+                  >
+                    <span className={classes.linkText}>{'100 / case'}</span>
+                  </LocationTooltip>
+              </TableCell>
+              <TableCell>
+                {'$ 30.00'}
               </TableCell>
               <TableCell>
                 {menuItem.brandName}
@@ -152,7 +177,7 @@ function PublicMenuItemResultsTable(props) {
           <TableRow>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-              colSpan={5}
+              colSpan={6}
               count={menuItems.length}
               rowsPerPage={rowsPerPage}
               page={page}

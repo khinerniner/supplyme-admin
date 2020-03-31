@@ -381,9 +381,9 @@ class Base extends Component {
                     <div style={{ display: 'block' }}>
                         <img style={{ display: 'inline-block', position: 'relative' }} alt="image" height="60" width="60" className={classes.img} src={'/src/containers/App/styles/img/temp_anon.jpg'} />
                         <div style={{ display: 'inline-block' }}>
-                            <div style={{ paddingLeft: 10, color: '#000000', fontSize: '1.0em' }}><strong><em>{displayName} - {accountType}</em></strong></div>
+                            <div style={{ paddingLeft: 10, color: '#000000', fontSize: '1.0em' }}><strong><em>{displayName}</em></strong></div>
                             <div style={{ paddingLeft: 10, color: 'gray', fontSize: '1.0em' }}><em>{email}</em></div>
-                            <div style={{ paddingLeft: 10, color: '#82a4bc', fontSize: '1.0em' }}><a onClick={e => this.dispatchNewRoute('/privacy')}><strong><em>Privacy</em></strong></a></div>
+                            <div style={{ paddingLeft: 10, color: '#82a4bc', fontSize: '1.0em' }}><a onClick={e => this.dispatchNewRoute('/privacy')}><strong><em>{accountType}</em></strong></a></div>
                             <div style={{ paddingLeft: 10, color: '#82a4bc', fontSize: '1.0em' }}><strong><em><span>{version}</span></em></strong></div>
                         </div>
                     </div>

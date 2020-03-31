@@ -77,16 +77,6 @@ const LocationTooltip = withStyles((theme) => ({
   },
 }))(Tooltip);
 
-// const LocationTooltip = withStyles((theme) => ({
-//   tooltip: {
-//     backgroundColor: '#f5f5f9',
-//     color: 'rgba(0, 0, 0, 0.87)',
-//     maxWidth: 220,
-//     fontSize: theme.typography.pxToRem(12),
-//     border: '1px solid #dadde9',
-//   },
-// }))(Tooltip);
-
 function MenuItemResultsTable(props) {
   const { classes, rows, handleLink, handleAction } = props;
   const [page, setPage] = React.useState(0);
@@ -101,7 +91,7 @@ function MenuItemResultsTable(props) {
   };
   return (
     <Paper className={classes.root}>
-      <Table className={classes.table}>
+      <Table size="small" className={classes.table}>
         <TableHead>
           <TableRow>
             <TableCell className={classes.tableHeaders} >Name</TableCell>
@@ -134,12 +124,12 @@ function MenuItemResultsTable(props) {
                     title={
                       <React.Fragment>
                       <em>
-                          {"123 West St, Newport Beach CA"}
+                          {row.location}
                       </em>
                       </React.Fragment>
                     }
                   >
-                    <span className={classes.linkText}>{'100 / case'}</span>
+                    <span className={classes.linkText}>{`${row.packageQuantity} / ${row.packageType}`}</span>
                   </LocationTooltip>
               </TableCell>
               <TableCell>

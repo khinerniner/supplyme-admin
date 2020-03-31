@@ -117,7 +117,12 @@ class MenuItemListView extends React.Component {
 
     receiveMenuItems = (menuItems) => {
         console.warn('Received MenuItems');
-        const rows = filterBy(menuItems).map(e => menuItemRowObject(e));
+        var rows = [];
+        filterBy(menuItems).forEach((m) => {
+              m.quantities.forEach((q) => {
+                    rows.push(menuItemRowObject(m, q));
+              });
+        });
         this.setState({rows});
     }
 
