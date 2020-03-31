@@ -4,7 +4,7 @@ import { parseJSON, formatFirestoreDateString, validateString, validateKey } fro
 import { apiBulkUploadMenuItems } from '../../utils/http_functions';
 import { toNewMenuItem, getMenuItemFromSnapshot, getPublicMenuItemFromSnapshot } from './model';
 import { errorAlert, successAlert } from '../../utils/alerts';
-import { supplyMeAnalytic } from '../../utils/analytics';
+import { xupplyAnalytic } from '../../utils/analytics';
 
 export const addMenuItem = menuItem => ({
     type: 'ADD_MENUITEM',
@@ -190,11 +190,11 @@ export const saveNewMenuItem = (token, employeeID, accountID, menuItem, redirect
         console.log("Transaction successfully committed!");
         dispatch(saveNewMenuItemSuccess());
         // dispatch(addMenuItem(menuItem))
-        supplyMeAnalytic('save_menu_item_success');
+        xupplyAnalytic('save_menu_item_success');
         history.push(redirectRoute)
     }).catch((error) => {
         console.log("Transaction failed: ", error);
-        supplyMeAnalytic('save_menu_item_failure');
+        xupplyAnalytic('save_menu_item_failure');
         dispatch(saveNewMenuItemFailure({
             response: {
                 status: 999,
@@ -274,7 +274,7 @@ export const updateMenuItem = (employeeID, accountID, menuItem, redirectRoute) =
 
     })).then((result) => {
         console.log('Transaction successfully committed!');
-        supplyMeAnalytic('update_menu_item_success', null);
+        xupplyAnalytic('update_menu_item_success', null);
         dispatch(updateMenuItemSuccess(result.currentMenuItemInfo));
         successAlert('Update MenuItem Success!');
         history.push(`/accounts/${accountID}/menuItems`)
@@ -282,7 +282,7 @@ export const updateMenuItem = (employeeID, accountID, menuItem, redirectRoute) =
         console.log('Transaction failed: ', error.message || error);
         console.log(error.message || error);
         errorAlert(error.message || error);
-        supplyMeAnalytic('update_menu_item_failure', null);
+        xupplyAnalytic('update_menu_item_failure', null);
         dispatch(updateMenuItemFailure({
             response: {
                 status: 403,
@@ -345,10 +345,10 @@ export const deleteMenuItem = (employeeID, accountID, menuItem, redirectRoute) =
         dispatch(deleteMenuItemSuccess());
         history.push(`/accounts/${accountID}/menuItems`)
         errorAlert('Delete Menu Item Success');
-        supplyMeAnalytic('delete_menu_item_success');
+        xupplyAnalytic('delete_menu_item_success');
     }).catch((error) => {
         errorAlert(error.message || error);
-        supplyMeAnalytic('delete_menu_item_failure');
+        xupplyAnalytic('delete_menu_item_failure');
         dispatch(deleteMenuItemFailure({
             response: {
                 status: 400,

@@ -1,15 +1,15 @@
 #!/bin/sh
 {
-  pm2 delete supplyme \
+  pm2 delete xupply \
   && git pull \
-  && cd /srv/www/supplyme-admin/static \
+  && cd /srv/www/xupply-admin/static \
   && npm install \
   && npm run build:production \
-  && pm2 start "/usr/local/bin/npm" --name "supplyme" -- start
+  && pm2 start "/usr/local/bin/npm" --name "xupply" -- start
 } || {
   git pull \
-  && cd /srv/www/supplyme-admin/static \
+  && cd /srv/www/xupply-admin/static \
   && npm install \
   && npm run build:production \
-  && pm2 start "/usr/local/bin/npm" --name "supplyme" -- start
+  && pm2 start "/usr/local/bin/npm" --name "xupply" -- start
 }

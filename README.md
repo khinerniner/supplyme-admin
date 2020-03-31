@@ -1,7 +1,7 @@
-# SupplyME
+# Xupply
 
-[![CircleCI](https://circleci.com/gh/CASL-AE/supplyme-admin.svg?style=svg&circle-token=96cba64460e7ac5f2a898d06b3755b6fb9e599bc)](https://circleci.com/gh/CASL-AE/supplyme-admin)
-[![SupplyME site released under the MIT license.](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![CircleCI](https://circleci.com/gh/CASL-AE/xupply-admin.svg?style=svg&circle-token=96cba64460e7ac5f2a898d06b3755b6fb9e599bc)](https://circleci.com/gh/CASL-AE/xupply-admin)
+[![Xupply site released under the MIT license.](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![PRs welcome!](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-blue.svg?style=flat-square)](#contributors-)
 
@@ -10,7 +10,7 @@
   <img height="300px" width="auto" src="public/www/images/logo.png">
 </p>
 
-SupplyME is a web application that connects those who NEED supplies with those who HAVE supplies and allows financiers to fund those who NEED supplies.
+Xupply is a web application that connects those who NEED supplies with those who HAVE supplies and allows financiers to fund those who NEED supplies.
 
 There are 3 users. “Retailers”, “Manufacturers” & “Financiers”.
 
@@ -30,7 +30,7 @@ There are 3 users. “Retailers”, “Manufacturers” & “Financiers”.
 
 
 # Project Status
-Right now we’re in the very early stages of project development, but moving very rapidly! We’re currently assembling [teams](https://github.com/CASL-AE/supplyme-admin/blob/master/TEAM.md), speaking to organizations to assess needs, designing app workflows, and building the initial MVP.
+Right now we’re in the very early stages of project development, but moving very rapidly! We’re currently assembling [teams](https://github.com/CASL-AE/xupply-admin/blob/master/TEAM.md), speaking to organizations to assess needs, designing app workflows, and building the initial MVP.
 
 # Tech Stack
 
@@ -46,14 +46,14 @@ Right now we’re in the very early stages of project development, but moving ve
 
 # Contributing
 
-Please read [CONTRIBUTING](CONTRIBUTING.md) and [CODE_OF_CONDUCT](https://github.com/CASL-AE/supplyme-admin/blob/master/CODE_OF_CONDUCT.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING](CONTRIBUTING.md) and [CODE_OF_CONDUCT](https://github.com/CASL-AE/xupply-admin/blob/master/CODE_OF_CONDUCT.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 Thank you to all the users who have contributed to this library!
 
-<a href="https://github.com/CASL-AE/supplyme-admin/graphs/contributors">
-  <img src="https://contributors-img.firebaseapp.com/image?repo=CASL-AE/supplyme-admin" />
+<a href="https://github.com/CASL-AE/xupply-admin/graphs/contributors">
+  <img src="https://contributors-img.firebaseapp.com/image?repo=CASL-AE/xupply-admin" />
 </a>
 
 # License
 
-SupplyME is available under the MIT license. See the [LICENSE](LICENSE) file for more info.
+Xupply is available under the MIT license. See the [LICENSE](LICENSE) file for more info.

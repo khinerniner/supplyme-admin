@@ -25,7 +25,7 @@ function renderAccountType() {
     const array = [];
     array.push(<MenuItem key={'retailer'} value={'retailer'}>Retailer</MenuItem>);
     array.push(<MenuItem key={'manufacturer'} value={'manufacturer'}>Manufacturer</MenuItem>);
-    array.push(<MenuItem key={'financiar'} value={'financiar'}>Financiar</MenuItem>);
+    array.push(<MenuItem key={'financier'} value={'financier'}>Financier</MenuItem>);
     return array;
 }
 
@@ -33,7 +33,7 @@ const styles = theme => ({
     root: {
         flex: 1,
         height: '100vh',
-        backgroundColor: '#fff',
+        backgroundColor: theme.palette.primary.background,
     },
     content: {
         paddingTop: 42,
@@ -63,7 +63,7 @@ const styles = theme => ({
       marginRight: '3%',
     },
     gridItemBox: {
-      backgroundColor: '#fff',
+      backgroundColor: theme.palette.primary.background,
       borderRadius: '1rem',
       boxShadow: '0 0.5rem 4rem 0.5rem rgba(0,0,0,0.08)',
     },
@@ -418,9 +418,9 @@ class RegisterView extends Component {
                 <div className={classes.leftContent}>
                     <div className={classes.gridItem}>
                         <div className={classes.registerHeader}>
-                            SupplyME
+                            Xupply
                         </div>
-                        <p className={classes.registerSubHeader}>Please fill out the following information to register a new account in SupplyME.</p>
+                        <p className={classes.registerSubHeader}>Please fill out the following information to register a new account in Xupply.</p>
                         <p className={classes.registerSubHeader}>If you would like to donate, please send <span style={{fontWeight: 600}}>XRP</span> to <div onClick={(e) => this.copyCodeToClipboard(e)} style={{cursor: 'pointer', fontWeight: 600}}>rw2ciyaNshpHe7bCHo4bRWq6pqqynnWKQg</div></p>
                     </div>
                 </div>

@@ -2,18 +2,18 @@
 import logging
 
 # Create Logger
-logger = logging.getLogger('supplyme.test.account.test_account_activation_send')
+logger = logging.getLogger('xupply.test.account.test_account_activation_send')
 
 from testing_config import BaseTestConfig
 import json
 import pytest
 
-from server.account.model import SupplyMeAccountCode
+from server.account.model import XupplyAccountCode
 
 @pytest.mark.skip(reason="Using Prod Cert")
 class TestAccountEmailActivationSend(BaseTestConfig):
 
-    emailAccountCode = SupplyMeAccountCode(
+    emailAccountCode = XupplyAccountCode(
         activationCode='O4LBaoJ7edRvBL3GxOHH',
         accountID=None,
         valid=True,

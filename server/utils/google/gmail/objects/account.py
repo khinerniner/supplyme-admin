@@ -5,15 +5,15 @@ import time
 
 logger = logging.getLogger('cattail.utils.google.gmail.objects.establishment.py')
 
-from server.utils.google.gmail.client import SupplyMeGoogleClient
+from server.utils.google.gmail.client import XupplyGoogleClient
 
 BASE_DOMAIN = 'https://app.localhost'
 # BASE_DOMAIN = 'https://app.caslnpo.org'
 
-class SupplyMeAccountEmails(object):
+class XupplyAccountEmails(object):
     def __init__(self, user_email=None):
         self.user_email = user_email
-        self.email_server = SupplyMeGoogleClient(self.user_email)
+        self.email_server = XupplyGoogleClient(self.user_email)
 
     # Activation Code Email
     # TODO
@@ -22,9 +22,9 @@ class SupplyMeAccountEmails(object):
         try:
             to = self.user_email
             campaign_id = activation_code
-            subject = 'Your Exclusive SupplyMe Invite'
+            subject = 'Your Exclusive Xupply Invite'
             header = 'Congratulations {},'.format(to_name)
-            body = 'Your account {} has been approved for SupplyMe. Please use the key below to register your account.'.format(to_account_name)
+            body = 'Your account {} has been approved for Xupply. Please use the key below to register your account.'.format(to_account_name)
             abody = '<a href="{base_domain}/register?type={is_type}&code={code}">{code}</a>'.format(base_domain=BASE_DOMAIN, is_type='account', code=activation_code)
             footer = 'Cheers,'
             footer_sign = from_name
@@ -52,9 +52,9 @@ class SupplyMeAccountEmails(object):
         try:
             to = self.user_email
             campaign_id = activation_code
-            subject = 'Welcome to SupplyMe'
+            subject = 'Welcome to Xupply'
             header = 'Dear {},'.format(to_name)
-            body = 'We have registered {} in SupplyMe. Once you have finshed creating locations, you will be able to create requests with SupplyMe'.format(to_account_name)
+            body = 'We have registered {} in Xupply. Once you have finshed creating locations, you will be able to create requests with Xupply'.format(to_account_name)
             abody = None
             footer = 'Cheers,'
             footer_sign = from_name

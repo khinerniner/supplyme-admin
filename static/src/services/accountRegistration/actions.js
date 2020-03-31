@@ -2,7 +2,7 @@ import history from '../../history';
 import { auth, db } from '../../store/firebase';
 import { parseJSON } from '../../utils/misc';
 import { errorAlert } from '../../utils/alerts';
-import { supplyMeAnalytic } from '../../utils/analytics';
+import { xupplyAnalytic } from '../../utils/analytics';
 import { toNewAccount } from '../account/model';
 import { getAccount } from '../../services/account/actions';
 import { toNewEmployee } from '../employee/model';
@@ -41,12 +41,12 @@ export const validateActivationCode = (code) => {
       if (doc.exists && doc.data().valid) {
         return true;
       } else {
-        supplyMeAnalytic('activation_code_failure', null);
+        xupplyAnalytic('activation_code_failure', null);
         return false;
       }
     }).catch((error) => {
       console.log(error);
-      supplyMeAnalytic('activation_code_ref_failure', null);
+      xupplyAnalytic('activation_code_ref_failure', null);
       return false;
     })
 }
@@ -60,7 +60,7 @@ export const registerAccount = (accountCode, password, redirectRoute) => (dispat
         if (!response) {
           console.log('Error Validating Auth Code');
           errorAlert('Error Validating Auth Code')
-          supplyMeAnalytic('register_account_failure', null);
+          xupplyAnalytic('register_account_failure', null);
           dispatch(registerAccountFailure({
               response: {
                   status: 403,
@@ -117,7 +117,7 @@ export const registerAccount = (accountCode, password, redirectRoute) => (dispat
                 }).catch((error) => {
                   console.log(error)
                   errorAlert(error.message);
-                  supplyMeAnalytic('register_account_failure', null);
+                  xupplyAnalytic('register_account_failure', null);
                   dispatch(registerAccountFailure({
                       response: {
                           status: 999,
@@ -135,14 +135,13 @@ export const registerAccount = (accountCode, password, redirectRoute) => (dispat
                   result.employeeInfo,
                   result.idToken,
                 ));
-                dispatch(apiSendEmailRegisteredAccount(result.idToken, accountCode));
                 dispatch(getAccount(result.accountID));
-                supplyMeAnalytic('register_account_success', null);
+                xupplyAnalytic('register_account_success', null);
                 history.push(redirectRoute);
             }).catch((error) => {
                 console.log("Transaction failed: ", error);
                 errorAlert(error.message);
-                supplyMeAnalytic('register_account_failure', null);
+                xupplyAnalytic('register_account_failure', null);
                 dispatch(registerAccountFailure({
                     response: {
                         status: 999,
@@ -153,7 +152,7 @@ export const registerAccount = (accountCode, password, redirectRoute) => (dispat
         }).catch((error) => {
             console.log(error)
             errorAlert(error.message);
-            supplyMeAnalytic('register_account_failure', null);
+            xupplyAnalytic('register_account_failure', null);
             return dispatch(registerAccountFailure({
                 response: {
                     status: 999,

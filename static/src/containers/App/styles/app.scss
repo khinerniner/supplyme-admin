@@ -1,5 +1,5 @@
 /* global styles */
-@import 'fonts/montserrat';
+@import 'fonts/poppins';
 @import 'typography';
 @import 'links';
 @import '~loaders.css/src/animations/ball-clip-rotate.scss';
@@ -18,7 +18,7 @@
 
 :global(body) {
   position: relative;
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: 'Poppins', sans-serif !important;
   h1, h2, h3, h4 {
     font-weight: 300;
   }

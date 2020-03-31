@@ -11,13 +11,17 @@ import googleData from './google/reducer';
 import requestData from './request/reducer';
 import menuItemData from './menuItem/reducer';
 import orderData from './order/reducer';
+import opportnuityData from './opportunity/reducer';
 
 /* Public Reducer Files */
 import valorData from './valor/reducer';
 
 const appReducer = history => {
     return combineReducers({
+        // Public
         router: connectRouter(history),
+        valorData,
+        // Private
         app,
         accountData,
         employeeData,
@@ -26,9 +30,7 @@ const appReducer = history => {
         requestData,
         menuItemData,
         orderData,
-
-        // Public
-        valorData,
+        opportnuityData,
     });
 }
 

@@ -3,7 +3,7 @@
 import logging
 import time
 
-logger = logging.getLogger('supplyme.utils.google.gmail.client.py')
+logger = logging.getLogger('xupply.utils.google.gmail.client.py')
 
 from server.env import APP_ENV
 
@@ -32,7 +32,7 @@ from apiclient import errors, discovery
 
 SCOPES = 'https://www.googleapis.com/auth/gmail.send'
 
-class SupplyMeGoogleClient(object):
+class XupplyGoogleClient(object):
     def __init__(self, userEmail):
         self.sender = 'support@caslnpo.org'
         self.userEmail = userEmail

@@ -14,7 +14,7 @@ import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 
-import UploadMedia from '../../../components/VeriDoc/Media/UploadMedia';
+import UploadMedia from '../../../components/Xupply/Media/UploadMedia';
 
 import { toNewValor } from '../../../services/valor/model';
 import { saveNewValor } from '../../../services/valor/actions';
@@ -23,11 +23,11 @@ import {
   roundUp,
 } from '../../../utils/misc';
 
-const styles = {
+const styles = (theme) => ({
     root: {
         color: '#000',
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: theme.palette.primary.background,
     },
     content: {
         paddingTop: 42,
@@ -89,7 +89,7 @@ const styles = {
         backgroundColor: '#202020',
         textTransform: 'none',
     },
-};
+});
 
 function mapStateToProps(state) {
     return {};

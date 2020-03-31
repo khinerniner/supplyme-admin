@@ -11,27 +11,29 @@ import LoginView from './containers/NotAuth/Register/LoginView';
 import AccountRegisterView from './containers/NotAuth/Register/AccountRegisterView';
 import ValorListView from './containers/NotAuth/Valor/ValorListView';
 import ValorCreateView from './containers/NotAuth/Valor/ValorCreateView';
-import PublicRequestMapView from './containers/VeriDoc/Request/PublicRequestMapView';
+import PublicRequestMapView from './containers/Xupply/Request/PublicRequestMapView';
 
 /* Private Containers */
-import EmployeeListView from './containers/VeriDoc/Employee/EmployeeListView';
-import EmployeeDetailView from './containers/VeriDoc/Employee/EmployeeDetailView';
-import EmployeeCreateView from './containers/VeriDoc/Employee/EmployeeCreateView';
-import EmployeeCodeListView from './containers/VeriDoc/Employee/EmployeeCodeListView';
-import EmployeeCodeCreateView from './containers/VeriDoc/Employee/EmployeeCodeCreateView';
-import LocationListView from './containers/VeriDoc/Location/LocationListView';
-import LocationDetailView from './containers/VeriDoc/Location/LocationDetailView';
-import LocationCreateView from './containers/VeriDoc/Location/LocationCreateView';
-import RequestListView from './containers/VeriDoc/Request/RequestListView';
-import PublicRequestListView from './containers/VeriDoc/Request/PublicRequestListView';
-import RequestCreateView from './containers/VeriDoc/Request/RequestCreateView';
-import RequestDetailView from './containers/VeriDoc/Request/RequestDetailView';
-import MenuItemListView from './containers/VeriDoc/MenuItem/MenuItemListView';
-import MenuItemDetailView from './containers/VeriDoc/MenuItem/MenuItemDetailView';
-import MenuItemCreateView from './containers/VeriDoc/MenuItem/MenuItemCreateView';
-import OrderListView from './containers/VeriDoc/Order/OrderListView';
-import OrderCreateView from './containers/VeriDoc/Order/OrderCreateView';
-import OrderDetailView from './containers/VeriDoc/Order/OrderDetailView';
+import EmployeeListView from './containers/Xupply/Employee/EmployeeListView';
+import EmployeeDetailView from './containers/Xupply/Employee/EmployeeDetailView';
+import EmployeeCreateView from './containers/Xupply/Employee/EmployeeCreateView';
+import EmployeeCodeListView from './containers/Xupply/Employee/EmployeeCodeListView';
+import EmployeeCodeCreateView from './containers/Xupply/Employee/EmployeeCodeCreateView';
+import LocationListView from './containers/Xupply/Location/LocationListView';
+import LocationDetailView from './containers/Xupply/Location/LocationDetailView';
+import LocationCreateView from './containers/Xupply/Location/LocationCreateView';
+import RequestListView from './containers/Xupply/Request/RequestListView';
+import PublicRequestListView from './containers/Xupply/Request/PublicRequestListView';
+import RequestCreateView from './containers/Xupply/Request/RequestCreateView';
+import RequestDetailView from './containers/Xupply/Request/RequestDetailView';
+import MenuItemListView from './containers/Xupply/MenuItem/MenuItemListView';
+import MenuItemDetailView from './containers/Xupply/MenuItem/MenuItemDetailView';
+import MenuItemCreateView from './containers/Xupply/MenuItem/MenuItemCreateView';
+import OrderListView from './containers/Xupply/Order/OrderListView';
+import OrderCreateView from './containers/Xupply/Order/OrderCreateView';
+import OrderDetailView from './containers/Xupply/Order/OrderDetailView';
+import OpportunityListView from './containers/Xupply/Opportunity/OpportunityListView';
+import OpportunityCreateView from './containers/Xupply/Opportunity/OpportunityCreateView';
 
 /* Public Components */
 import { requireNoAuthentication } from './components/NotAuthenticatedComponent';
@@ -66,6 +68,8 @@ export default (
             <Route exact path="/accounts/:id/orders/search" component={requireAuthentication(PublicRequestListView)} />
             <Route exact path="/accounts/:id/orders/create/requests/:id" component={requireAuthentication(OrderCreateView)} />
             <Route exact path="/accounts/:id/orders/:id" component={requireAuthentication(OrderDetailView)} />
+            <Route exact path="/accounts/:id/opportunities" component={requireAuthentication(OpportunityListView)} />
+            <Route exact path="/accounts/:id/opportunities/create/requests/:id" component={requireAuthentication(OpportunityCreateView)} />
 
             <Route exact path="/map" component={requireNoAuthentication(PublicRequestMapView)} />
             <Route exact path="/valor" component={requireNoAuthentication(ValorListView)} />

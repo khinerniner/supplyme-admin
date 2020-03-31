@@ -5,15 +5,15 @@ import time
 
 logger = logging.getLogger('cattail.utils.google.gmail.objects.employee.py')
 
-from server.utils.google.gmail.client import SupplyMeGoogleClient
+from server.utils.google.gmail.client import XupplyGoogleClient
 
 BASE_DOMAIN = 'https://app.localhost'
 # BASE_DOMAIN = 'https://app.cattails.io'
 
-class SupplyMeEmployeeEmails(object):
+class XupplyEmployeeEmails(object):
     def __init__(self, user_email=None):
         self.user_email = user_email
-        self.email_server = SupplyMeGoogleClient(self.user_email)
+        self.email_server = XupplyGoogleClient(self.user_email)
 
     # Activation Code Email
     # TODO: None
@@ -21,9 +21,9 @@ class SupplyMeEmployeeEmails(object):
     def send_activation_code_email(self, to_name=None, to_account_name=None, from_name=None, activation_code=None):
         to = self.user_email
         campaign_id = activation_code
-        subject = 'Welcome to SupplyMe'
+        subject = 'Welcome to Xupply'
         header = 'Congratulations {},'.format(to_name)
-        body = 'You have been approved for SupplyMe by {}. Please use the key below to register your account.'.format(to_account_name)
+        body = 'You have been approved for Xupply by {}. Please use the key below to register your account.'.format(to_account_name)
         abody = '<a href="{base_domain}/register?type={isType}&code={code}">{code}</a>'.format(base_domain=BASE_DOMAIN, isType='employee', code=activation_code)
         footer = 'Cheers,'
         footer_sign = from_name

@@ -1,14 +1,14 @@
-# supplyme/google/notifications.py
+# xupply/google/notifications.py
 
 import logging
 
 # Create Logger
-logger = logging.getLogger('supplyme.google.notifications.py')
+logger = logging.getLogger('xupply.google.notifications.py')
 
 # from server import celery
 
-from server.utils.google.gmail.objects.account import SupplyMeAccountEmails
-from server.utils.google.gmail.objects.employee import SupplyMeEmployeeEmails
+from server.utils.google.gmail.objects.account import XupplyAccountEmails
+from server.utils.google.gmail.objects.employee import XupplyEmployeeEmails
 
 # Account Activation Code Email Notification
 # TODO: None
@@ -17,7 +17,7 @@ from server.utils.google.gmail.objects.employee import SupplyMeEmployeeEmails
 def account_code_email_notification_task(to_name=None, to_account_name=None, from_name=None, user_email=None, activation_code=None):
     try:
         logger.info('Sending Account Authorization Email for code: {}'.format(activation_code))
-        SupplyMeAccountEmails(user_email=user_email).send_activation_code_email(
+        XupplyAccountEmails(user_email=user_email).send_activation_code_email(
             to_name=to_name,
             to_account_name=to_account_name,
             from_name=from_name,
@@ -34,7 +34,7 @@ def account_code_email_notification_task(to_name=None, to_account_name=None, fro
 def account_registration_email_notification_task(to_name=None, to_account_name=None, from_name=None, user_email=None):
     try:
         logger.info('Sending Account Registration Email for code: {}'.format(to_account_name))
-        SupplyMeAccountEmails(user_email=user_email).send_registration_email(
+        XupplyAccountEmails(user_email=user_email).send_registration_email(
             to_name=to_name,
             to_account_name=to_account_name,
             from_name=from_name,
@@ -50,7 +50,7 @@ def account_registration_email_notification_task(to_name=None, to_account_name=N
 def employee_code_email_notification_task(to_name=None, to_account_name=None, from_name=None, user_email=None, activation_code=None):
     try:
         logger.info('Sending Employee Authorization Email for code: {}'.format(activation_code))
-        SupplyMeEmployeeEmails(user_email=user_email).send_activation_code_email(
+        XupplyEmployeeEmails(user_email=user_email).send_activation_code_email(
             to_name=to_name,
             to_account_name=to_account_name,
             from_name=from_name,

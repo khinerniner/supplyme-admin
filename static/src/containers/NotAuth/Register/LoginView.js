@@ -39,7 +39,7 @@ function mapDispatchToProps(dispatch) {
 const styles = theme => ({
     root: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: theme.palette.primary.background,
         height: '100vh',
     },
     loginStyle: {
@@ -322,7 +322,7 @@ class LoginView extends Component {
                     <div onKeyPress={e => this._handleKeyPress(e)}>
                         <div className={classes.loginBoxStyle}>
                             <div className={classes.loginHeader}>
-                                Log into SupplyME
+                                Log into Xupply
                             </div>
                             <div style={{margin: 10}}>
                                 {

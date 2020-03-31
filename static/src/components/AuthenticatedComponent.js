@@ -4,8 +4,8 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import history from '../history';
 
-import Base from '../components/VeriDoc/Base';
-import Loader from '../components/VeriDoc/Base/Loader';
+import Base from '../components/Xupply/Base';
+import Loader from '../components/Xupply/Base/Loader';
 
 import { loginEmployeeWithPermissions, logoutAndRedirect } from '../services/app/actions';
 import { auth } from '../store/firebase';

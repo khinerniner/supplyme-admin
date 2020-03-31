@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import history from '../history';
 
-import Base from '../components/VeriDoc/Base';
+import Base from '../components/Xupply/Base';
 
 function mapStateToProps(state) {
     return {
