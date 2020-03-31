@@ -18,12 +18,11 @@ const styles = (theme) => ({
     root: {
       width: '100%',
       marginTop: 40,
-      overflowX: 'auto',
       boxShadow: 'none',
+      borderRadius: 8,
+      padding: 30,
     },
-    table: {
-      minWidth: 650,
-    },
+    table: {},
     tableHeaders: {
       fontSize: 12,
       fontWeight: 500,
