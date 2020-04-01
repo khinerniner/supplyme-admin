@@ -130,7 +130,7 @@ function PublicMenuItemResultsTable(props) {
                     title={
                       <React.Fragment>
                       <em>
-                          {`${menuItem.quantities[0].location.address.street1} ${menuItem.quantities[0].location.address.locality} ${menuItem.quantities[0].location.address.region}`}
+                          {`${menuItem.quantities[0].location.address.locality}, ${menuItem.quantities[0].location.address.region}`}
                       </em>
                       </React.Fragment>
                     }

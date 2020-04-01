@@ -178,7 +178,7 @@ export function menuItemRowObject(m, q) {
         updatedDate: m.updatedDate,
         createdDate: m.createdDate,
         // Quantity Details
-        location: `${q.location.address.street1} ${q.location.address.locality} ${q.location.address.region}`,
+        location: `${q.location.address.locality}, ${q.location.address.region}`,
         packageQuantity: q.packageQuantity,
         packageType: q.packageType,
         pricePerUnit: q.pricePerUnit,
