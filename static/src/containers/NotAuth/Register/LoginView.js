@@ -168,7 +168,7 @@ class LoginView extends Component {
               break;
         }
         console.warn(next_state);
-        this.setState(next_state, () => {});
+        // this.setState(next_state, () => {});
     }
 
     componentWillReceiveProps(nextProps) {
