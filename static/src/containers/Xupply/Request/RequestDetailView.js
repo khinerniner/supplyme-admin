@@ -112,6 +112,7 @@ function mapStateToProps(state) {
         pathname: state.router.location.pathname,
         employeeID: state.app.employeeID,
         accountID: state.app.accountID,
+        accountType: state.app.accountType,
         requests: state.requestData.publicRequests,
         receivedAt: state.requestData.receivedPublicRequestsAt,
     };
@@ -190,11 +191,53 @@ class RequestDetailView extends React.Component {
         );
     }
 
-    dispatchNewRequest = (e, requestID) => {
+    dispatchNewOrder = (e, requestID) => {
         e.preventDefault();
         const { accountID } = this.props;
         const route = `/accounts/${accountID}/orders/create/requests/${requestID}`;
         dispatchNewRoute(route);
+    }
+
+    dispatchNewOpportunity = (e, requestID) => {
+        e.preventDefault();
+        const { accountID } = this.props;
+        const route = `/accounts/${accountID}/opportunities/create/requests/${requestID}`;
+        dispatchNewRoute(route);
+    }
+
+    renderAction = () => {
+        const { classes, accountType } = this.props;
+        const { request } = this.state;
+        switch(accountType) {
+            case 'retailer':
+                return null;
+            case 'manufacturer':
+                return (
+                    <Button
+                      variant="contained"
+                      disableRipple
+                      disableFocusRipple
+                      className={classes.button}
+                      onClick={e => this.dispatchNewOrder(e, request.requestID)}
+                    >
+                        {'Create Order'}
+                    </Button>
+                );
+            case 'financier':
+                return (
+                    <Button
+                      variant="contained"
+                      disableRipple
+                      disableFocusRipple
+                      className={classes.button}
+                      onClick={e => this.dispatchNewOpportunity(e, request.requestID)}
+                    >
+                        {'Fund Request'}
+                    </Button>
+                );
+            default:
+                return null;
+        }
     }
 
     render() {
@@ -231,15 +274,7 @@ class RequestDetailView extends React.Component {
                                 <span>{request.active ? `Lat: ${request.location.address.location.lat} Lng: ${request.location.address.location.lng}` : null}</span>
                               </div>
                               <div className={classes.detailActions}>
-                                  <Button
-                                    variant="contained"
-                                    disableRipple
-                                    disableFocusRipple
-                                    className={classes.button}
-                                    onClick={e => this.dispatchNewRequest(e, request.requestID)}
-                                  >
-                                      {'Order From Request'}
-                                  </Button>
+                                  {this.renderAction()}
                               </div>
                           </div>
                       </div>
