@@ -12,6 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
 import Paper from '@material-ui/core/Paper';
 import CancelIcon from '@material-ui/icons/Cancel';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import TablePaginationActions from '../../TablePaginationActions';
 
@@ -82,7 +83,8 @@ function OpportunityResultsTable(props) {
             <TableCell className={classes.tableHeaders} >Items</TableCell>
             <TableCell className={classes.tableHeaders} >Required By</TableCell>
             <TableCell className={classes.tableHeaders} >Status</TableCell>
-            <TableCell style={{textAlign: 'center'}} className={classes.tableHeaders} >Funding</TableCell>
+            <TableCell className={classes.tableHeaders} >Remaining Cost</TableCell>
+            <TableCell style={{textAlign: 'center'}} className={classes.tableHeaders} >% Funded</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -104,7 +106,12 @@ function OpportunityResultsTable(props) {
               <TableCell>
                 {formatRequestStatus(row.isStatus)}
               </TableCell>
-              <TableCell><div style={{textAlign: 'center'}} onClick={e => handleLink(e, row.id)} className={classes.linkText}>{'Fund'}</div></TableCell>
+              <TableCell>
+                {'$ 3,000'}
+              </TableCell>
+              <TableCell>
+                  <LinearProgress variant="determinate" value={50} style={{backgroundColor: 'black'}} color="primary" />
+              </TableCell>
             </TableRow>
           ))}
           {emptyRows > 0 && (
