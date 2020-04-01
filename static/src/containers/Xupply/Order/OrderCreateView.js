@@ -426,7 +426,7 @@ class OrderCreateView extends React.Component {
                     />
                 </div>
                 <span className={classes.detailListDt}>
-                    Available: 240
+                    On Hand: 240 (Display Only)
                 </span>
             </div>
         );
@@ -552,29 +552,3 @@ OrderCreateView.propTypes = {
 };
 
 export default withStyles(styles)(OrderCreateView);
-
-
-// const AddMenuItemContainer = (
-//   <div className={classes.outerCell}>
-//       <div className={classes.subHeaderCell}>
-//           <div className={classes.subHeaders}>
-//               Add Menu Item & Quantity
-//           </div>
-//       </div>
-//       <div>
-//           <AutoCompleteMenuItems onFinishedSelecting={this.handleMenuItemSelected} />
-//       </div>
-
-//       <div className={classes.textCell}>
-//           <Button
-//             variant="contained"
-//             disableRipple
-//             disableFocusRipple
-//             onClick={this.handleMenuItemAdd}
-//             className={classes.createButton}
-//           >
-//               {'Add Menu Item'}
-//           </Button>
-//       </div>
-//   </div>
-// );
