@@ -19,46 +19,46 @@ import {
 } from '../../../utils/misc';
 
 const styles = (theme) => ({
-  root: {
-    width: '100%',
-    marginTop: 40,
-    boxShadow: 'none',
-    borderRadius: 8,
-    padding: 30,
-  },
-  table: {},
-  tableHeaders: {
-    fontSize: 12,
-    fontWeight: 500,
-    borderBottom: '1px solid #d6d6d6',
-    borderLeft: 0,
-    verticalAlign: 'bottom',
-    color: theme.palette.primary.black,
-  },
-  linkText: {
-    color: '#82a4bc !important',
-    fontWeight: '600px !important',
-    cursor: 'pointer',
-    textAlign: 'left',
-    fontSize: '14px !important',
-  },
-  cancelIcon: {
-    color: '#e02626',
-    margin: 0,
-    padding: 0,
-  },
-  checkIcon: {
-    color: '#37e026',
-    margin: 0,
-    padding: 0,
-  },
+    root: {
+      width: '100%',
+      marginTop: 40,
+      boxShadow: 'none',
+      borderRadius: 8,
+      padding: 30,
+    },
+    table: {},
+    tableHeaders: {
+      fontSize: 12,
+      fontWeight: 500,
+      borderBottom: '1px solid #d6d6d6',
+      borderLeft: 0,
+      verticalAlign: 'bottom',
+      color: theme.palette.primary.black,
+    },
+    linkText: {
+      color: '#82a4bc !important',
+      fontWeight: '600px !important',
+      cursor: 'pointer',
+      textAlign: 'left',
+      fontSize: '14px !important',
+    },
+    cancelIcon: {
+      color: '#e02626',
+      margin: 0,
+      padding: 0,
+    },
+    checkIcon: {
+      color: '#37e026',
+      margin: 0,
+      padding: 0,
+    },
 });
 
 
 
 function OrderMenuItemsTable(props) {
   const { classes, menuItems } = props;
-  console.log(menuItems)
+  console.log(menuItems);
   return (
     <Paper className={classes.root}>
       <Table size="small" className={classes.table}>
