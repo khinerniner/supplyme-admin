@@ -267,7 +267,7 @@ class RequestDetailView extends React.Component {
                                   }
                               </div>
                               <div className={classes.detailTitle}>
-                                <span className={classes.detailTitleText}>{`Budget:  ${request.budget || 'Not Funded Yet...'}`}</span>
+                                <span className={classes.detailTitleText}>{`Total Funded:  $ ${request.budget || '0'}`}</span>
                                 <br />
                                 <span>{`${request.location.name}`}</span>
                                 <br />

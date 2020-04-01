@@ -86,7 +86,7 @@ function RequestMenuItemsTable(props) {
             <TableCell className={classes.tableHeaders} >Requested</TableCell>
             <TableCell className={classes.tableHeaders} >Package</TableCell>
             <TableCell className={classes.tableHeaders} >$ Per Package</TableCell>
-            <TableCell className={classes.tableHeaders} >Cost</TableCell>
+            <TableCell className={classes.tableHeaders} >Total</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

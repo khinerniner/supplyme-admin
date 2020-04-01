@@ -73,12 +73,15 @@ export function getKeys(pathname) {
 export function getRegistrationSearch(search) {
     if (!search) {
         return {
+            demo: null,
             code: null,
             type: null,
+            error: null,
         }
     }
     const results = search.split('?').pop(-1);
     const _results = results.split('&');
+    let demo = null;
     let code = null;
     let type = null;
     let error = null;
@@ -86,6 +89,9 @@ export function getRegistrationSearch(search) {
         const key = result.split('=').shift();
         const value = result.split('=').pop();
         switch (key) {
+            case 'demo':
+                demo = value;
+                break;
             case 'code':
                 code = value;
                 break;
@@ -100,8 +106,10 @@ export function getRegistrationSearch(search) {
         }
     });
     return {
+        demo: demo,
         code: code,
         type: type,
+        error: error,
     }
 }
 

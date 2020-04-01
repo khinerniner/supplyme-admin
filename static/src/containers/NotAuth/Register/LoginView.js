@@ -16,11 +16,11 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
 import { loginEmployee, forgotPassword } from '../../../services/app/actions';
-import { validateEmail, dispatchNewRoute } from '../../../utils/misc';
+import { validateEmail, dispatchNewRoute, getRegistrationSearch } from '../../../utils/misc';
 
 function mapStateToProps(state) {
     return {
-        pathname: state.router.location.pathname,
+        search: state.router.location.search,
         statusText: state.app.statusText,
         isAuthenticating: state.app.isAuthenticating,
         isAuthenticated: state.app.isAuthenticated,
@@ -141,15 +141,34 @@ class LoginView extends Component {
 
     componentDidMount() {
         const { search } = this.props;
+        const keys = getRegistrationSearch(search);
+        const next_state = this.state;
         if (search !== '') {
             let next = search;
             if (next !== '?_sc=true') {
                 next = next.split('?next=').pop(-1);
-                this.setState({
-                    redirectRoute: next,
-                });
+                next_state.redirectRoute = next;
             }
         }
+        const demo = keys.demo;
+        switch(demo) {
+          case 'retailer':
+              next_state.email = 'hcp@test.com';
+              next_state.password ='123456';
+              break;
+          case 'manufacturer':
+              next_state.email = 'manu@test.com';
+              next_state.password ='123456';
+              break;
+          case 'financier':
+              next_state.email = 'fin@test.com';
+              next_state.password ='123456';
+              break;
+          default:
+              break;
+        }
+        console.warn(next_state);
+        this.setState(next_state, () => {});
     }
 
     componentWillReceiveProps(nextProps) {
@@ -158,6 +177,13 @@ class LoginView extends Component {
                 loading: false,
             });
         }
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        if (nextState === this.state) {
+            return false;
+        }
+        return true;
     }
 
     isDisabled() {
@@ -276,7 +302,9 @@ class LoginView extends Component {
     render() {
         const { classes } = this.props;
         const {
+            email,
             email_error_text,
+            password,
             password_error_text,
             disabled,
             showDialog,
@@ -293,6 +321,7 @@ class LoginView extends Component {
                 <div className={classes.text}>
                     <TextField
                         type="email"
+                        value={email}
                         variant="outlined"
                         autoComplete="username email"
                         fullWidth
@@ -304,6 +333,7 @@ class LoginView extends Component {
                 <div className={classes.text}>
                     <TextField
                         type="password"
+                        value={password}
                         variant="outlined"
                         autoComplete="current-password"
                         fullWidth

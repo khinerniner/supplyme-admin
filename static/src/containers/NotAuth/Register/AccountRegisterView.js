@@ -143,9 +143,7 @@ class RegisterView extends Component {
         const keys = getRegistrationSearch(search);
         const next_state = this.state;
         next_state.activationCode.activationCode = keys.code;
-        if (keys.type !== null) {
-            this.setState({activationCode: next_state.activationCode});
-        }
+        this.setState(next_state, () => {});
     }
 
     componentWillReceiveProps(nextProps) {
