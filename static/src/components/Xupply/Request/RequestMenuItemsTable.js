@@ -63,6 +63,16 @@ const ImageTooltip = withStyles((theme) => ({
   },
 }))(Tooltip);
 
+const LocationTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip);
+
 function RequestMenuItemsTable(props) {
   const { classes, menuItems } = props;
   console.log(menuItems)
@@ -73,7 +83,10 @@ function RequestMenuItemsTable(props) {
           <TableRow>
             <TableCell className={classes.tableHeaders} >Name</TableCell>
             <TableCell className={classes.tableHeaders} >Brand</TableCell>
-            <TableCell className={classes.tableHeaders} >Quantity</TableCell>
+            <TableCell className={classes.tableHeaders} >Requested</TableCell>
+            <TableCell className={classes.tableHeaders} >Package</TableCell>
+            <TableCell className={classes.tableHeaders} >$ Per Package</TableCell>
+            <TableCell className={classes.tableHeaders} >Cost</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -95,6 +108,25 @@ function RequestMenuItemsTable(props) {
               </TableCell>
               <TableCell>
                 {menuItem.quantity}
+              </TableCell>
+              <TableCell>
+                <LocationTooltip
+                  title={
+                    <React.Fragment>
+                    <em>
+                        {`${menuItem.item.quantities[0].location.address.locality}, ${menuItem.item.quantities[0].location.address.region}`}
+                    </em>
+                    </React.Fragment>
+                  }
+                >
+                  <span className={classes.linkText}>{`${menuItem.item.quantities[0].packageQuantity} / ${menuItem.item.quantities[0].packageType}`}</span>
+                </LocationTooltip>
+              </TableCell>
+              <TableCell>
+                {`$ ${menuItem.item.quantities[0].pricePerUnit}`}
+              </TableCell>
+              <TableCell style={{fontWeight: 600, textDecoration: 'underline'}}>
+                {`$ ${menuItem.quantity * menuItem.item.quantities[0].pricePerUnit}`}
               </TableCell>
             </TableRow>
           ))}
