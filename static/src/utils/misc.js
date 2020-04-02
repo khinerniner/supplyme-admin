@@ -216,3 +216,7 @@ export function dispatchNewObject(e, accountID, objectType, objectID, subObjectT
     }
     dispatchNewRoute(route);
 }
+
+export function roundUp(v) {
+    return parseFloat(v.toFixed(2));
+}
