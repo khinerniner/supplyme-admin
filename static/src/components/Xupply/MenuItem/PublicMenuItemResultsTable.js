@@ -54,10 +54,7 @@ const styles = (theme) => ({
     padding: 0,
   },
   textField: {
-      width: 150,
-  },
-  textCell: {
-      marginBottom: 15,
+      width: 100,
   },
 });
 
@@ -148,22 +145,14 @@ function PublicMenuItemResultsTable(props) {
                 {menuItem.upcID || 'None'}
               </TableCell>
               <TableCell style={{textAlign: 'center'}}>
-                  <div className={classes.textCell}>
-                      <TextField
-                        placeholder="Ex. 10"
-                        label="Quantity"
-                        margin="dense"
-                        variant="outlined"
-                        type="number"
-                        // helperText={'cbdContent_error_text'}
-                        // value={menuItemQuaa.stock || ''}
-                        className={classes.textField}
-                        onChange={e => handleChange(e, 'quantity')}
-                        // FormHelperTextProps={{ classes: { root: classes.helperText } }}
-                        autoComplete=""
-                      />
-                  </div>
-                  <div onClick={e => handleAction(e, menuItem)} style={{fontWeight: 600, color: 'blue', cursor: 'pointer'}}>Add To Cart</div>
+                  <TextField
+                    placeholder="Ex. 100"
+                    margin="dense"
+                    type="number"
+                    className={classes.textField}
+                    onChange={e => handleChange(e, menuItem)}
+                    autoComplete=""
+                  />
               </TableCell>
             </TableRow>
           ))}
@@ -200,7 +189,6 @@ function PublicMenuItemResultsTable(props) {
 
 PublicMenuItemResultsTable.propTypes = {
   menuItems: PropTypes.array.isRequired,
-  handleAction: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 };
