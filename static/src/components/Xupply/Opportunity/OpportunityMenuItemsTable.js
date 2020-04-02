@@ -12,6 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
 import Paper from '@material-ui/core/Paper';
 import Tooltip from '@material-ui/core/Tooltip';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import {
   formatDateNoTime
@@ -33,6 +34,7 @@ const styles = (theme) => ({
     borderLeft: 0,
     verticalAlign: 'bottom',
     color: theme.palette.primary.black,
+    overflowWrap: 'normal',
   },
   linkText: {
     color: '#82a4bc !important',
@@ -73,60 +75,64 @@ const LocationTooltip = withStyles((theme) => ({
   },
 }))(Tooltip);
 
-function RequestMenuItemsTable(props) {
-  const { classes, menuItems, stockPerItem } = props;
+function OpportunityMenuItemsTable(props) {
+  const { classes, menuItems, activeOpportunities, handleCheckBox } = props;
   console.log(menuItems)
   return (
     <Paper className={classes.root}>
       <Table size="small" className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell className={classes.tableHeaders} >Name</TableCell>
-            <TableCell className={classes.tableHeaders} >Brand</TableCell>
+            <TableCell className={classes.tableHeaders} >Fund</TableCell>
+            <TableCell className={classes.tableHeaders} >Item</TableCell>
             <TableCell className={classes.tableHeaders} >Requested</TableCell>
             <TableCell className={classes.tableHeaders} >Package</TableCell>
-            <TableCell className={classes.tableHeaders} >$ Per Package</TableCell>
+            <TableCell className={classes.tableHeaders} >Price</TableCell>
             <TableCell className={classes.tableHeaders} >Total</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {menuItems.map(menuItem => (
-            <TableRow key={menuItem.itemID}>
+            <TableRow key={menuItem.item.itemID}>
+            <TableCell>
+            <Checkbox
+                checked={activeOpportunities.some(o => o.item.itemID === menuItem.item.itemID)}
+                onChange={e => handleCheckBox(e, menuItem)}
+                color="primary"
+            />
+            </TableCell>
             <TableCell>
                 <ImageTooltip
                   title={
                     <React.Fragment>
-                      <img src={menuItem.thumbItemImageURL ? menuItem.thumbItemImageURL : '/src/containers/App/styles/img/broken.png'} style={{height: 50, width: 50}} />
+                      <img src={menuItem.item.thumbItemImageURL ? menuItem.item.thumbItemImageURL : '/src/containers/App/styles/img/broken.png'} style={{height: 50, width: 50}} />
                     </React.Fragment>
                   }
                 >
-                  <a onClick={e => handleLink(e, menuItem.itemID)} className={classes.linkText}>{menuItem.itemName}</a>
+                  <a onClick={e => handleLink(e, menuItem.item.itemID)} className={classes.linkText}>{menuItem.item.itemName}</a>
                 </ImageTooltip>
             </TableCell>
               <TableCell>
-                {menuItem.brandName}
-              </TableCell>
-              <TableCell>
-                {stockPerItem[menuItem.itemID].quantity}
+                {menuItem.quantity}
               </TableCell>
               <TableCell>
                 <LocationTooltip
                   title={
                     <React.Fragment>
                     <em>
-                        {`${menuItem.quantities[0].location.address.locality}, ${menuItem.quantities[0].location.address.region}`}
+                        {`${menuItem.item.quantities[0].location.address.locality}, ${menuItem.item.quantities[0].location.address.region}`}
                     </em>
                     </React.Fragment>
                   }
                 >
-                  <span className={classes.linkText}>{`${menuItem.quantities[0].packageQuantity} / ${menuItem.quantities[0].packageType}`}</span>
+                  <span className={classes.linkText}>{`${menuItem.item.quantities[0].packageQuantity} / ${menuItem.item.quantities[0].packageType}`}</span>
                 </LocationTooltip>
               </TableCell>
               <TableCell>
-                {`$ ${menuItem.quantities[0].pricePerUnit}`}
+                {`$ ${menuItem.item.quantities[0].pricePerUnit}`}
               </TableCell>
               <TableCell style={{fontWeight: 600, textDecoration: 'underline'}}>
-                {`$ ${stockPerItem[menuItem.itemID].quantity * menuItem.quantities[0].pricePerUnit}` || 0}
+                {`$ ${menuItem.quantity * menuItem.item.quantities[0].pricePerUnit}`}
               </TableCell>
             </TableRow>
           ))}
@@ -138,9 +144,10 @@ function RequestMenuItemsTable(props) {
 
 
 
-RequestMenuItemsTable.propTypes = {
+OpportunityMenuItemsTable.propTypes = {
   menuItems: PropTypes.array.isRequired,
-  stockPerItem: PropTypes.object.isRequired,
+  activeOpportunities: PropTypes.array.isRequired,
+  handleCheckBox: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 };
-export default withStyles(styles)(RequestMenuItemsTable);
+export default withStyles(styles)(OpportunityMenuItemsTable);

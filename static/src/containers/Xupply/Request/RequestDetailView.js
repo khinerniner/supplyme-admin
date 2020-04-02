@@ -331,7 +331,7 @@ class RequestDetailView extends React.Component {
                               <div className={classes.section}>
                                   <span className={classes.detailTitleText}>{'Requested Menu Items'}</span>
                               </div>
-                              <RequestMenuItemsTable menuItems={request.menuItems} />
+                              <RequestMenuItemsTable menuItems={request.items} stockPerItem={request.stockPerItem} />
                           </div>
                       </div>
                   </div>

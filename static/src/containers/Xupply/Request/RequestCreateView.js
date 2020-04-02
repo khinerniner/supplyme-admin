@@ -15,7 +15,7 @@ import { KeyboardDatePicker } from '@material-ui/pickers';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
-import { toNewRequest, toNewRequestItem } from '../../../services/request/model';
+import { toNewRequest } from '../../../services/request/model';
 import { saveNewRequest, updateRequest, deleteRequest } from '../../../services/request/actions';
 import { geocodeGooglePlace } from '../../../services/google/actions';
 import {
@@ -172,7 +172,6 @@ class RequestCreateView extends React.Component {
         super(props);
         this.state = {
             request: toNewRequest(),
-            menuItem: toNewRequestItem(),
             menuItemOpen: false,
             requiredBy_error_text: null,
             // phoneNumber_error_text: null,
@@ -221,7 +220,7 @@ class RequestCreateView extends React.Component {
         }
     }
 
-    handleChange = (e, parent, name) => {
+    handleChange = (e, name) => {
         const { value } = e.target;
         const next_state = this.state;
         next_state.request[name] = value;
@@ -241,9 +240,10 @@ class RequestCreateView extends React.Component {
         this.setState(next_state, () => {});
     }
 
-    handleItemsSelected = (e, items) => {
+    handleItemsSelected = (e, items, stockPerItem) => {
         const next_state = this.state;
-        next_state.request.menuItems = items;
+        next_state.request.items = items;
+        next_state.request.stockPerItem = stockPerItem;
         next_state.menuItemOpen = false;
         this.setState(next_state, () => {});
     }
@@ -352,8 +352,9 @@ class RequestCreateView extends React.Component {
     renderRequestMenuItems = (item) => {
         console.log(item)
         const { classes } = this.props;
+        const { request } = this.state;
         return (
-            <div key={item.item.itemID}>
+            <div key={item.itemID}>
                 <IconButton
                   color='secondary'
                   disabled={false}
@@ -362,7 +363,7 @@ class RequestCreateView extends React.Component {
                     <RemoveCircleOutlineIcon className={classes.iconButton} />
                 </IconButton>
                 <span className={classes.detailListDt}>
-                    Item Name: {item.item.itemName} - Requested: {item.quantity}
+                    Item Name: {item.itemName} - Requested: {request.stockPerItem[item.itemID].quantity}
                 </span>
             </div>
         );
@@ -466,12 +467,12 @@ class RequestCreateView extends React.Component {
                     </div>
                 </div>
 
-                {request.menuItems.length > 0
+                {request.items.length > 0
                   ? (
                     <div className={classes.block}>
                         <dl className={classes.detailList}>
                             <div className={classes.detailListFlex}>
-                                {request.menuItems.map(this.renderRequestMenuItems, this)}
+                                {request.items.map(this.renderRequestMenuItems, this)}
                             </div>
                         </dl>
                     </div>

@@ -2,7 +2,6 @@ import { parseFirestoreTimeStamp } from '../../utils/misc';
 import { toNewLocation } from '../../services/location/model';
 import { toNewMenuItem } from '../../services/menuItem/model';
 
-
 /*
 Request Types
 
@@ -22,7 +21,8 @@ export function getRequestFromSnapshot(request) {
         requiredBy: parseFirestoreTimeStamp(request.requiredBy),
         status: request.status,
         location: request.location,
-        menuItems: request.menuItems,
+        items: request.items,
+        stockPerItem: request.stockPerItem,
     };
 }
 export function toNewRequest() {
@@ -41,15 +41,11 @@ export function toNewRequest() {
             events: [],
         },
         location: toNewLocation(),
-        menuItems: [],
+        items: [],
+        stockPerItem: {},
     };
 }
-export function toNewRequestItem() {
-    return {
-        quantity: 0,
-        item: toNewMenuItem(),
-    };
-}
+
 export function requestRowObject(request) {
     return {
         index: request.requestID,
@@ -62,7 +58,7 @@ export function requestRowObject(request) {
         isStatus: request.status.isStatus,
         isStatusTime: parseFirestoreTimeStamp(request.status.isStatusTime),
         locationName: request.location.name,
-        items: request.menuItems.map(i => `${i.item.itemName}, `),
+        items: request.items.map(i => `${i.itemName}, `),
     };
 }
 export function requestMarkerObject(request) {
@@ -74,7 +70,7 @@ export function requestMarkerObject(request) {
         budget: request.budget,
         priority: request.priority,
         requiredBy: request.requiredBy,
-        items: request.menuItems.map(i => `${i.item.itemName}, `),
+        items: request.items.map(i => `${i.itemName}, `),
         location: request.location.address.location,
         img: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/info-i_maps.png',
     };

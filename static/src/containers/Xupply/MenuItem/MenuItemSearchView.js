@@ -16,7 +16,6 @@ import PublicMenuItemResultsTable from '../../../components/Xupply/MenuItem/Publ
 
 import { validateString, dispatchNewRoute, filterBy } from '../../../utils/misc';
 import { fetchPublicMenuItems } from '../../../services/menuItem/actions';
-import { toNewRequestItem } from '../../../services/request/model';
 
 const styles = (theme) => ({
     root: {
@@ -84,8 +83,8 @@ class MenuItemSearchView extends React.Component {
         super(props);
         this.state = {
             menuItems: [],
-            menuItem: toNewRequestItem(),
             requestItems: [],
+            stockPerItem: {},
         };
     }
 
@@ -145,26 +144,28 @@ class MenuItemSearchView extends React.Component {
         dispatchNewRoute(route);
     }
 
-    handleMenuItemChange = (e, name) => {
+    handleMenuItemChange = (e, menuItem) => {
         const { value } = e.target;
         const next_state = this.state;
-        next_state.menuItem[name] = value;
-        this.setState(next_state, () => {});
-    }
-
-    handleMenuItemAdd = (e, item) => {
-        console.log('Item Added');
-        console.warn(item);
-        const next_state = this.state;
-        next_state.menuItem.item = item;
-        let next_items = this.state.requestItems;
-        if (this.state.requestItems.map(i => i).includes(this.state.menuItem.item.itemID)) {
-            next_items = next_items.filter(e => e !== this.state.menuItem.item.itemID);
+        const itemID = menuItem.itemID;
+        const quantity = value;
+        console.warn(quantity);
+        console.warn(menuItem);
+        console.warn(this.state.requestItems);
+        const packageType = menuItem.quantities[0].packageType;
+        const pricePerUnit = menuItem.quantities[0].pricePerUnit;
+        const found = this.state.requestItems.some(o => o.itemID === itemID);
+        console.warn(found);
+        if (found) {
+            next_state.stockPerItem[menuItem.itemID] = {packageType: packageType, quantity: quantity};
+            if (quantity === '') {
+              next_state.requestItems = this.state.requestItems.filter(o => o.itemID !== itemID);
+              delete next_state.request.stockPerItem[menuItem.itemID];
+            }
         } else {
-            next_items.push(this.state.menuItem);
+            next_state.requestItems.push(menuItem);
+            next_state.stockPerItem[menuItem.itemID] = {packageType: packageType, quantity: quantity};
         }
-        next_state.requestItems = next_items;
-        next_state.menuItem = toNewRequestItem();
         this.setState(next_state, () => {});
     }
 
@@ -180,9 +181,10 @@ class MenuItemSearchView extends React.Component {
 
     renderRequestMenuItems = (item) => {
         const { classes } = this.props;
+        const { stockPerItem } = this.state;
         console.log(item);
         return (
-            <div key={item.item.itemID}>
+            <div key={item.itemID}>
                 <IconButton
                   color='secondary'
                   disabled={false}
@@ -191,7 +193,7 @@ class MenuItemSearchView extends React.Component {
                     <RemoveCircleOutlineIcon className={classes.iconButton} />
                 </IconButton>
                 <span className={classes.detailListDt}>
-                    Item Name: {item.item.itemName} - Requested: {item.quantity}
+                    Item Name: {item.itemName} - Requested: {stockPerItem[item.itemID].quantity}
                 </span>
             </div>
         );
@@ -202,6 +204,7 @@ class MenuItemSearchView extends React.Component {
         const {
             menuItems,
             requestItems,
+            stockPerItem,
         } = this.state;
 
         const GeneralContainer = (
@@ -223,7 +226,7 @@ class MenuItemSearchView extends React.Component {
               disableFocusRipple
               className={classes.firstButton}
               classes={{ label: classes.buttonLabel }}
-              onClick={e => handleItemsSelected(e, requestItems)}
+              onClick={e => handleItemsSelected(e, requestItems, stockPerItem)}
             >
                 {'Back To Request'}
             </Button>
@@ -239,7 +242,6 @@ class MenuItemSearchView extends React.Component {
                     <PublicMenuItemResultsTable
                         menuItems={menuItems}
                         handleChange={this.handleMenuItemChange}
-                        handleAction={this.handleMenuItemAdd}
                     />
                 </div>
             </div>
