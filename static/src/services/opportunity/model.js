@@ -10,9 +10,8 @@ export function getOpportunityFromSnapshot(opportunity) {
         deleted: opportunity.deleted,
         status: opportunity.status,
         request: opportunity.request,
-        menuItems: opportunity.menuItems,
+        transactions: opportunity.transactions,
         total: opportunity.total,
-        stockPerItem: opportunity.stockPerItem,
     };
 }
 export function toNewOpportunity() {
@@ -26,14 +25,13 @@ export function toNewOpportunity() {
             events: [],
         },
         request: toNewRequest(),
-        menuItems: [],
+        transactions: [],
         total: 0,
-        stockPerItem: {},
     };
 }
 export function toNewOpportunityItem() {
     return {
-        quantity: 0,
+        amount: 0,
         item: toNewMenuItem(),
     };
 }
@@ -44,8 +42,6 @@ export function opportunityRowObject(opportunity) {
         active: opportunity.active,
         deleted: opportunity.deleted,
         isStatus: opportunity.status.isStatus,
-        deliveryTo: 'Null',
-        requiredBy: parseFirestoreTimeStamp(opportunity.request.requiredBy),
         updatedDate: parseFirestoreTimeStamp(opportunity.status.isStatusTime),
     };
 }

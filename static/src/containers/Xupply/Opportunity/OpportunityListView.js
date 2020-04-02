@@ -119,7 +119,7 @@ class OpportunityListView extends React.Component {
     dispatchNewRequest = (e, requestID) => {
         e.preventDefault();
         const { accountID } = this.props;
-        const route = `/accounts/${accountID}/requests/${requestID}`;
+        const route = `/accounts/${accountID}/opportunities/create/requests/${requestID}`;
         dispatchNewRoute(route);
     }
 
