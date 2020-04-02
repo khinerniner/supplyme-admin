@@ -74,7 +74,7 @@ const LocationTooltip = withStyles((theme) => ({
 }))(Tooltip);
 
 function RequestMenuItemsTable(props) {
-  const { classes, menuItems } = props;
+  const { classes, menuItems, stockPerItem } = props;
   console.log(menuItems)
   return (
     <Paper className={classes.root}>
@@ -91,42 +91,42 @@ function RequestMenuItemsTable(props) {
         </TableHead>
         <TableBody>
           {menuItems.map(menuItem => (
-            <TableRow key={menuItem.item.itemID}>
+            <TableRow key={menuItem.itemID}>
             <TableCell>
                 <ImageTooltip
                   title={
                     <React.Fragment>
-                      <img src={menuItem.item.thumbItemImageURL ? menuItem.item.thumbItemImageURL : '/src/containers/App/styles/img/broken.png'} style={{height: 50, width: 50}} />
+                      <img src={menuItem.thumbItemImageURL ? menuItem.thumbItemImageURL : '/src/containers/App/styles/img/broken.png'} style={{height: 50, width: 50}} />
                     </React.Fragment>
                   }
                 >
-                  <a onClick={e => handleLink(e, menuItem.item.itemID)} className={classes.linkText}>{menuItem.item.itemName}</a>
+                  <a onClick={e => handleLink(e, menuItem.itemID)} className={classes.linkText}>{menuItem.itemName}</a>
                 </ImageTooltip>
             </TableCell>
               <TableCell>
-                {menuItem.item.brandName}
+                {menuItem.brandName}
               </TableCell>
               <TableCell>
-                {menuItem.quantity}
+                {stockPerItem[menuItem.itemID].quantity}
               </TableCell>
               <TableCell>
                 <LocationTooltip
                   title={
                     <React.Fragment>
                     <em>
-                        {`${menuItem.item.quantities[0].location.address.locality}, ${menuItem.item.quantities[0].location.address.region}`}
+                        {`${menuItem.quantities[0].location.address.locality}, ${menuItem.quantities[0].location.address.region}`}
                     </em>
                     </React.Fragment>
                   }
                 >
-                  <span className={classes.linkText}>{`${menuItem.item.quantities[0].packageQuantity} / ${menuItem.item.quantities[0].packageType}`}</span>
+                  <span className={classes.linkText}>{`${menuItem.quantities[0].packageQuantity} / ${menuItem.quantities[0].packageType}`}</span>
                 </LocationTooltip>
               </TableCell>
               <TableCell>
-                {`$ ${menuItem.item.quantities[0].pricePerUnit}`}
+                {`$ ${menuItem.quantities[0].pricePerUnit}`}
               </TableCell>
               <TableCell style={{fontWeight: 600, textDecoration: 'underline'}}>
-                {`$ ${menuItem.quantity * menuItem.item.quantities[0].pricePerUnit}`}
+                {`$ ${stockPerItem[menuItem.itemID].quantity * menuItem.quantities[0].pricePerUnit}` || 0}
               </TableCell>
             </TableRow>
           ))}
@@ -140,6 +140,7 @@ function RequestMenuItemsTable(props) {
 
 RequestMenuItemsTable.propTypes = {
   menuItems: PropTypes.array.isRequired,
+  stockPerItem: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
 };
 export default withStyles(styles)(RequestMenuItemsTable);

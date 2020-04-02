@@ -12,6 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
 import Paper from '@material-ui/core/Paper';
 import CancelIcon from '@material-ui/icons/Cancel';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import TablePaginationActions from '../../TablePaginationActions';
 
@@ -72,7 +73,7 @@ function RequestResultsTable(props) {
     setRowsPerPage(parseInt(e.target.value, 10));
     setPage(0);
   };
-  
+
   return (
     <Paper className={classes.root}>
       <Table size="small" className={classes.table}>
@@ -82,9 +83,8 @@ function RequestResultsTable(props) {
             <TableCell className={classes.tableHeaders} >Priority</TableCell>
             <TableCell className={classes.tableHeaders} >Required By</TableCell>
             <TableCell className={classes.tableHeaders} >Items</TableCell>
-            <TableCell className={classes.tableHeaders} >Budget</TableCell>
-            <TableCell className={classes.tableHeaders} >Status</TableCell>
-            <TableCell className={classes.tableHeaders} >Updated Date</TableCell>
+            <TableCell className={classes.tableHeaders} >% Funded</TableCell>
+            <TableCell className={classes.tableHeaders} >% Completed</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -93,23 +93,24 @@ function RequestResultsTable(props) {
             : rows
           ).map(row => (
             <TableRow key={row.id}>
-              <TableCell><a onClick={e => handleLink(e, row.id)} className={classes.linkText}>{row.locationName || 'Unkown Name'}</a></TableCell>
               <TableCell>
-                {row.priority}
+                  <a onClick={e => handleLink(e, row.id)} className={classes.linkText}>{row.locationName || 'Unkown Name'}</a>
               </TableCell>
               <TableCell>
-                {formatDateNoTime(row.requiredBy)}
+                  {row.priority}
               </TableCell>
               <TableCell>
-                {row.items}
+                  {formatDateNoTime(row.requiredBy)}
               </TableCell>
               <TableCell>
-                {row.budget}
+                  {row.items}
               </TableCell>
               <TableCell>
-                {formatRequestStatus(row.isStatus)}
+                  <LinearProgress variant="determinate" value={50} style={{backgroundColor: 'black'}} color="primary" />
               </TableCell>
-              <TableCell>{formatDateNoTime(row.isStatusTime)}</TableCell>
+              <TableCell>
+                  <LinearProgress variant="determinate" value={50} style={{backgroundColor: 'black'}} color="primary" />
+              </TableCell>
             </TableRow>
           ))}
           {emptyRows > 0 && (
