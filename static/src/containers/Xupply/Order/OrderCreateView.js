@@ -4,44 +4,28 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
-import MenuItem from '@material-ui/core/MenuItem';
-import { KeyboardDatePicker } from '@material-ui/pickers';
-import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
-import { toNewOrder, toNewOrderItem } from '../../../services/order/model';
-import { saveNewOrder, updateOrder, deleteOrder } from '../../../services/order/actions';
+import { toNewOrder } from '../../../services/order/model';
+import { toNewRequest } from '../../../services/request/model';
 import {
-    getKeys,
-    validateString,
-    validateDate,
-    validateEmail,
-    validateDatePick,
-    roundUp,
-    formatDateNoTime,
+  getKeys,
+  dispatchNewRoute,
+  formatDateWTime,
+  dispatchNewObject,
+  roundUp
 } from '../../../utils/misc';
 
-import AutoCompleteLocations from '../../../components/Xupply/AutoCompletes/AutoCompleteLocations';
-import AutoCompleteMenuItems from '../../../components/Xupply/AutoCompletes/AutoCompleteMenuItems';
-
-function renderPriorityType() {
-    const array = [];
-    array.push(<MenuItem key={'high'} value={'high'}>High</MenuItem>);
-    array.push(<MenuItem key={'med'} value={'med'}>Medium</MenuItem>);
-    array.push(<MenuItem key={'low'} value={'low'}>Low</MenuItem>);
-    return array;
-}
+import MiniDetailMap from '../../../components/Xupply/Misc/MiniDetailMap';
+import OrderMenuItemsTable from '../../../components/Xupply/Order/OrderMenuItemsTable';
 
 const styles = (theme) => ({
     root: {
         flex: 1,
-        backgroundColor: theme.palette.primary.background,
+        height: '100vh'
     },
     content: {
         paddingTop: 42,
@@ -49,120 +33,135 @@ const styles = (theme) => ({
         paddingLeft: 80,
         paddingRight: 80,
     },
-    outerCell: {
-        marginBottom: 40,
-    },
-    headerCell: {
-        marginBottom: 40,
-        display: 'block',
-    },
-    headers: {
-        display: 'inline-block',
-        fontWeight: 500,
-        fontSize: 28,
-        // fontFamily: 'AvenirNext-DemiBold',
-    },
-    subHeaderCell: {
-        marginBottom: 24,
-        display: 'block',
-    },
-    subHeaders: {
-        display: 'inline-block',
-        fontWeight: 500,
-        fontSize: 20,
-        // fontFamily: 'AvenirNext-DemiBold',
-    },
-    childHeaderCell: {
-        marginTop: 16,
-        marginBottom: 16,
-    },
-    childHeaders: {
-        display: 'inline-block',
-        fontWeight: 500,
-        fontSize: 16,
-    },
-    textField: {
-        width: 250,
-    },
-    textCell: {
-        marginBottom: 15,
-    },
-    inputLabel: {
-        fontSize: 13,
-        fontFamily: 'AvenirNext',
-        paddingBottom: 5,
-        display: 'inline-block',
-    },
-    helperText: {
-        fontSize: 12,
-        color: '#d22323',
-    },
-    createButton: {
-        color: '#ffffff',
-        backgroundColor: theme.palette.primary.main,
-        textTransform: 'none',
-    },
-    deleteButton: {
-        color: theme.palette.primary.main,
-        backgroundColor: '#e02626',
-        textTransform: 'none',
-    },
-    outerFlexCell: {
+    display: {
         display: 'flex',
-        flexWrap: 'wrap',
-        marginBottom: 40,
     },
-    innerFlexCell: {
-        paddingRight: 10,
+    leftDetail: {
+      paddingRight: '8rem',
+      flexBasis: 0,
+      flexGrow: 1,
+    },
+    detailCard: {
+      padding: '2.0rem',
+      boxShadow: '0 8px 64px rgba(32, 32, 32, 0.08), 0 4px 16px rgba(32, 32, 32, 0.02)',
+      brequestRadius: 16,
+    },
+    detailTop: {
+      marginBottom: 30,
+      display: 'flex',
+      alignItems: 'center',
+      fontWeight: 500,
+      color: '#202020',
+    },
+    detailTitle: {
+        marginBottom: 30,
+    },
+    detailTitleText: {
+      color: 'black',
+      fontSize: 24,
+      fontWeight: 600,
+      lineHeight: 1.36,
+      margin: 0,
+    },
+    detailActions: {
+        display: 'flex',
+    },
+    button: {
+        color: 'fff',
+        marginRight: 10,
+        textTransform: 'none',
+        backgroundColor: theme.palette.primary.main,
+    },
+    rightDetail: {
+      flexGrow: 2,
+      flexBasis: 0,
     },
     block: {
         marginBottom: 40,
     },
+    section: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingTop: 15,
+      paddingBottom: 15,
+      margin: 0,
+    },
     detailList: {
-        // borderTop: '1px solid #e6e6e6',
-        paddingTop: 15,
-        display: 'block',
+      brequestTop: '1px solid #e6e6e6',
+      paddingTop: 15,
+      display: 'block',
     },
     detailListDt: {
-        minWidth: '30%',
-        border: 0,
-        padding: '.5rem 0',
-        margin: 0,
+      minWidth: '30%',
+      brequest: 0,
+      padding: '.5rem 0',
+      margin: 0,
     },
     detailListDd: {
-        minWidth: '60%',
-        border: 0,
-        fontWeight: 500,
-        padding: '.5rem 0',
-        margin: 0,
-        marginLeft: 5,
+      minWidth: '70%',
+      brequest: 0,
+      fontWeight: 500,
+      padding: '.5rem 0',
+      margin: 0,
     },
     detailListFlex: {
-        // display: 'flex',
+        display: 'flex',
     },
+    img: {
+        brequestRadius: '50%',
+        paddingRight: 10,
+    }
 });
 
 function mapStateToProps(state) {
     return {
         pathname: state.router.location.pathname,
-        idToken: state.app.idToken,
         employeeID: state.app.employeeID,
         accountID: state.app.accountID,
-        orders: state.orderData.orders,
-        receivedAt: state.orderData.receivedAt,
+        accountType: state.app.accountType,
         requests: state.requestData.publicRequests,
-        receivedPublicRequestsAt: state.requestData.receivedPublicRequestsAt,
+        receivedAt: state.requestData.receivedPublicRequestsAt,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: {
-            saveNewOrder: bindActionCreators(saveNewOrder, dispatch),
-            deleteOrder: bindActionCreators(deleteOrder, dispatch),
-            updateOrder: bindActionCreators(updateOrder, dispatch),
-        },
+        actions: {},
     };
+}
+
+export function searchQuantityPriceByPackageType(quantities, type) {
+      console.log(quantities)
+      console.log(type)
+      var count = 0;
+      if (quantities.length > 0 && type !== null) {
+            quantities.forEach((q) => {
+                if (q.packageType === type) {
+                    count = parseFloat(q.pricePerUnit, 2);
+                }
+            });
+      }
+      return count;
+}
+
+export function getTotal(items, stockPerItem) {
+    console.log(items);
+    console.log(stockPerItem);
+    let count = 0;
+    if (items.length > 0 && Object.keys(stockPerItem).length > 0) {
+        items.forEach((i) => {
+            if (i !== null && i.quantities.length > 0) {
+                console.log(stockPerItem[i.itemID].quantity)
+                console.log(stockPerItem[i.itemID].packageType)
+                const price = searchQuantityPriceByPackageType(i.quantities, stockPerItem[i.itemID].packageType)
+                console.log(price)
+                count += parseFloat(stockPerItem[i.itemID].quantity * price, 2);
+            }
+        });
+    }
+    console.log(count)
+    return roundUp(count, 2);
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -172,30 +171,25 @@ class OrderCreateView extends React.Component {
         super(props);
         this.state = {
             order: toNewOrder(),
-            menuItemOpen: false,
-            requiredBy_error_text: null,
-            // phoneNumber_error_text: null,
-            redirectRoute: `/accounts/${this.props.accountID}/orders`,
+            request: toNewRequest(),
+            activeOrders: [],
+            totalOrder: 0,
         };
     }
 
     componentDidMount() {
-        console.log('Order Create Mounted')
-        this.loadCompData();
-        this.loadRequestData();
+      console.log('Request Detail Mounted')
+      this.loadCompData();
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.receivedAt !== null && this.props.receivedAt === null) {
             this.loadCompData(nextProps);
         }
-        if (nextProps.receivedPublicRequestsAt !== null && this.props.receivedPublicRequestsAt === null) {
-            this.loadRequestData(nextProps);
-        }
     }
 
     componentWillUnmount() {
-        console.log('Order Create UnMounted')
+      console.log('Request Detail UnMounted')
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -205,88 +199,39 @@ class OrderCreateView extends React.Component {
         return true;
     }
 
-    loadCompData = (props = this.props) => {
-        const { orders, pathname } = props;
-        const keys = getKeys(pathname);
-        const orderID = keys.second;
-        if (orderID && orderID !== null) {
-            orders.forEach((order) => {
-                if (order.orderID === orderID) {
-                    console.log('Setting Order State')
-                    const next_state = this.state;
-                    next_state.order = order;
-                    this.setState(next_state, () => {});
-                }
-            })
-        }
-    }
-
-    loadRequestData = (props = this.props) => {
-        const { requests, pathname } = props;
+    loadCompData = () => {
+        const { actions, accountID, requests, pathname } = this.props;
         const keys = getKeys(pathname);
         const requestID = keys.third;
         if (requestID && requestID !== null) {
             requests.forEach((request) => {
                 if (request.requestID === requestID) {
-                    console.log('Setting Request State')
-                    const next_state = this.state;
-                    next_state.order.request = request;
-                    request.menuItems.forEach((item) => {
-                        const newItem = toNewOrderItem();
-                        newItem.item = item.item;
-                        next_state.order.menuItems.push(newItem)
-                    })
-                    this.setState(next_state, () => {});
+                    this.setState({request});
                 }
             })
         }
     }
 
-    handleChange = (e, parent, name) => {
+    handleChange = (e, menuItem) => {
         const { value } = e.target;
         const next_state = this.state;
-        next_state.order[name] = value;
-        this.setState(next_state, () => {});
-    }
-
-    handleDateChange = (name) => (date) => {
-        const next_state = this.state;
-        next_state.order[name] = date.toDate();
-        this.setState(next_state, () => {});
-    }
-
-    handleLocationSelected = (location) => {
-        const next_state = this.state;
-        console.log(location)
-        next_state.order.location = location;
-        this.setState(next_state, () => {});
-    }
-
-    handleMenuItemChange = (e, name, index) => {
-        const { value } = e.target;
-        const next_state = this.state;
-        next_state.order.menuItems[index][name] = value;
-        this.setState(next_state, () => {});
-    }
-
-    handleMenuItemAdd = () => {
-        const next_state = this.state;
-        let next_items = this.state.order.menuItems;
-        if (this.state.order.menuItems.map(i => i).includes(this.state.menuItem.item.itemID)) {
-            next_items = next_items.filter(e => e !== this.state.menuItem.item.itemID);
+        const itemID = menuItem.item.itemID;
+        const quantity = value;
+        const packageType = menuItem.item.quantities[0].packageType;
+        const pricePerUnit = menuItem.item.quantities[0].pricePerUnit;
+        const found = this.state.order.items.some(o => o.itemID === itemID);
+        console.warn(found);
+        console.warn(quantity);
+        if (found) {
+            next_state.order.stockPerItem[menuItem.item.itemID] = {packageType: packageType, quantity: quantity};
+            if (quantity === '') {
+              next_state.order.items = this.state.order.items.filter(o => o.itemID !== itemID);
+              delete next_state.order.stockPerItem[menuItem.item.itemID];
+            }
         } else {
-            next_items.push(this.state.menuItem);
+            next_state.order.items.push(menuItem.item);
+            next_state.order.stockPerItem[menuItem.item.itemID] = {packageType: packageType, quantity: quantity};
         }
-        next_state.order.menuItems = next_items;
-        next_state.menuItemOpen = false;
-        next_state.menuItem = toNewOrderItem();
-        this.setState(next_state, () => {});
-    }
-
-    handleMenuItemSelected = (item) => {
-        console.log(item)
-        const next_state = this.state;
-        next_state.menuItem.item = item;
         this.setState(next_state, () => {});
     }
 
@@ -341,214 +286,189 @@ class OrderCreateView extends React.Component {
         }
     }
 
-    deleteActiveProperty = (e) => {
-        const {
-            actions,
-            idToken,
-            employeeID,
-            accountID,
-        } = this.props;
-        const { order, redirectRoute } = this.state;
-        e.preventDefault();
-        swal({
-            title: `Delete this Property?`,
-            text: `Doing so will permanently delete the data for this Property?.`,
-            icon: 'warning',
-            buttons: {
-                cancel: 'Cancel',
-                order: {
-                    text: 'Delete',
-                    value: 'delete',
-                },
-            },
-        })
-            .then((value) => {
-                switch (value) {
-                    case 'delete':
-                        console.log(`Delete Property`);
-                        actions.deleteOrder(employeeID, accountID, order, redirectRoute);
-                        break;
-                    default:
-                        break;
-                }
-            });
-    }
-
-    createNewOrder = () => {
-        const { actions, idToken, employeeID, accountID } = this.props;
-        const { order, redirectRoute } = this.state;
-        actions.saveNewOrder(idToken, employeeID, accountID, order, redirectRoute);
-    }
-
-    updateThisOrder = () => {
-        const { actions, idToken, employeeID, accountID } = this.props;
-        const { order, redirectRoute } = this.state;
-        actions.updateOrder(employeeID, accountID, order, redirectRoute);
-
-    }
-
-    deleteMenuItem(e, item){
-        let next_state = this.state.order.menuItems
-        for(let i = 0; i < next_state.length; i++){
-            if(next_state[i] === item){
-                next_state.splice(i,1)
-            }
-        }
-        this.setState(next_state, () => { })
-    }
-
-    toggleAddMenuItem = (e, menuItemOpen) => {
-        this.setState({menuItemOpen: menuItemOpen})
-    }
-
-    renderOrderMenuItems = (item, index) => {
-        console.log(item)
-        console.log(index)
+    renderItemQuantites = (quantity, index) => {
         const { classes } = this.props;
+        console.log(quantity)
         return (
-            <div key={item.item.itemID}>
-                <span className={classes.detailListDt}>
-                    Item Name: {item.item.itemName} - Requested: {item.quantity}
-                </span>
-                <div className={classes.textCell}>
-                    <TextField
-                      placeholder="Ex. 10"
-                      label="Quantity"
-                      margin="dense"
-                      variant="outlined"
-                      type="number"
-                      // helperText={'cbdContent_error_text'}
-                      // value={menuItemQuaa.stock || ''}
-                      className={classes.textFieldSmall}
-                      onChange={e => this.handleMenuItemChange(e, 'quantity', index)}
-                      // FormHelperTextProps={{ classes: { root: classes.helperText } }}
-                      autoComplete=""
-                    />
+            <div className={classes.block}>
+                <div className={classes.section}>
+                    <span className={classes.detailTitleText}>{`$ ${quantity.pricePerUnit} - ${quantity.packageQuantity} / ${quantity.packageType}`}</span>
                 </div>
-                <span className={classes.detailListDt}>
-                    On Hand: 240 (Display Only)
-                </span>
+                <dl className={classes.detailList}>
+                    <div key={index} className={classes.detailListFlex}>
+                        <dt className={classes.detailListDt}>
+                            {'Stock'}
+                        </dt>
+                        <dd className={classes.detailListDd}>
+                            {quantity.stock}
+                        </dd>
+                    </div>
+                </dl>
             </div>
         );
+    }
+
+    dispatchNewOrder = (e, requestID) => {
+        e.preventDefault();
+        const { accountID } = this.props;
+        const route = `/accounts/${accountID}/orders/create/requests/${requestID}`;
+        dispatchNewRoute(route);
+    }
+
+    dispatchNewOpportunity = (e, requestID) => {
+        e.preventDefault();
+        const { accountID } = this.props;
+        const route = `/accounts/${accountID}/opportunities/create/requests/${requestID}`;
+        dispatchNewRoute(route);
+    }
+
+    renderAction = () => {
+        const { classes, accountType } = this.props;
+        const { request } = this.state;
+        switch(accountType) {
+            case 'retailer':
+                return null;
+            case 'manufacturer':
+                return (
+                    <Button
+                      variant="contained"
+                      disableRipple
+                      disableFocusRipple
+                      className={classes.button}
+                      onClick={e => this.dispatchNewOrder(e, request.requestID)}
+                    >
+                        {'Create Order'}
+                    </Button>
+                );
+            case 'financier':
+                return (
+                    <Button
+                      variant="contained"
+                      disableRipple
+                      disableFocusRipple
+                      className={classes.button}
+                      onClick={e => this.dispatchNewOpportunity(e, request.requestID)}
+                    >
+                        {'Fund Request'}
+                    </Button>
+                );
+            default:
+                return null;
+        }
     }
 
     render() {
-        const { classes } = this.props;
-        const {
-            order,
-            requiredBy_error_text,
-            menuItemOpen,
-        } = this.state;
-
-        const priorityTypes = renderPriorityType();
-
-        console.log(order)
-
-        const NameContainer = (
-            <div className={classes.outerCell}>
-                <div className={classes.subHeaderCell}>
-                    <div className={classes.subHeaders}>
-                        Request Information
-                    </div>
-                </div>
-                <div className={classes.childHeaderCell}>
-                    <div className={classes.childHeaders}>
-                        The Request information attached to the order.
-                    </div>
-                </div>
-                <div className={classes.childHeaderCell}>
-                    <div className={classes.childHeaders}>
-                        <span style={{fontWeight: 600}}>Request ID:</span> {order.request.requestID}
-                    </div>
-                </div>
-                <div className={classes.childHeaderCell}>
-                    <div className={classes.childHeaders}>
-                        <span style={{fontWeight: 600}}>Request Budget:</span> {order.request.budget}
-                    </div>
-                </div>
-                <div className={classes.childHeaderCell}>
-                    <div className={classes.childHeaders}>
-                        <span style={{fontWeight: 600}}>Request Priority:</span> {order.request.priority}
-                    </div>
-                </div>
-                <div className={classes.childHeaderCell}>
-                    <div className={classes.childHeaders}>
-                        <span style={{fontWeight: 600}}>Request Required By:</span> {formatDateNoTime(order.request.requiredBy)}
-                    </div>
-                </div>
-            </div>
-        );
-
-        const CreateContainer = (
-            <div className={classes.outerCell}>
-                <div className={classes.textCell}>
-                    <Button
-                        variant="contained"
-                        disableRipple
-                        disableFocusRipple
-                        onClick={order.active ? this.updateThisOrder : this.createNewOrder}
-                        className={classes.createButton}
-                        style={{ marginRight: 10 }}
-                    >
-                        {order.active ? 'Update Order' : 'Create Order'}
-                    </Button>
-                    <Button
-                        variant="contained"
-                        disableRipple
-                        disableFocusRipple
-                        onClick={this.deleteActiveProperty}
-                        className={classes.deleteButton}
-                    >
-                        {'Delete Order'}
-                    </Button>
-                </div>
-            </div>
-        );
-
-        const MenuItemsContainer = (
-            <div className={classes.outerCell}>
-                <div className={classes.subHeaderCell}>
-                    <div className={classes.subHeaders}>
-                        Requested Menu Items
-                    </div>
-                </div>
-                <div className={classes.block}>
-                    <dl className={classes.detailList}>
-                        <div className={classes.detailListFlex}>
-                            {order.request.menuItems.map(this.renderOrderMenuItems, this)}
-                        </div>
-                    </dl>
-                </div>
-            </div>
-        );
-
+        const { classes, accountID } = this.props;
+        const { request, order, totalOrder } = this.state;
+        console.error(request)
+        console.error(order)
+        console.error(totalOrder)
         return (
-            <div className={classes.root}>
-                <div className={classes.content}>
-                    <div className={classes.headerCell}>
-                        <div className={classes.headers}>
-                            {order.active ? 'Edit Order' : 'New Order'}
-                        </div>
-                    </div>
-                    {NameContainer}
-                    {MenuItemsContainer}
-                    {CreateContainer}
-                </div>
-            </div>
+          <div className={classes.root}>
+              <div className={classes.content}>
+                  <div className={classes.display}>
+                      <div className={classes.leftDetail}>
+                          <div className={classes.detailCard}>
+                              <div className={classes.detailTop}>
+                                  {
+                                    request.active
+                                    ? (
+                                      <MiniDetailMap
+                                          isMarkerShown={true}
+                                          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_API_KEY}`}
+                                          loadingElement={<div style={{ height: `100%` }} />}
+                                          containerElement={<div style={{ width: 400, height: 200 }} />}
+                                          mapElement={<div style={{ height: `100%` }} />}
+                                          id={request.requestID}
+                                          location={request.location.address.location}
+                                      />
+                                    ) : null
+                                  }
+                              </div>
+                              <div className={classes.detailTitle}>
+                                <span className={classes.detailTitleText}>{`Order Total:  $ ${order.total || getTotal(order.items, order.stockPerItem) || '0'}`}</span>
+                                <br />
+                                <span>{`${request.location.name}`}</span>
+                                <br />
+                                <span>{request.active ? `Lat: ${request.location.address.location.lat} Lng: ${request.location.address.location.lng}` : null}</span>
+                              </div>
+                              <div className={classes.detailActions}>
+                                  {this.renderAction()}
+                              </div>
+                          </div>
+                      </div>
+                      <div className={classes.rightDetail}>
+                          <div className={classes.block}>
+                              <div className={classes.section}>
+                                  <span className={classes.detailTitleText}>Details</span>
+
+                              </div>
+                              <dl className={classes.detailList}>
+                                  <div className={classes.detailListFlex}>
+                                  <dt className={classes.detailListDt}>
+                                      ID
+                                  </dt>
+                                  <dd className={classes.detailListDd}>
+                                      {request.requestID}
+                                  </dd>
+                                  </div>
+                                  <div className={classes.detailListFlex}>
+                                  <dt className={classes.detailListDt}>
+                                      Created
+                                  </dt>
+                                  <dd className={classes.detailListDd}>
+                                      {'formatDateWTime(request.status.events[0].time)'}
+                                  </dd>
+                                  </div>
+                                  <div className={classes.detailListFlex}>
+                                  <dt className={classes.detailListDt}>
+                                      Priority
+                                  </dt>
+                                  <dd className={classes.detailListDd}>
+                                      {request.priority}
+                                  </dd>
+                                  </div>
+                                  <div className={classes.detailListFlex}>
+                                  <dt className={classes.detailListDt}>
+                                      Request Type
+                                  </dt>
+                                  <dd className={classes.detailListDd}>
+                                      {request.requestType}
+                                  </dd>
+                                  </div>
+                                  <div className={classes.detailListFlex}>
+                                  <dt className={classes.detailListDt}>
+                                      Required By
+                                  </dt>
+                                  <dd className={classes.detailListDd}>
+                                      {formatDateWTime(request.requiredBy)}
+                                  </dd>
+                                  </div>
+                              </dl>
+                          </div>
+                          <div className={classes.block}>
+                              <div className={classes.section}>
+                                  <span className={classes.detailTitleText}>{'Requested Menu Items'}</span>
+                              </div>
+                              <OrderMenuItemsTable
+                                  handleChange={this.handleChange}
+                                  menuItems={request.menuItems}
+                              />
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
         );
     }
 }
 
 OrderCreateView.defaultProps = {
-    saveNewOrder: f => f,
-    deleteOrder: f => f,
-    updateOrder: f => f,
+    router: PropTypes.object,
 };
+
 OrderCreateView.propTypes = {
-    saveNewOrder: PropTypes.func,
-    updateOrder: PropTypes.func,
-    deleteOrder: PropTypes.func,
-    classes: PropTypes.object.isRequired,
+    router: PropTypes.object,
 };
 
 export default withStyles(styles)(OrderCreateView);

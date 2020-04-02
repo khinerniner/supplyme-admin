@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -11,12 +12,35 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
 import Paper from '@material-ui/core/Paper';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Tooltip from '@material-ui/core/Tooltip';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import MenuItemCell from '../MenuItem/MenuItemCell';
 
 import {
   formatDateNoTime
 } from '../../../utils/misc';
+
+const ImageTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip);
+
+const LocationTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip);
 
 const styles = (theme) => ({
     root: {
@@ -52,39 +76,75 @@ const styles = (theme) => ({
       margin: 0,
       padding: 0,
     },
+    textField: {
+        width: 100,
+    }
 });
 
 
 
 function OrderMenuItemsTable(props) {
-  const { classes, menuItems } = props;
-  console.log(menuItems);
+  const { classes, handleChange, menuItems } = props;
   return (
     <Paper className={classes.root}>
       <Table size="small" className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell className={classes.tableHeaders} >Location</TableCell>
-            <TableCell className={classes.tableHeaders} >Name</TableCell>
-            <TableCell className={classes.tableHeaders} >Image</TableCell>
-            <TableCell className={classes.tableHeaders} >Type</TableCell>
-            <TableCell className={classes.tableHeaders} >Quantity</TableCell>
+              <TableCell className={classes.tableHeaders} >Xupply</TableCell>
+              <TableCell className={classes.tableHeaders} >Item</TableCell>
+              <TableCell className={classes.tableHeaders} >Requested</TableCell>
+              <TableCell className={classes.tableHeaders} >Package</TableCell>
+              <TableCell className={classes.tableHeaders} >Price</TableCell>
+              <TableCell className={classes.tableHeaders} >Total</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {menuItems.map(menuItem => (
             <TableRow key={menuItem.item.itemID}>
-              <TableCell>{menuItem.item.quantities[0].location.name}</TableCell>
-              <TableCell><a onClick={e => handleLink(e, menuItem.item.itemID)} className={classes.linkText}>{menuItem.item.itemName || 'Unkown Name'}</a></TableCell>
-              <TableCell style={{width: 100}}>
-                  <MenuItemCell itemID={menuItem.item.itemID} itemImage={menuItem.item.thumbItemImageURL} />
+              <TableCell>
+                  <TextField
+                      placeholder={menuItem.quantity}
+                      type="number"
+                      margin="dense"
+                      autoComplete=""
+                      className={classes.textField}
+                      onChange={e => handleChange(e, menuItem)}
+                  />
               </TableCell>
               <TableCell>
-                {menuItem.item.itemType}
+                  <ImageTooltip
+                    title={
+                      <React.Fragment>
+                        <img src={menuItem.item.thumbItemImageURL ? menuItem.item.thumbItemImageURL : '/src/containers/App/styles/img/broken.png'} style={{height: 50, width: 50}} />
+                      </React.Fragment>
+                    }
+                  >
+                    <a onClick={e => handleLink(e, menuItem.item.itemID)} className={classes.linkText}>{menuItem.item.itemName}</a>
+                  </ImageTooltip>
               </TableCell>
-              <TableCell>
-                {menuItem.quantity}
-              </TableCell>
+                <TableCell>
+                    {menuItem.quantity}
+                </TableCell>
+                <TableCell>
+                  <LocationTooltip
+                    title={
+                      <React.Fragment>
+                      <em>
+                          {`${menuItem.item.quantities[0].location.address.locality}, ${menuItem.item.quantities[0].location.address.region}`}
+                      </em>
+                      </React.Fragment>
+                    }
+                  >
+                    <span className={classes.linkText}>{`${menuItem.item.quantities[0].packageQuantity} / ${menuItem.item.quantities[0].packageType}`}</span>
+                  </LocationTooltip>
+                </TableCell>
+                <TableCell>
+                  {`$ ${menuItem.item.quantities[0].pricePerUnit}`}
+                </TableCell>
+                <TableCell style={{fontWeight: 600, textDecoration: 'underline'}}>
+                  {`$ ${menuItem.quantity * menuItem.item.quantities[0].pricePerUnit}`}
+                  <span></span>
+                </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -93,9 +153,8 @@ function OrderMenuItemsTable(props) {
   );
 }
 
-
-
 OrderMenuItemsTable.propTypes = {
+  handleChange: PropTypes.func.isRequired,
   menuItems: PropTypes.array.isRequired,
   classes: PropTypes.object.isRequired,
 };

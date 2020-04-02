@@ -26,15 +26,9 @@ export function toNewOrder() {
             events: [],
         },
         request: toNewRequest(),
-        menuItems: [],
+        items: [],
         total: 0,
         stockPerItem: {},
-    };
-}
-export function toNewOrderItem() {
-    return {
-        quantity: 0,
-        item: toNewMenuItem(),
     };
 }
 export function orderRowObject(order) {

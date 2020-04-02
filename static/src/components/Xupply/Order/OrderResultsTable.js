@@ -12,6 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
 import Paper from '@material-ui/core/Paper';
 import CancelIcon from '@material-ui/icons/Cancel';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import TablePaginationActions from '../../TablePaginationActions';
 
@@ -103,7 +104,7 @@ function OrderResultsTable(props) {
               <TableCell>
                 {formatOrderStatus(row.isStatus)}
               </TableCell>
-              <TableCell>{formatDateNoTime(row.updatedDate ? row.updatedDate : row.createdDate)}</TableCell>
+              <LinearProgress variant="determinate" value={50} style={{backgroundColor: 'black'}} color="primary" />
             </TableRow>
           ))}
           {emptyRows > 0 && (
