@@ -128,6 +128,22 @@ def get_pop_density(state):
     raise ValueError('Unknown Population Density Error Occured: {}'.format(r.text))
 # [END Get Population Density]
 
+# Get Population Median Age
+# TODO: None
+# [START Get Population Median Age]
+def get_pop_age(state):
+    zip_url = 'http://zipatlas.com/us/{}/city-comparison/median-age.htm'.format(
+        state
+    )
+    r = requests.get(url=zip_url)
+    print(r)
+    print(r.text)
+    if r.status_code == 200:
+        print(r.json())
+        return r.json()
+    raise ValueError('Unknown Population Median Age Error Occured: {}'.format(r.text))
+# [END Get Population Median Age]
+
 # Get Hospital Rank
 # TODO: None
 # [START Get Hospital Rank]
@@ -139,11 +155,11 @@ def get_hospital_rank(address):
     # Get Hospital Stats (Beds)
     # beds = '127'
     # Get County Pop Density
-    result = get_pop_density('FL')
+    result = get_pop_age('FL')
     print(result)
     pop_density = '78.1'
     # Get County Pop Media Age
     median_age = '78.1'
     # Get County Cases
-    
+
 # [END Get Hospital Rank]
