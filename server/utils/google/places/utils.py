@@ -55,6 +55,7 @@ def parse_google_geocode(data):
     locality = None
     region = None
     country = None
+    county = None
     postal_code = None
     location = None
     geocode = data['results'][0]
@@ -71,12 +72,15 @@ def parse_google_geocode(data):
             country = result['short_name']
         if 'postal_code' in result['types']:
             postal_code = result['short_name']
+        if 'administrative_area_level_2' in result['types']:
+            county = result['short_name']
     address = {
         'street1': '{} {}'.format(street_number, route),
         'street2': None,
         'locality': locality,
         'region': region,
         'country': country,
+        'county': county,
         'postal': postal_code,
     }
 
@@ -107,3 +111,39 @@ def get_google_directions(origin, destination, waypoints):
         return r.json()
     raise ValueError('Unknown Google Directions Error Occured: {}'.format(r.text))
 # [END Get Google Directions]
+
+# Get Population Density
+# TODO: None
+# [START Get Population Density]
+def get_pop_density(state):
+    zip_url = 'http://zipatlas.com/us/{}/city-comparison/median-age.htm'.format(
+        state
+    )
+    r = requests.get(url=zip_url)
+    print(r)
+    print(r.text)
+    if r.status_code == 200:
+        print(r.json())
+        return r.json()
+    raise ValueError('Unknown Population Density Error Occured: {}'.format(r.text))
+# [END Get Population Density]
+
+# Get Hospital Rank
+# TODO: None
+# [START Get Hospital Rank]
+def get_hospital_rank(address):
+    # Get County from Address
+    # geocode = geocode_google_place(address)
+    # geocode = parse_google_geocode(geocode)
+    # print(geocode['county'])
+    # Get Hospital Stats (Beds)
+    # beds = '127'
+    # Get County Pop Density
+    result = get_pop_density('FL')
+    print(result)
+    pop_density = '78.1'
+    # Get County Pop Media Age
+    median_age = '78.1'
+    # Get County Cases
+    
+# [END Get Hospital Rank]
