@@ -7,6 +7,7 @@
 | Slack              | GitHub Handle                                          | Role                         | Timezone (DST) |
 |--------------------|--------------------------------------------------------|------------------------------|----------------|
 | @Denis Angell      | [@dangell7](https://github.com/dangell7)               | Core Lead                    | UTC-6 (-5)     |
+| @KL                | [@khinerniner](https://github.com/khinerniner)         | Core Lead                    | CST            |
 
 ### Infrastructure
 
